@@ -51,8 +51,7 @@ MultipleSubscriptionResponse <- R6::R6Class(
 
       MultipleSubscriptionResponseObject
     },
-    fromJSON = function(MultipleSubscriptionResponseJson) {
-      MultipleSubscriptionResponseObject <- jsonlite::fromJSON(MultipleSubscriptionResponseJson)
+    fromJSON = function(MultipleSubscriptionResponseObject) {
       if (!is.null(MultipleSubscriptionResponseObject$`message`)) {
         self$`message` <- MultipleSubscriptionResponseObject$`message`
       }

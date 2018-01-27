@@ -59,8 +59,7 @@ MonitoringTaskCheck <- R6::R6Class(
 
       MonitoringTaskCheckObject
     },
-    fromJSON = function(MonitoringTaskCheckJson) {
-      MonitoringTaskCheckObject <- jsonlite::fromJSON(MonitoringTaskCheckJson)
+    fromJSON = function(MonitoringTaskCheckObject) {
       if (!is.null(MonitoringTaskCheckObject$`created`)) {
         self$`created` <- MonitoringTaskCheckObject$`created`
       }
@@ -95,7 +94,7 @@ MonitoringTaskCheck <- R6::R6Class(
       self$`created` <- MonitoringTaskCheckObject$`created`
       self$`id` <- MonitoringTaskCheckObject$`id`
       self$`message` <- MonitoringTaskCheckObject$`message`
-      MonitorCheckResultTypeObject -> MonitorCheckResultType$new()
+      MonitorCheckResultTypeObject <- MonitorCheckResultType$new()
       self$`result` <- MonitorCheckResultTypeObject$fromJSON(jsonlite::toJSON(MonitoringTaskCheckObject$result, auto_unbox = TRUE))
     }
   )

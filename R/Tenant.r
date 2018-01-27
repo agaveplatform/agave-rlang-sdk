@@ -86,8 +86,10 @@ Tenant <- R6::R6Class(
 
       TenantObject
     },
-    fromJSON = function(TenantJson) {
-      TenantObject <- jsonlite::fromJSON(TenantJson)
+    fromJSON = function(TenantObject) {
+      if  ("result" %in% names(TenantObject)) {
+        TenantObject <- TenantObject$result
+      }
       if (!is.null(TenantObject$`id`)) {
         self$`id` <- TenantObject$`id`
       }
@@ -108,7 +110,7 @@ Tenant <- R6::R6Class(
       }
       if (!is.null(TenantObject$`contact`)) {
         contactObject <- TenantContact$new()
-        contactObject$fromJSON(jsonlite::toJSON(TenantObject$contact, auto_unbox = TRUE))
+        contactObject$fromJSON(jsonlite::toJSON(TenantObject$`contact`, auto_unbox = TRUE))
         self$`contact` <- contactObject
       }
     },
@@ -133,14 +135,17 @@ Tenant <- R6::R6Class(
       )
     },
     fromJSONString = function(TenantJson) {
-      TenantObject <- jsonlite::fromJSON(TenantJson)
+      TenantObject <- jsonlite::fromJSON(TenantJson, simplifyVector = FALSE)
+      if  ("result" %in% names(TenantObject)) {
+        TenantObject <- TenantObject$result
+      }
       self$`id` <- TenantObject$`id`
       self$`name` <- TenantObject$`name`
       self$`baseUrl` <- TenantObject$`baseUrl`
       self$`code` <- TenantObject$`code`
       self$`created` <- TenantObject$`created`
       self$`lastUpdated` <- TenantObject$`lastUpdated`
-      TenantContactObject -> TenantContact$new()
+      TenantContactObject <- TenantContact$new()
       self$`contact` <- TenantContactObject$fromJSON(jsonlite::toJSON(TenantObject$contact, auto_unbox = TRUE))
     }
   )

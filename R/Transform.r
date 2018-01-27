@@ -87,8 +87,7 @@ Transform <- R6::R6Class(
 
       TransformObject
     },
-    fromJSON = function(TransformJson) {
-      TransformObject <- jsonlite::fromJSON(TransformJson)
+    fromJSON = function(TransformObject) {
       if (!is.null(TransformObject$`decoders`)) {
         self$`decoders` <- lapply(TransformObject$`decoders`, function(x) {
           decodersObject <- TransformDecoder$new()
@@ -143,7 +142,7 @@ Transform <- R6::R6Class(
       self$`description` <- TransformObject$`description`
       self$`descriptionurl` <- TransformObject$`descriptionurl`
       self$`enabled` <- TransformObject$`enabled`
-      TransformEncoderObject -> TransformEncoder$new()
+      TransformEncoderObject <- TransformEncoder$new()
       self$`encoder` <- TransformEncoderObject$fromJSON(jsonlite::toJSON(TransformObject$encoder, auto_unbox = TRUE))
       self$`name` <- TransformObject$`name`
       self$`tags` <- TransformObject$`tags`

@@ -50,8 +50,7 @@ SingleRemoteFileResponse <- R6::R6Class(
 
       SingleRemoteFileResponseObject
     },
-    fromJSON = function(SingleRemoteFileResponseJson) {
-      SingleRemoteFileResponseObject <- jsonlite::fromJSON(SingleRemoteFileResponseJson)
+    fromJSON = function(SingleRemoteFileResponseObject) {
       if (!is.null(SingleRemoteFileResponseObject$`message`)) {
         self$`message` <- SingleRemoteFileResponseObject$`message`
       }
@@ -79,7 +78,7 @@ SingleRemoteFileResponse <- R6::R6Class(
     fromJSONString = function(SingleRemoteFileResponseJson) {
       SingleRemoteFileResponseObject <- jsonlite::fromJSON(SingleRemoteFileResponseJson)
       self$`message` <- SingleRemoteFileResponseObject$`message`
-      FileInfoObject -> FileInfo$new()
+      FileInfoObject <- FileInfo$new()
       self$`result` <- FileInfoObject$fromJSON(jsonlite::toJSON(SingleRemoteFileResponseObject$result, auto_unbox = TRUE))
       self$`status` <- SingleRemoteFileResponseObject$`status`
     }

@@ -77,8 +77,7 @@ Permission <- R6::R6Class(
 
       PermissionObject
     },
-    fromJSON = function(PermissionJson) {
-      PermissionObject <- jsonlite::fromJSON(PermissionJson)
+    fromJSON = function(PermissionObject) {
       if (!is.null(PermissionObject$`username`)) {
         self$`username` <- PermissionObject$`username`
       }
@@ -122,7 +121,7 @@ Permission <- R6::R6Class(
       PermissionObject <- jsonlite::fromJSON(PermissionJson)
       self$`username` <- PermissionObject$`username`
       self$`internalUsername` <- PermissionObject$`internalUsername`
-      PermissionStanzaObject -> PermissionStanza$new()
+      PermissionStanzaObject <- PermissionStanza$new()
       self$`permission` <- PermissionStanzaObject$fromJSON(jsonlite::toJSON(PermissionObject$permission, auto_unbox = TRUE))
       self$`created` <- PermissionObject$`created`
       self$`lastUpdated` <- PermissionObject$`lastUpdated`

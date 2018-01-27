@@ -50,8 +50,7 @@ TransformRequest <- R6::R6Class(
 
       TransformRequestObject
     },
-    fromJSON = function(TransformRequestJson) {
-      TransformRequestObject <- jsonlite::fromJSON(TransformRequestJson)
+    fromJSON = function(TransformRequestObject) {
       if (!is.null(TransformRequestObject$`nativeFormat`)) {
         self$`nativeFormat` <- TransformRequestObject$`nativeFormat`
       }

@@ -23,8 +23,7 @@ ApplicationParameterType <- R6::R6Class(
 
       ApplicationParameterTypeObject
     },
-    fromJSON = function(ApplicationParameterTypeJson) {
-      ApplicationParameterTypeObject <- jsonlite::fromJSON(ApplicationParameterTypeJson)
+    fromJSON = function(ApplicationParameterTypeObject) {
     },
     toJSONString = function() {
        sprintf(

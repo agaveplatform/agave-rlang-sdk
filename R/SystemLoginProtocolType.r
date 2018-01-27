@@ -23,8 +23,7 @@ SystemLoginProtocolType <- R6::R6Class(
 
       SystemLoginProtocolTypeObject
     },
-    fromJSON = function(SystemLoginProtocolTypeJson) {
-      SystemLoginProtocolTypeObject <- jsonlite::fromJSON(SystemLoginProtocolTypeJson)
+    fromJSON = function(SystemLoginProtocolTypeObject) {
     },
     toJSONString = function() {
        sprintf(

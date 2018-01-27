@@ -103,8 +103,7 @@ BatchQueue <- R6::R6Class(
 
       BatchQueueObject
     },
-    fromJSON = function(BatchQueueJson) {
-      BatchQueueObject <- jsonlite::fromJSON(BatchQueueJson)
+    fromJSON = function(BatchQueueObject) {
       if (!is.null(BatchQueueObject$`customDirectives`)) {
         self$`customDirectives` <- BatchQueueObject$`customDirectives`
       }

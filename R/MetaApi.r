@@ -18,73 +18,73 @@
 #' @section Methods:
 #' \describe{
 #'
-#' add_metadata  
+#' add_metadata 
 #'
 #'
-#' add_metadata_permission  
+#' add_metadata_permission 
 #'
 #'
-#' add_metadata_schema  
+#' add_metadata_schema 
 #'
 #'
-#' add_metadata_schema_permission  
+#' add_metadata_schema_permission 
 #'
 #'
-#' clear_metadata_permissions  
+#' clear_metadata_permissions 
 #'
 #'
-#' clear_metadata_schema_permissions  
+#' clear_metadata_schema_permissions 
 #'
 #'
-#' delete_metadata  
+#' delete_metadata 
 #'
 #'
-#' delete_metadata_permission  
+#' delete_metadata_permission 
 #'
 #'
-#' delete_metadata_schema  
+#' delete_metadata_schema 
 #'
 #'
-#' delete_schema_permission  
+#' delete_schema_permission 
 #'
 #'
-#' get_metadata  
+#' get_metadata 
 #'
 #'
-#' get_metadata_permission  
+#' get_metadata_permission 
 #'
 #'
-#' get_metadata_schema  
+#' get_metadata_schema 
 #'
 #'
-#' get_metadata_schema_permission  
+#' get_metadata_schema_permission 
 #'
 #'
-#' list_metadata  
+#' list_metadata 
 #'
 #'
-#' list_metadata_permissions  
+#' list_metadata_permissions 
 #'
 #'
-#' list_metadata_schema  
+#' list_metadata_schema 
 #'
 #'
-#' list_metadata_schema_permissions  
+#' list_metadata_schema_permissions 
 #'
 #'
-#' update_metadata  
+#' update_metadata 
 #'
 #'
-#' update_metadata_permission  
+#' update_metadata_permission 
 #'
 #'
-#' update_metadata_schema  
+#' update_metadata_schema 
 #'
 #'
-#' update_metadata_schema_permission  
+#' update_metadata_schema_permission 
 #'
 #' }
-#' 
+#'
 #' @export
 MetaApi <- R6::R6Class(
   'MetaApi',
@@ -119,9 +119,9 @@ MetaApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Metadata$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -157,9 +157,9 @@ MetaApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -191,9 +191,9 @@ MetaApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- MetadataSchema$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -229,9 +229,9 @@ MetaApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -261,9 +261,9 @@ MetaApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -291,9 +291,9 @@ MetaApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -321,9 +321,9 @@ MetaApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -355,9 +355,9 @@ MetaApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -385,9 +385,9 @@ MetaApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -419,9 +419,9 @@ MetaApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -449,9 +449,9 @@ MetaApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Metadata$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -485,9 +485,9 @@ MetaApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -517,9 +517,9 @@ MetaApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- MetadataSchema$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -553,9 +553,9 @@ MetaApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -593,13 +593,21 @@ MetaApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- Metadata$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- Metadata$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -633,9 +641,9 @@ MetaApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -673,13 +681,21 @@ MetaApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- MetadataSchema$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- MetadataSchema$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -713,13 +729,21 @@ MetaApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- Permission$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- Permission$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -751,9 +775,9 @@ MetaApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Metadata$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -793,9 +817,9 @@ MetaApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -831,9 +855,9 @@ MetaApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- MetadataSchema$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -873,9 +897,9 @@ MetaApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -888,4 +912,4 @@ MetaApi <- R6::R6Class(
 
     }
   )
-) 
+)

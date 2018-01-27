@@ -59,8 +59,7 @@ TagHistory <- R6::R6Class(
 
       TagHistoryObject
     },
-    fromJSON = function(TagHistoryJson) {
-      TagHistoryObject <- jsonlite::fromJSON(TagHistoryJson)
+    fromJSON = function(TagHistoryObject) {
       if (!is.null(TagHistoryObject$`created`)) {
         self$`created` <- TagHistoryObject$`created`
       }

@@ -32,8 +32,7 @@ SystemCloneAction <- R6::R6Class(
 
       SystemCloneActionObject
     },
-    fromJSON = function(SystemCloneActionJson) {
-      SystemCloneActionObject <- jsonlite::fromJSON(SystemCloneActionJson)
+    fromJSON = function(SystemCloneActionObject) {
       if (!is.null(SystemCloneActionObject$`action`)) {
         actionObject <- SystemActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(SystemCloneActionObject$action, auto_unbox = TRUE))
@@ -50,7 +49,7 @@ SystemCloneAction <- R6::R6Class(
     },
     fromJSONString = function(SystemCloneActionJson) {
       SystemCloneActionObject <- jsonlite::fromJSON(SystemCloneActionJson)
-      SystemActionTypeObject -> SystemActionType$new()
+      SystemActionTypeObject <- SystemActionType$new()
       self$`action` <- SystemActionTypeObject$fromJSON(jsonlite::toJSON(SystemCloneActionObject$action, auto_unbox = TRUE))
     }
   )

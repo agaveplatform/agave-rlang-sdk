@@ -92,8 +92,7 @@ ApplicationParameterFlagValue <- R6::R6Class(
 
       ApplicationParameterFlagValueObject
     },
-    fromJSON = function(ApplicationParameterFlagValueJson) {
-      ApplicationParameterFlagValueObject <- jsonlite::fromJSON(ApplicationParameterFlagValueJson)
+    fromJSON = function(ApplicationParameterFlagValueObject) {
       if (!is.null(ApplicationParameterFlagValueObject$`defaultValue`)) {
         self$`defaultValue` <- ApplicationParameterFlagValueObject$`defaultValue`
       }

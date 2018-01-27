@@ -41,8 +41,7 @@ FileMkdirAction <- R6::R6Class(
 
       FileMkdirActionObject
     },
-    fromJSON = function(FileMkdirActionJson) {
-      FileMkdirActionObject <- jsonlite::fromJSON(FileMkdirActionJson)
+    fromJSON = function(FileMkdirActionObject) {
       if (!is.null(FileMkdirActionObject$`action`)) {
         actionObject <- FileManagementActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(FileMkdirActionObject$action, auto_unbox = TRUE))
@@ -64,7 +63,7 @@ FileMkdirAction <- R6::R6Class(
     },
     fromJSONString = function(FileMkdirActionJson) {
       FileMkdirActionObject <- jsonlite::fromJSON(FileMkdirActionJson)
-      FileManagementActionTypeObject -> FileManagementActionType$new()
+      FileManagementActionTypeObject <- FileManagementActionType$new()
       self$`action` <- FileManagementActionTypeObject$fromJSON(jsonlite::toJSON(FileMkdirActionObject$action, auto_unbox = TRUE))
       self$`path` <- FileMkdirActionObject$`path`
     }

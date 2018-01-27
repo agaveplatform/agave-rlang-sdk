@@ -23,8 +23,7 @@ SystemStorageProtocolType <- R6::R6Class(
 
       SystemStorageProtocolTypeObject
     },
-    fromJSON = function(SystemStorageProtocolTypeJson) {
-      SystemStorageProtocolTypeObject <- jsonlite::fromJSON(SystemStorageProtocolTypeJson)
+    fromJSON = function(SystemStorageProtocolTypeObject) {
     },
     toJSONString = function() {
        sprintf(

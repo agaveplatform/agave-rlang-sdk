@@ -23,8 +23,7 @@ PostItRequestMethod <- R6::R6Class(
 
       PostItRequestMethodObject
     },
-    fromJSON = function(PostItRequestMethodJson) {
-      PostItRequestMethodObject <- jsonlite::fromJSON(PostItRequestMethodJson)
+    fromJSON = function(PostItRequestMethodObject) {
     },
     toJSONString = function() {
        sprintf(

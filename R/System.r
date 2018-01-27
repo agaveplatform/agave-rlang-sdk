@@ -147,8 +147,7 @@ System <- R6::R6Class(
 
       SystemObject
     },
-    fromJSON = function(SystemJson) {
-      SystemObject <- jsonlite::fromJSON(SystemJson)
+    fromJSON = function(SystemObject) {
       if (!is.null(SystemObject$`description`)) {
         self$`description` <- SystemObject$`description`
       }
@@ -244,11 +243,11 @@ System <- R6::R6Class(
       self$`revision` <- SystemObject$`revision`
       self$`scratchDir` <- SystemObject$`scratchDir`
       self$`site` <- SystemObject$`site`
-      SystemStatusTypeObject -> SystemStatusType$new()
+      SystemStatusTypeObject <- SystemStatusType$new()
       self$`status` <- SystemStatusTypeObject$fromJSON(jsonlite::toJSON(SystemObject$status, auto_unbox = TRUE))
-      SystemStorageConfigObject -> SystemStorageConfig$new()
+      SystemStorageConfigObject <- SystemStorageConfig$new()
       self$`storage` <- SystemStorageConfigObject$fromJSON(jsonlite::toJSON(SystemObject$storage, auto_unbox = TRUE))
-      SystemTypeObject -> SystemType$new()
+      SystemTypeObject <- SystemType$new()
       self$`type` <- SystemTypeObject$fromJSON(jsonlite::toJSON(SystemObject$type, auto_unbox = TRUE))
       self$`uuid` <- SystemObject$`uuid`
     }

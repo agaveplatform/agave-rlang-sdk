@@ -18,19 +18,19 @@
 #' @section Methods:
 #' \describe{
 #'
-#' async_transform  
+#' async_transform 
 #'
 #'
-#' get_transform  
+#' get_transform 
 #'
 #'
-#' list_transforms  
+#' list_transforms 
 #'
 #'
-#' sync_transform  
+#' sync_transform 
 #'
 #' }
-#' 
+#'
 #' @export
 TransformsApi <- R6::R6Class(
   'TransformsApi',
@@ -77,9 +77,9 @@ TransformsApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Transform$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -109,9 +109,9 @@ TransformsApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Transform$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -157,13 +157,21 @@ TransformsApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- Transform$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- Transform$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -203,9 +211,9 @@ TransformsApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -216,4 +224,4 @@ TransformsApi <- R6::R6Class(
 
     }
   )
-) 
+)

@@ -23,8 +23,7 @@ JobStatusType <- R6::R6Class(
 
       JobStatusTypeObject
     },
-    fromJSON = function(JobStatusTypeJson) {
-      JobStatusTypeObject <- jsonlite::fromJSON(JobStatusTypeJson)
+    fromJSON = function(JobStatusTypeObject) {
     },
     toJSONString = function() {
        sprintf(

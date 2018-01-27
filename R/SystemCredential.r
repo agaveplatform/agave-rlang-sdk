@@ -138,8 +138,7 @@ SystemCredential <- R6::R6Class(
 
       SystemCredentialObject
     },
-    fromJSON = function(SystemCredentialJson) {
-      SystemCredentialObject <- jsonlite::fromJSON(SystemCredentialJson)
+    fromJSON = function(SystemCredentialObject) {
       if (!is.null(SystemCredentialObject$`credential`)) {
         self$`credential` <- SystemCredentialObject$`credential`
       }
@@ -224,14 +223,14 @@ SystemCredential <- R6::R6Class(
       self$`expirationDate` <- SystemCredentialObject$`expirationDate`
       self$`internalUsername` <- SystemCredentialObject$`internalUsername`
       self$`isDefault` <- SystemCredentialObject$`isDefault`
-      SystemTypeObject -> SystemType$new()
+      SystemTypeObject <- SystemType$new()
       self$`parentType` <- SystemTypeObject$fromJSON(jsonlite::toJSON(SystemCredentialObject$parentType, auto_unbox = TRUE))
       self$`password` <- SystemCredentialObject$`password`
       self$`publicKey` <- SystemCredentialObject$`publicKey`
       self$`privateKey` <- SystemCredentialObject$`privateKey`
-      SystemAuthConfigServerProtocolTypeObject -> SystemAuthConfigServerProtocolType$new()
+      SystemAuthConfigServerProtocolTypeObject <- SystemAuthConfigServerProtocolType$new()
       self$`server` <- SystemAuthConfigServerProtocolTypeObject$fromJSON(jsonlite::toJSON(SystemCredentialObject$server, auto_unbox = TRUE))
-      AuthenticationTypeObject -> AuthenticationType$new()
+      AuthenticationTypeObject <- AuthenticationType$new()
       self$`type` <- AuthenticationTypeObject$fromJSON(jsonlite::toJSON(SystemCredentialObject$type, auto_unbox = TRUE))
       self$`username` <- SystemCredentialObject$`username`
       self$`valid` <- SystemCredentialObject$`valid`

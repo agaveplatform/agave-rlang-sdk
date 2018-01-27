@@ -95,8 +95,7 @@ JobSummary <- R6::R6Class(
 
       JobSummaryObject
     },
-    fromJSON = function(JobSummaryJson) {
-      JobSummaryObject <- jsonlite::fromJSON(JobSummaryJson)
+    fromJSON = function(JobSummaryObject) {
       if (!is.null(JobSummaryObject$`appId`)) {
         self$`appId` <- JobSummaryObject$`appId`
       }

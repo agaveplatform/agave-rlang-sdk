@@ -50,8 +50,7 @@ JobHistory <- R6::R6Class(
 
       JobHistoryObject
     },
-    fromJSON = function(JobHistoryJson) {
-      JobHistoryObject <- jsonlite::fromJSON(JobHistoryJson)
+    fromJSON = function(JobHistoryObject) {
       if (!is.null(JobHistoryObject$`created`)) {
         self$`created` <- JobHistoryObject$`created`
       }

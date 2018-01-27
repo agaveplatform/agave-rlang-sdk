@@ -59,8 +59,7 @@ NotificationResponse <- R6::R6Class(
 
       NotificationResponseObject
     },
-    fromJSON = function(NotificationResponseJson) {
-      NotificationResponseObject <- jsonlite::fromJSON(NotificationResponseJson)
+    fromJSON = function(NotificationResponseObject) {
       if (!is.null(NotificationResponseObject$`message`)) {
         self$`message` <- NotificationResponseObject$`message`
       }
@@ -93,7 +92,7 @@ NotificationResponse <- R6::R6Class(
     fromJSONString = function(NotificationResponseJson) {
       NotificationResponseObject <- jsonlite::fromJSON(NotificationResponseJson)
       self$`message` <- NotificationResponseObject$`message`
-      NotificationObject -> Notification$new()
+      NotificationObject <- Notification$new()
       self$`result` <- NotificationObject$fromJSON(jsonlite::toJSON(NotificationResponseObject$result, auto_unbox = TRUE))
       self$`status` <- NotificationResponseObject$`status`
       self$`version` <- NotificationResponseObject$`version`

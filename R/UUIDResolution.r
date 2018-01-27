@@ -50,8 +50,7 @@ UUIDResolution <- R6::R6Class(
 
       UUIDResolutionObject
     },
-    fromJSON = function(UUIDResolutionJson) {
-      UUIDResolutionObject <- jsonlite::fromJSON(UUIDResolutionJson)
+    fromJSON = function(UUIDResolutionObject) {
       if (!is.null(UUIDResolutionObject$`uuid`)) {
         self$`uuid` <- UUIDResolutionObject$`uuid`
       }
@@ -80,7 +79,7 @@ UUIDResolution <- R6::R6Class(
       UUIDResolutionObject <- jsonlite::fromJSON(UUIDResolutionJson)
       self$`uuid` <- UUIDResolutionObject$`uuid`
       self$`type` <- UUIDResolutionObject$`type`
-      TODO_OBJECT_MAPPINGObject -> TODO_OBJECT_MAPPING$new()
+      TODO_OBJECT_MAPPINGObject <- TODO_OBJECT_MAPPING$new()
       self$`representation` <- TODO_OBJECT_MAPPINGObject$fromJSON(jsonlite::toJSON(UUIDResolutionObject$representation, auto_unbox = TRUE))
     }
   )

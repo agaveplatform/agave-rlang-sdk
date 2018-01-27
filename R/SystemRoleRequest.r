@@ -41,8 +41,7 @@ SystemRoleRequest <- R6::R6Class(
 
       SystemRoleRequestObject
     },
-    fromJSON = function(SystemRoleRequestJson) {
-      SystemRoleRequestObject <- jsonlite::fromJSON(SystemRoleRequestJson)
+    fromJSON = function(SystemRoleRequestObject) {
       if (!is.null(SystemRoleRequestObject$`username`)) {
         self$`username` <- SystemRoleRequestObject$`username`
       }
@@ -65,7 +64,7 @@ SystemRoleRequest <- R6::R6Class(
     fromJSONString = function(SystemRoleRequestJson) {
       SystemRoleRequestObject <- jsonlite::fromJSON(SystemRoleRequestJson)
       self$`username` <- SystemRoleRequestObject$`username`
-      SystemRoleTypeObject -> SystemRoleType$new()
+      SystemRoleTypeObject <- SystemRoleType$new()
       self$`role` <- SystemRoleTypeObject$fromJSON(jsonlite::toJSON(SystemRoleRequestObject$role, auto_unbox = TRUE))
     }
   )

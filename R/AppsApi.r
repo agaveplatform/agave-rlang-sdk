@@ -18,49 +18,49 @@
 #' @section Methods:
 #' \describe{
 #'
-#' add_app  
+#' add_app 
 #'
 #'
-#' add_app_permission  
+#' add_app_permission 
 #'
 #'
-#' clear_app_permissions  
+#' clear_app_permissions 
 #'
 #'
-#' delete_app  
+#' delete_app 
 #'
 #'
-#' delete_app_permission  
+#' delete_app_permission 
 #'
 #'
-#' get_app_details  
+#' get_app_details 
 #'
 #'
-#' get_app_permission  
+#' get_app_permission 
 #'
 #'
-#' get_app_submission_form  
+#' get_app_submission_form 
 #'
 #'
-#' invoke_app_action  
+#' invoke_app_action 
 #'
 #'
-#' list_app_history  
+#' list_app_history 
 #'
 #'
-#' list_app_permissions  
+#' list_app_permissions 
 #'
 #'
-#' list_apps List apps 
+#' list_apps List apps
 #'
 #'
-#' update_app  
+#' update_app 
 #'
 #'
-#' update_app_permission  
+#' update_app_permission 
 #'
 #' }
-#' 
+#'
 #' @export
 AppsApi <- R6::R6Class(
   'AppsApi',
@@ -95,9 +95,9 @@ AppsApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Application$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -133,9 +133,9 @@ AppsApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -165,9 +165,9 @@ AppsApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -195,9 +195,9 @@ AppsApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -229,9 +229,9 @@ AppsApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -259,9 +259,9 @@ AppsApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Application$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -299,9 +299,9 @@ AppsApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -331,9 +331,9 @@ AppsApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Character$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -369,9 +369,9 @@ AppsApi <- R6::R6Class(
                                  method = "PUT",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Application$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -417,9 +417,9 @@ AppsApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- HistoryEvent$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -461,13 +461,21 @@ AppsApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- Permission$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- Permission$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -517,13 +525,21 @@ AppsApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- ApplicationSummary$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- ApplicationSummary$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -555,9 +571,9 @@ AppsApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Application$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -597,9 +613,9 @@ AppsApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -612,4 +628,4 @@ AppsApi <- R6::R6Class(
 
     }
   )
-) 
+)

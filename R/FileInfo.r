@@ -104,8 +104,7 @@ FileInfo <- R6::R6Class(
 
       FileInfoObject
     },
-    fromJSON = function(FileInfoJson) {
-      FileInfoObject <- jsonlite::fromJSON(FileInfoJson)
+    fromJSON = function(FileInfoObject) {
       if (!is.null(FileInfoObject$`format`)) {
         self$`format` <- FileInfoObject$`format`
       }
@@ -170,7 +169,7 @@ FileInfo <- R6::R6Class(
       self$`path` <- FileInfoObject$`path`
       self$`permissions` <- FileInfoObject$`permissions`
       self$`system` <- FileInfoObject$`system`
-      FileTypeObject -> FileType$new()
+      FileTypeObject <- FileType$new()
       self$`type` <- FileTypeObject$fromJSON(jsonlite::toJSON(FileInfoObject$type, auto_unbox = TRUE))
     }
   )

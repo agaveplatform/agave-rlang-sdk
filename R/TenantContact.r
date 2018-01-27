@@ -14,7 +14,6 @@
 #' @field url 
 #' @field type 
 #' @field primary 
-#' @field contact 
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON
@@ -27,8 +26,7 @@ TenantContact <- R6::R6Class(
     `url` = NULL,
     `type` = NULL,
     `primary` = NULL,
-    `contact` = NULL,
-    initialize = function(`name`, `email`, `url`, `type`, `primary`, `contact`){
+    initialize = function(`name`, `email`, `url`, `type`, `primary`){
       if (!missing(`name`)) {
         stopifnot(is.character(`name`), length(`name`) == 1)
         self$`name` <- `name`
@@ -48,10 +46,6 @@ TenantContact <- R6::R6Class(
       if (!missing(`primary`)) {
         self$`primary` <- `primary`
       }
-      if (!missing(`contact`)) {
-        stopifnot(R6::is.R6(`contact`))
-        self$`contact` <- `contact`
-      }
     },
     toJSON = function() {
       TenantContactObject <- list()
@@ -70,51 +64,40 @@ TenantContact <- R6::R6Class(
       if (!is.null(self$`primary`)) {
         TenantContactObject[['primary']] <- self$`primary`
       }
-      if (!is.null(self$`contact`)) {
-        TenantContactObject[['contact']] <- self$`contact`$toJSON()
-      }
-
+      
       TenantContactObject
     },
-    fromJSON = function(TenantContactJson) {
-      TenantContactObject <- jsonlite::fromJSON(TenantContactJson)
-      if (!is.null(TenantContactObject$`name`)) {
-        self$`name` <- TenantContactObject$`name`
+    fromJSON = function(TenantContactObject) {
+      if (!is.null(TenantContactObject['name'])) {
+        self$`name` <- TenantContactObject['name']
       }
-      if (!is.null(TenantContactObject$`email`)) {
-        self$`email` <- TenantContactObject$`email`
+      if (!is.null(TenantContactObject['email'])) {
+        self$`email` <- TenantContactObject['email']
       }
-      if (!is.null(TenantContactObject$`url`)) {
-        self$`url` <- TenantContactObject$`url`
+      if (!is.null(TenantContactObject['url'])) {
+        self$`url` <- TenantContactObject['url']
       }
-      if (!is.null(TenantContactObject$`type`)) {
-        self$`type` <- TenantContactObject$`type`
+      if (!is.null(TenantContactObject['type'])) {
+        self$`type` <- TenantContactObject['type']
       }
-      if (!is.null(TenantContactObject$`primary`)) {
-        self$`primary` <- TenantContactObject$`primary`
-      }
-      if (!is.null(TenantContactObject$`contact`)) {
-        contactObject <- TenantContact$new()
-        contactObject$fromJSON(jsonlite::toJSON(TenantContactObject$contact, auto_unbox = TRUE))
-        self$`contact` <- contactObject
+      if (!is.null(TenantContactObject['primary'])) {
+        self$`primary` <- TenantContactObject['primary']
       }
     },
     toJSONString = function() {
-       sprintf(
+      sprintf(
         '{
            "name": %s,
            "email": %s,
            "url": %s,
            "type": %s,
-           "primary": %s,
-           "contact": %s
+           "primary": %s
         }',
         self$`name`,
         self$`email`,
         self$`url`,
         self$`type`,
-        self$`primary`,
-        self$`contact`$toJSON()
+        self$`primary`
       )
     },
     fromJSONString = function(TenantContactJson) {
@@ -124,8 +107,6 @@ TenantContact <- R6::R6Class(
       self$`url` <- TenantContactObject$`url`
       self$`type` <- TenantContactObject$`type`
       self$`primary` <- TenantContactObject$`primary`
-      TenantContactObject -> TenantContact$new()
-      self$`contact` <- TenantContactObject$fromJSON(jsonlite::toJSON(TenantContactObject$contact, auto_unbox = TRUE))
     }
   )
 )

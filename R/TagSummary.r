@@ -50,8 +50,7 @@ TagSummary <- R6::R6Class(
 
       TagSummaryObject
     },
-    fromJSON = function(TagSummaryJson) {
-      TagSummaryObject <- jsonlite::fromJSON(TagSummaryJson)
+    fromJSON = function(TagSummaryObject) {
       if (!is.null(TagSummaryObject$`name`)) {
         self$`name` <- TagSummaryObject$`name`
       }

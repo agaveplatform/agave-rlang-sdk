@@ -13,7 +13,7 @@
 #' @field secret 
 #' @field callbackUrl 
 #' @field description 
-#' @field name 
+#' @field clientName 
 #' @field tier 
 #'
 #' @importFrom R6 R6Class
@@ -26,9 +26,9 @@ Client <- R6::R6Class(
     `secret` = NULL,
     `callbackUrl` = NULL,
     `description` = NULL,
-    `name` = NULL,
+    `clientName` = NULL,
     `tier` = NULL,
-    initialize = function(`key`, `secret`, `callbackUrl`, `description`, `name`, `tier`){
+    initialize = function(`key`, `secret`, `callbackUrl`, `description`, `clientName`, `tier`){
       if (!missing(`key`)) {
         stopifnot(is.character(`key`), length(`key`) == 1)
         self$`key` <- `key`
@@ -45,9 +45,9 @@ Client <- R6::R6Class(
         stopifnot(is.character(`description`), length(`description`) == 1)
         self$`description` <- `description`
       }
-      if (!missing(`name`)) {
-        stopifnot(is.character(`name`), length(`name`) == 1)
-        self$`name` <- `name`
+      if (!missing(`clientName`)) {
+        stopifnot(is.character(`clientName`), length(`clientName`) == 1)
+        self$`clientName` <- `clientName`
       }
       if (!missing(`tier`)) {
         stopifnot(is.character(`tier`), length(`tier`) == 1)
@@ -68,8 +68,8 @@ Client <- R6::R6Class(
       if (!is.null(self$`description`)) {
         ClientObject[['description']] <- self$`description`
       }
-      if (!is.null(self$`name`)) {
-        ClientObject[['name']] <- self$`name`
+      if (!is.null(self$`clientName`)) {
+        ClientObject[['clientName']] <- self$`clientName`
       }
       if (!is.null(self$`tier`)) {
         ClientObject[['tier']] <- self$`tier`
@@ -77,25 +77,41 @@ Client <- R6::R6Class(
 
       ClientObject
     },
-    fromJSON = function(ClientJson) {
-      ClientObject <- jsonlite::fromJSON(ClientJson)
-      if (!is.null(ClientObject$`key`)) {
-        self$`key` <- ClientObject$`key`
+    fromJSON = function(ClientObject) {
+      if (is.character(ClientObject) || is.primitive(ClientObject)) {
+        self$fromJSONString(ClientObject)
       }
-      if (!is.null(ClientObject$`secret`)) {
-        self$`secret` <- ClientObject$`secret`
-      }
-      if (!is.null(ClientObject$`callbackUrl`)) {
-        self$`callbackUrl` <- ClientObject$`callbackUrl`
-      }
-      if (!is.null(ClientObject$`description`)) {
-        self$`description` <- ClientObject$`description`
-      }
-      if (!is.null(ClientObject$`name`)) {
-        self$`name` <- ClientObject$`name`
-      }
-      if (!is.null(ClientObject$`tier`)) {
-        self$`tier` <- ClientObject$`tier`
+      else {
+        if ("result" %in% names(ClientObject)) {
+          ClientObject <- ClientObject$result
+        }
+        if (!is.null(ClientObject$`key`)) {
+          self$`key` <- ClientObject$`key`
+        }
+        if (!is.null(ClientObject$`consumerKey`)) {
+          self$`key` <- ClientObject$`consumerKey`
+        }
+        if (!is.null(ClientObject$`secret`)) {
+          self$`secret` <- ClientObject$`secret`
+        }
+        if (!is.null(ClientObject$`consumerSecret`)) {
+          self$`secret` <- ClientObject$`consumerSecret`
+        }
+        if (!is.null(ClientObject$`callbackUrl`)) {
+          self$`callbackUrl` <- ClientObject$`callbackUrl`
+        }
+        if (!is.null(ClientObject$`description`)) {
+          self$`description` <- ClientObject$`description`
+        }
+        if (!is.null(ClientObject$`name`)) {
+          self$`clientName` <- ClientObject$`name`
+        }
+        if (!is.null(ClientObject$`clientName`)) {
+          self$`clientName` <- ClientObject$`clientName`
+        }
+        if (!is.null(ClientObject$`tier`)) {
+          self$`tier` <- ClientObject$`tier`
+        }
       }
     },
     toJSONString = function() {
@@ -105,24 +121,27 @@ Client <- R6::R6Class(
            "secret": %s,
            "callbackUrl": %s,
            "description": %s,
-           "name": %s,
+           "clientName": %s,
            "tier": %s
         }',
         self$`key`,
         self$`secret`,
         self$`callbackUrl`,
         self$`description`,
-        self$`name`,
+        self$`clientName`,
         self$`tier`
       )
     },
     fromJSONString = function(ClientJson) {
-      ClientObject <- jsonlite::fromJSON(ClientJson)
-      self$`key` <- ClientObject$`key`
-      self$`secret` <- ClientObject$`secret`
+      ClientObject <- jsonlite::fromJSON(ClientJson, simplifyVector = TRUE)
+      if ("result" %in% names(ClientObject)) {
+        ClientObject <- ClientObject$result
+      }
+      self$`key` <- ClientObject$`consumerKey`
+      self$`secret` <- ClientObject$`consumerSecret`
       self$`callbackUrl` <- ClientObject$`callbackUrl`
       self$`description` <- ClientObject$`description`
-      self$`name` <- ClientObject$`name`
+      self$`clientName` <- ClientObject$`name`
       self$`tier` <- ClientObject$`tier`
     }
   )

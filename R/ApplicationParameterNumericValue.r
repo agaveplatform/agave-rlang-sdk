@@ -92,8 +92,7 @@ ApplicationParameterNumericValue <- R6::R6Class(
 
       ApplicationParameterNumericValueObject
     },
-    fromJSON = function(ApplicationParameterNumericValueJson) {
-      ApplicationParameterNumericValueObject <- jsonlite::fromJSON(ApplicationParameterNumericValueJson)
+    fromJSON = function(ApplicationParameterNumericValueObject) {
       if (!is.null(ApplicationParameterNumericValueObject$`defaultValue`)) {
         self$`defaultValue` <- ApplicationParameterNumericValueObject$`defaultValue`
       }

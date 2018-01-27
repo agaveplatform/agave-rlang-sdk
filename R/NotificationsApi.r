@@ -18,22 +18,22 @@
 #' @section Methods:
 #' \describe{
 #'
-#' add_notification  
+#' add_notification 
 #'
 #'
-#' delete_notification  
+#' delete_notification 
 #'
 #'
-#' get_notification  
+#' get_notification 
 #'
 #'
-#' list_notifications  
+#' list_notifications 
 #'
 #'
-#' update_notification  
+#' update_notification 
 #'
 #' }
-#' 
+#'
 #' @export
 NotificationsApi <- R6::R6Class(
   'NotificationsApi',
@@ -68,9 +68,9 @@ NotificationsApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Notification$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -100,9 +100,9 @@ NotificationsApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -130,9 +130,9 @@ NotificationsApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Notification$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -170,13 +170,21 @@ NotificationsApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- Notification$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- Notification$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -208,9 +216,9 @@ NotificationsApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Notification$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -223,4 +231,4 @@ NotificationsApi <- R6::R6Class(
 
     }
   )
-) 
+)

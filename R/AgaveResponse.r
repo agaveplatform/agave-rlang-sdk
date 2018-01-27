@@ -50,8 +50,7 @@ AgaveResponse <- R6::R6Class(
 
       AgaveResponseObject
     },
-    fromJSON = function(AgaveResponseJson) {
-      AgaveResponseObject <- jsonlite::fromJSON(AgaveResponseJson)
+    fromJSON = function(AgaveResponseObject) {
       if (!is.null(AgaveResponseObject$`message`)) {
         self$`message` <- AgaveResponseObject$`message`
       }

@@ -18,61 +18,61 @@
 #' @section Methods:
 #' \describe{
 #'
-#' add_tag Creat a new tag 
+#' add_tag Creat a new tag
 #'
 #'
-#' add_tag_resource Add resources to tag 
+#' add_tag_resource Add resources to tag
 #'
 #'
-#' clear_tag_permissions Clear tag permissions 
+#' clear_tag_permissions Clear tag permissions
 #'
 #'
-#' clear_tag_resources Clear all tagged resources 
+#' clear_tag_resources Clear all tagged resources
 #'
 #'
-#' delete_tag Delete tag 
+#' delete_tag Delete tag
 #'
 #'
-#' delete_tag_permission_for_user Remove user tag permission 
+#' delete_tag_permission_for_user Remove user tag permission
 #'
 #'
-#' get_tag_details Tag Details 
+#' get_tag_details Tag Details
 #'
 #'
-#' get_tag_permission_for_user List tag permissions for a user 
+#' get_tag_permission_for_user List tag permissions for a user
 #'
 #'
-#' get_tagged_resource Get tagged item details 
+#' get_tagged_resource Get tagged item details
 #'
 #'
-#' list_tag_history Tag history 
+#' list_tag_history Tag history
 #'
 #'
-#' list_tag_permissions List permissionss set for a given tag id 
+#' list_tag_permissions List permissionss set for a given tag id
 #'
 #'
-#' list_tag_resources Tagged items 
+#' list_tag_resources Tagged items
 #'
 #'
-#' list_tags Available tags 
+#' list_tags Available tags
 #'
 #'
-#' remove_tag_resource Remove resource from tag 
+#' remove_tag_resource Remove resource from tag
 #'
 #'
-#' update_tag Update tag 
+#' update_tag Update tag
 #'
 #'
-#' update_tag_permission Grant permission 
+#' update_tag_permission Grant permission
 #'
 #'
-#' update_tag_permission_for_user Update user permission on tag 
+#' update_tag_permission_for_user Update user permission on tag
 #'
 #'
-#' update_tag_resource Add resource to tag 
+#' update_tag_resource Add resource to tag
 #'
 #' }
-#' 
+#'
 #' @export
 TagApi <- R6::R6Class(
   'TagApi',
@@ -107,9 +107,9 @@ TagApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Tag$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -145,13 +145,21 @@ TagApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- Tag$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- Tag$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -177,9 +185,9 @@ TagApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -207,9 +215,9 @@ TagApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -237,9 +245,9 @@ TagApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -271,9 +279,9 @@ TagApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -301,9 +309,9 @@ TagApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Tag$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -337,13 +345,21 @@ TagApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- Permission$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- Permission$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -373,9 +389,9 @@ TagApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- TagResource$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -413,13 +429,21 @@ TagApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- TagHistory$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- TagHistory$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -453,13 +477,21 @@ TagApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- Permission$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- Permission$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -493,13 +525,21 @@ TagApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- TagResource$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- TagResource$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -549,13 +589,21 @@ TagApi <- R6::R6Class(
                                  method = "GET",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- TagSummary$new()
-        result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
+        returnArray <- vector('list', length(jsonResp$result))
+        i <- 1
+        for (returnJsonObject in jsonResp$result){
+          returnObject <- TagSummary$new()
+          result <- returnObject$fromJSON(returnJsonObject)
+          returnArray[[ i ]] <- returnObject
+          i <- i + 1
+        }
+
+        Response$new(returnArray, resp)
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -585,9 +633,9 @@ TagApi <- R6::R6Class(
                                  method = "DELETE",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         # void response, no need to return anything
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
@@ -621,9 +669,9 @@ TagApi <- R6::R6Class(
                                  method = "PUT",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Tag$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -659,9 +707,9 @@ TagApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -701,9 +749,9 @@ TagApi <- R6::R6Class(
                                  method = "POST",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- Permission$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -743,9 +791,9 @@ TagApi <- R6::R6Class(
                                  method = "PUT",
                                  queryParams = queryParams,
                                  headerParams = headerParams,
-                                 body = body, 
+                                 body = body,
                                  ...)
-      
+
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         returnObject <- TagResource$new()
         result <- returnObject$fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
@@ -758,4 +806,4 @@ TagApi <- R6::R6Class(
 
     }
   )
-) 
+)

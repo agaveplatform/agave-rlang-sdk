@@ -75,8 +75,7 @@ ApplicationArgumentValue <- R6::R6Class(
 
       ApplicationArgumentValueObject
     },
-    fromJSON = function(ApplicationArgumentValueJson) {
-      ApplicationArgumentValueObject <- jsonlite::fromJSON(ApplicationArgumentValueJson)
+    fromJSON = function(ApplicationArgumentValueObject) {
       if (!is.null(ApplicationArgumentValueObject$`defaultValue`)) {
         self$`defaultValue` <- ApplicationArgumentValueObject$`defaultValue`
       }

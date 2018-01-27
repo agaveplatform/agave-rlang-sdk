@@ -77,8 +77,7 @@ ClientAPISubscription <- R6::R6Class(
 
       ClientAPISubscriptionObject
     },
-    fromJSON = function(ClientAPISubscriptionJson) {
-      ClientAPISubscriptionObject <- jsonlite::fromJSON(ClientAPISubscriptionJson)
+    fromJSON = function(ClientAPISubscriptionObject) {
       if (!is.null(ClientAPISubscriptionObject$`apiContext`)) {
         self$`apiContext` <- ClientAPISubscriptionObject$`apiContext`
       }
@@ -126,9 +125,9 @@ ClientAPISubscription <- R6::R6Class(
       self$`apiName` <- ClientAPISubscriptionObject$`apiName`
       self$`apiProvider` <- ClientAPISubscriptionObject$`apiProvider`
       self$`apiVersion` <- ClientAPISubscriptionObject$`apiVersion`
-      ClientAPISubscriptionStatusTypeObject -> ClientAPISubscriptionStatusType$new()
+      ClientAPISubscriptionStatusTypeObject <- ClientAPISubscriptionStatusType$new()
       self$`status` <- ClientAPISubscriptionStatusTypeObject$fromJSON(jsonlite::toJSON(ClientAPISubscriptionObject$status, auto_unbox = TRUE))
-      ClientSubscriptionTierObject -> ClientSubscriptionTier$new()
+      ClientSubscriptionTierObject <- ClientSubscriptionTier$new()
       self$`tier` <- ClientSubscriptionTierObject$fromJSON(jsonlite::toJSON(ClientAPISubscriptionObject$tier, auto_unbox = TRUE))
     }
   )

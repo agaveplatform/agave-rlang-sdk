@@ -50,8 +50,7 @@ SystemCredentialsResponse <- R6::R6Class(
 
       SystemCredentialsResponseObject
     },
-    fromJSON = function(SystemCredentialsResponseJson) {
-      SystemCredentialsResponseObject <- jsonlite::fromJSON(SystemCredentialsResponseJson)
+    fromJSON = function(SystemCredentialsResponseObject) {
       if (!is.null(SystemCredentialsResponseObject$`message`)) {
         self$`message` <- SystemCredentialsResponseObject$`message`
       }
@@ -79,7 +78,7 @@ SystemCredentialsResponse <- R6::R6Class(
     fromJSONString = function(SystemCredentialsResponseJson) {
       SystemCredentialsResponseObject <- jsonlite::fromJSON(SystemCredentialsResponseJson)
       self$`message` <- SystemCredentialsResponseObject$`message`
-      SystemCredentialObject -> SystemCredential$new()
+      SystemCredentialObject <- SystemCredential$new()
       self$`result` <- SystemCredentialObject$fromJSON(jsonlite::toJSON(SystemCredentialsResponseObject$result, auto_unbox = TRUE))
       self$`status` <- SystemCredentialsResponseObject$`status`
     }

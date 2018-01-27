@@ -23,8 +23,7 @@ AuthenticationType <- R6::R6Class(
 
       AuthenticationTypeObject
     },
-    fromJSON = function(AuthenticationTypeJson) {
-      AuthenticationTypeObject <- jsonlite::fromJSON(AuthenticationTypeJson)
+    fromJSON = function(AuthenticationTypeObject) {
     },
     toJSONString = function() {
        sprintf(

@@ -61,8 +61,7 @@ ApplicationArgumentDataSemantics <- R6::R6Class(
 
       ApplicationArgumentDataSemanticsObject
     },
-    fromJSON = function(ApplicationArgumentDataSemanticsJson) {
-      ApplicationArgumentDataSemanticsObject <- jsonlite::fromJSON(ApplicationArgumentDataSemanticsJson)
+    fromJSON = function(ApplicationArgumentDataSemanticsObject) {
       if (!is.null(ApplicationArgumentDataSemanticsObject$`fileTypes`)) {
         self$`fileTypes` <- ApplicationArgumentDataSemanticsObject$`fileTypes`
       }

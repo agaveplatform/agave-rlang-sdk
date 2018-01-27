@@ -41,8 +41,7 @@ FilePermissionRequest <- R6::R6Class(
 
       FilePermissionRequestObject
     },
-    fromJSON = function(FilePermissionRequestJson) {
-      FilePermissionRequestObject <- jsonlite::fromJSON(FilePermissionRequestJson)
+    fromJSON = function(FilePermissionRequestObject) {
       if (!is.null(FilePermissionRequestObject$`username`)) {
         self$`username` <- FilePermissionRequestObject$`username`
       }
@@ -65,7 +64,7 @@ FilePermissionRequest <- R6::R6Class(
     fromJSONString = function(FilePermissionRequestJson) {
       FilePermissionRequestObject <- jsonlite::fromJSON(FilePermissionRequestJson)
       self$`username` <- FilePermissionRequestObject$`username`
-      PermissionTypeObject -> PermissionType$new()
+      PermissionTypeObject <- PermissionType$new()
       self$`permission` <- PermissionTypeObject$fromJSON(jsonlite::toJSON(FilePermissionRequestObject$permission, auto_unbox = TRUE))
     }
   )

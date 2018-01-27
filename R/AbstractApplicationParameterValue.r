@@ -92,8 +92,7 @@ AbstractApplicationParameterValue <- R6::R6Class(
 
       AbstractApplicationParameterValueObject
     },
-    fromJSON = function(AbstractApplicationParameterValueJson) {
-      AbstractApplicationParameterValueObject <- jsonlite::fromJSON(AbstractApplicationParameterValueJson)
+    fromJSON = function(AbstractApplicationParameterValueObject) {
       if (!is.null(AbstractApplicationParameterValueObject$`defaultValue`)) {
         self$`defaultValue` <- AbstractApplicationParameterValueObject$`defaultValue`
       }

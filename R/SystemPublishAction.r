@@ -32,8 +32,7 @@ SystemPublishAction <- R6::R6Class(
 
       SystemPublishActionObject
     },
-    fromJSON = function(SystemPublishActionJson) {
-      SystemPublishActionObject <- jsonlite::fromJSON(SystemPublishActionJson)
+    fromJSON = function(SystemPublishActionObject) {
       if (!is.null(SystemPublishActionObject$`action`)) {
         actionObject <- SystemActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(SystemPublishActionObject$action, auto_unbox = TRUE))
@@ -50,7 +49,7 @@ SystemPublishAction <- R6::R6Class(
     },
     fromJSONString = function(SystemPublishActionJson) {
       SystemPublishActionObject <- jsonlite::fromJSON(SystemPublishActionJson)
-      SystemActionTypeObject -> SystemActionType$new()
+      SystemActionTypeObject <- SystemActionType$new()
       self$`action` <- SystemActionTypeObject$fromJSON(jsonlite::toJSON(SystemPublishActionObject$action, auto_unbox = TRUE))
     }
   )

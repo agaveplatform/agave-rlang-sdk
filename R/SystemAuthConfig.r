@@ -104,8 +104,7 @@ SystemAuthConfig <- R6::R6Class(
 
       SystemAuthConfigObject
     },
-    fromJSON = function(SystemAuthConfigJson) {
-      SystemAuthConfigObject <- jsonlite::fromJSON(SystemAuthConfigJson)
+    fromJSON = function(SystemAuthConfigObject) {
       if (!is.null(SystemAuthConfigObject$`credential`)) {
         self$`credential` <- SystemAuthConfigObject$`credential`
       }
@@ -169,9 +168,9 @@ SystemAuthConfig <- R6::R6Class(
       self$`password` <- SystemAuthConfigObject$`password`
       self$`publicKey` <- SystemAuthConfigObject$`publicKey`
       self$`privateKey` <- SystemAuthConfigObject$`privateKey`
-      SystemAuthConfigServerObject -> SystemAuthConfigServer$new()
+      SystemAuthConfigServerObject <- SystemAuthConfigServer$new()
       self$`server` <- SystemAuthConfigServerObject$fromJSON(jsonlite::toJSON(SystemAuthConfigObject$server, auto_unbox = TRUE))
-      SystemLoginAuthenticationTypeObject -> SystemLoginAuthenticationType$new()
+      SystemLoginAuthenticationTypeObject <- SystemLoginAuthenticationType$new()
       self$`type` <- SystemLoginAuthenticationTypeObject$fromJSON(jsonlite::toJSON(SystemAuthConfigObject$type, auto_unbox = TRUE))
       self$`username` <- SystemAuthConfigObject$`username`
       self$`caCerts` <- SystemAuthConfigObject$`caCerts`

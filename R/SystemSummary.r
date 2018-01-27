@@ -84,8 +84,7 @@ SystemSummary <- R6::R6Class(
 
       SystemSummaryObject
     },
-    fromJSON = function(SystemSummaryJson) {
-      SystemSummaryObject <- jsonlite::fromJSON(SystemSummaryJson)
+    fromJSON = function(SystemSummaryObject) {
       if (!is.null(SystemSummaryObject$`description`)) {
         self$`description` <- SystemSummaryObject$`description`
       }
@@ -139,9 +138,9 @@ SystemSummary <- R6::R6Class(
       self$`isDefault` <- SystemSummaryObject$`isDefault`
       self$`isPublic` <- SystemSummaryObject$`isPublic`
       self$`name` <- SystemSummaryObject$`name`
-      SystemStatusTypeObject -> SystemStatusType$new()
+      SystemStatusTypeObject <- SystemStatusType$new()
       self$`status` <- SystemStatusTypeObject$fromJSON(jsonlite::toJSON(SystemSummaryObject$status, auto_unbox = TRUE))
-      SystemTypeObject -> SystemType$new()
+      SystemTypeObject <- SystemType$new()
       self$`type` <- SystemTypeObject$fromJSON(jsonlite::toJSON(SystemSummaryObject$type, auto_unbox = TRUE))
     }
   )

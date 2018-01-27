@@ -86,8 +86,7 @@ TransferTaskProgressSummary <- R6::R6Class(
 
       TransferTaskProgressSummaryObject
     },
-    fromJSON = function(TransferTaskProgressSummaryJson) {
-      TransferTaskProgressSummaryObject <- jsonlite::fromJSON(TransferTaskProgressSummaryJson)
+    fromJSON = function(TransferTaskProgressSummaryObject) {
       if (!is.null(TransferTaskProgressSummaryObject$`averageRate`)) {
         self$`averageRate` <- TransferTaskProgressSummaryObject$`averageRate`
       }

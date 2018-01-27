@@ -96,8 +96,7 @@ Metadata <- R6::R6Class(
 
       MetadataObject
     },
-    fromJSON = function(MetadataJson) {
-      MetadataObject <- jsonlite::fromJSON(MetadataJson)
+    fromJSON = function(MetadataObject) {
       if (!is.null(MetadataObject$`associationIds`)) {
         self$`associationIds` <- MetadataObject$`associationIds`
       }

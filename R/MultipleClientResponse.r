@@ -51,8 +51,7 @@ MultipleClientResponse <- R6::R6Class(
 
       MultipleClientResponseObject
     },
-    fromJSON = function(MultipleClientResponseJson) {
-      MultipleClientResponseObject <- jsonlite::fromJSON(MultipleClientResponseJson)
+    fromJSON = function(MultipleClientResponseObject) {
       if (!is.null(MultipleClientResponseObject$`message`)) {
         self$`message` <- MultipleClientResponseObject$`message`
       }

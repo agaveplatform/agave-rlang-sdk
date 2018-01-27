@@ -23,8 +23,7 @@ FileType <- R6::R6Class(
 
       FileTypeObject
     },
-    fromJSON = function(FileTypeJson) {
-      FileTypeObject <- jsonlite::fromJSON(FileTypeJson)
+    fromJSON = function(FileTypeObject) {
     },
     toJSONString = function() {
        sprintf(

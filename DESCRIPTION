@@ -1,12 +1,12 @@
-Package: swagger
+Package: rAgave
 Title: R Package Client for Agave Platform Science API
 Version: 1.0.0
-Authors@R: person("Swagger Codegen community", email = "apiteam@swagger.io", role = c("aut", "cre"))
+Authors@R: person("Rion Dooley", email = "deardooley@gmail.com", role = c("aut", "cre"))
 Description: Power your digital lab and reduce the time from theory to discovery using the Agave Science-as-a-Service API Platform. Agave provides hosted services that allow researchers to manage data, conduct experiments, and publish and share results from anywhere at any time.
 Depends: R (>= 3.3.3)
 Encoding: UTF-8
-License: Unlicense
+License: BSD 3-Clause
 LazyData: true
 Suggests: testthat
-Imports: jsonlite, httr, R6
+Imports: jsonlite, httr, R6, futile.logger
 RoxygenNote: 6.0.1.9000

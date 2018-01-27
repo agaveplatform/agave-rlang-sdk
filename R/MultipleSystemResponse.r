@@ -51,8 +51,7 @@ MultipleSystemResponse <- R6::R6Class(
 
       MultipleSystemResponseObject
     },
-    fromJSON = function(MultipleSystemResponseJson) {
-      MultipleSystemResponseObject <- jsonlite::fromJSON(MultipleSystemResponseJson)
+    fromJSON = function(MultipleSystemResponseObject) {
       if (!is.null(MultipleSystemResponseObject$`message`)) {
         self$`message` <- MultipleSystemResponseObject$`message`
       }

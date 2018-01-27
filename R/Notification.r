@@ -49,8 +49,7 @@ Notification <- R6::R6Class(
 
       NotificationObject
     },
-    fromJSON = function(NotificationJson) {
-      NotificationObject <- jsonlite::fromJSON(NotificationJson)
+    fromJSON = function(NotificationObject) {
       if (!is.null(NotificationObject$`event`)) {
         self$`event` <- NotificationObject$`event`
       }

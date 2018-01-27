@@ -32,8 +32,7 @@ JobStopAction <- R6::R6Class(
 
       JobStopActionObject
     },
-    fromJSON = function(JobStopActionJson) {
-      JobStopActionObject <- jsonlite::fromJSON(JobStopActionJson)
+    fromJSON = function(JobStopActionObject) {
       if (!is.null(JobStopActionObject$`action`)) {
         actionObject <- JobActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(JobStopActionObject$action, auto_unbox = TRUE))
@@ -50,7 +49,7 @@ JobStopAction <- R6::R6Class(
     },
     fromJSONString = function(JobStopActionJson) {
       JobStopActionObject <- jsonlite::fromJSON(JobStopActionJson)
-      JobActionTypeObject -> JobActionType$new()
+      JobActionTypeObject <- JobActionType$new()
       self$`action` <- JobActionTypeObject$fromJSON(jsonlite::toJSON(JobStopActionObject$action, auto_unbox = TRUE))
     }
   )

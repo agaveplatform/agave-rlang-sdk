@@ -33,3 +33,9 @@ vignettes/*.pdf
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
+.Rproj.user
+.agave
+.bash_history
+docker.Rproj
+.iplant
+agave.log

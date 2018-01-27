@@ -23,8 +23,7 @@ ClientAPISubscriptionStatusType <- R6::R6Class(
 
       ClientAPISubscriptionStatusTypeObject
     },
-    fromJSON = function(ClientAPISubscriptionStatusTypeJson) {
-      ClientAPISubscriptionStatusTypeObject <- jsonlite::fromJSON(ClientAPISubscriptionStatusTypeJson)
+    fromJSON = function(ClientAPISubscriptionStatusTypeObject) {
     },
     toJSONString = function() {
        sprintf(

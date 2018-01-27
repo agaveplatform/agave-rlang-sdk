@@ -50,8 +50,7 @@ SingleTransformResponse <- R6::R6Class(
 
       SingleTransformResponseObject
     },
-    fromJSON = function(SingleTransformResponseJson) {
-      SingleTransformResponseObject <- jsonlite::fromJSON(SingleTransformResponseJson)
+    fromJSON = function(SingleTransformResponseObject) {
       if (!is.null(SingleTransformResponseObject$`message`)) {
         self$`message` <- SingleTransformResponseObject$`message`
       }
@@ -79,7 +78,7 @@ SingleTransformResponse <- R6::R6Class(
     fromJSONString = function(SingleTransformResponseJson) {
       SingleTransformResponseObject <- jsonlite::fromJSON(SingleTransformResponseJson)
       self$`message` <- SingleTransformResponseObject$`message`
-      TransformObject -> Transform$new()
+      TransformObject <- Transform$new()
       self$`result` <- TransformObject$fromJSON(jsonlite::toJSON(SingleTransformResponseObject$result, auto_unbox = TRUE))
       self$`status` <- SingleTransformResponseObject$`status`
     }

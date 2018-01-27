@@ -23,8 +23,7 @@ SystemExecutionType <- R6::R6Class(
 
       SystemExecutionTypeObject
     },
-    fromJSON = function(SystemExecutionTypeJson) {
-      SystemExecutionTypeObject <- jsonlite::fromJSON(SystemExecutionTypeJson)
+    fromJSON = function(SystemExecutionTypeObject) {
     },
     toJSONString = function() {
        sprintf(

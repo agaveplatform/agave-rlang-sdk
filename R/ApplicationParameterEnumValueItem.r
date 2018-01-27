@@ -41,8 +41,7 @@ ApplicationParameterEnumValueItem <- R6::R6Class(
 
       ApplicationParameterEnumValueItemObject
     },
-    fromJSON = function(ApplicationParameterEnumValueItemJson) {
-      ApplicationParameterEnumValueItemObject <- jsonlite::fromJSON(ApplicationParameterEnumValueItemJson)
+    fromJSON = function(ApplicationParameterEnumValueItemObject) {
       if (!is.null(ApplicationParameterEnumValueItemObject$`key`)) {
         self$`key` <- ApplicationParameterEnumValueItemObject$`key`
       }

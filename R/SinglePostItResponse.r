@@ -50,8 +50,7 @@ SinglePostItResponse <- R6::R6Class(
 
       SinglePostItResponseObject
     },
-    fromJSON = function(SinglePostItResponseJson) {
-      SinglePostItResponseObject <- jsonlite::fromJSON(SinglePostItResponseJson)
+    fromJSON = function(SinglePostItResponseObject) {
       if (!is.null(SinglePostItResponseObject$`message`)) {
         self$`message` <- SinglePostItResponseObject$`message`
       }
@@ -79,7 +78,7 @@ SinglePostItResponse <- R6::R6Class(
     fromJSONString = function(SinglePostItResponseJson) {
       SinglePostItResponseObject <- jsonlite::fromJSON(SinglePostItResponseJson)
       self$`message` <- SinglePostItResponseObject$`message`
-      PostItObject -> PostIt$new()
+      PostItObject <- PostIt$new()
       self$`result` <- PostItObject$fromJSON(jsonlite::toJSON(SinglePostItResponseObject$result, auto_unbox = TRUE))
       self$`status` <- SinglePostItResponseObject$`status`
     }

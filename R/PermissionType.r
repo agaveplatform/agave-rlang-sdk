@@ -23,8 +23,7 @@ PermissionType <- R6::R6Class(
 
       PermissionTypeObject
     },
-    fromJSON = function(PermissionTypeJson) {
-      PermissionTypeObject <- jsonlite::fromJSON(PermissionTypeJson)
+    fromJSON = function(PermissionTypeObject) {
     },
     toJSONString = function() {
        sprintf(

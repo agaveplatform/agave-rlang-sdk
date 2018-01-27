@@ -41,8 +41,7 @@ TransformEncoder <- R6::R6Class(
 
       TransformEncoderObject
     },
-    fromJSON = function(TransformEncoderJson) {
-      TransformEncoderObject <- jsonlite::fromJSON(TransformEncoderJson)
+    fromJSON = function(TransformEncoderObject) {
       if (!is.null(TransformEncoderObject$`description`)) {
         self$`description` <- TransformEncoderObject$`description`
       }
