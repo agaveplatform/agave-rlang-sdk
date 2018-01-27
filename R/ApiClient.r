@@ -51,11 +51,12 @@ ApiClient  <- R6::R6Class(
         }
 
         if (!missing(queryParams)) {
-          queryParams <- list()
+          queryParams <- list(naked = "true")
         }
-
-        queryParams[['naked']] <- "true"
-
+        else {
+          queryParams <- modifyList(list(naked = "true"), queryParams)
+        }
+      
         if (method == "GET") {
             httr::GET(url, queryParams, headers, ...)
         }

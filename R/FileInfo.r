@@ -105,34 +105,43 @@ FileInfo <- R6::R6Class(
       FileInfoObject
     },
     fromJSON = function(FileInfoObject) {
-      if (!is.null(FileInfoObject$`format`)) {
-        self$`format` <- FileInfoObject$`format`
+      if (is.character(FileInfoObject) || is.primitive(FileInfoObject)) {
+        self$fromJSONString(FileInfoObject)
       }
-      if (!is.null(FileInfoObject$`lastModified`)) {
-        self$`lastModified` <- FileInfoObject$`lastModified`
-      }
-      if (!is.null(FileInfoObject$`length`)) {
-        self$`length` <- FileInfoObject$`length`
-      }
-      if (!is.null(FileInfoObject$`mimeType`)) {
-        self$`mimeType` <- FileInfoObject$`mimeType`
-      }
-      if (!is.null(FileInfoObject$`name`)) {
-        self$`name` <- FileInfoObject$`name`
-      }
-      if (!is.null(FileInfoObject$`path`)) {
-        self$`path` <- FileInfoObject$`path`
-      }
-      if (!is.null(FileInfoObject$`permissions`)) {
-        self$`permissions` <- FileInfoObject$`permissions`
-      }
-      if (!is.null(FileInfoObject$`system`)) {
-        self$`system` <- FileInfoObject$`system`
-      }
-      if (!is.null(FileInfoObject$`type`)) {
-        typeObject <- FileType$new()
-        typeObject$fromJSON(jsonlite::toJSON(FileInfoObject$type, auto_unbox = TRUE))
-        self$`type` <- typeObject
+      else {
+        if ("result" %in% names(FileInfoObject)) {
+          FileInfoObject <- FileInfoObject$result
+        }
+        
+        if (!is.null(FileInfoObject$`format`)) {
+          self$`format` <- FileInfoObject$`format`
+        }
+        if (!is.null(FileInfoObject$`lastModified`)) {
+          self$`lastModified` <- FileInfoObject$`lastModified`
+        }
+        if (!is.null(FileInfoObject$`length`)) {
+          self$`length` <- FileInfoObject$`length`
+        }
+        if (!is.null(FileInfoObject$`mimeType`)) {
+          self$`mimeType` <- FileInfoObject$`mimeType`
+        }
+        if (!is.null(FileInfoObject$`name`)) {
+          self$`name` <- FileInfoObject$`name`
+        }
+        if (!is.null(FileInfoObject$`path`)) {
+          self$`path` <- FileInfoObject$`path`
+        }
+        if (!is.null(FileInfoObject$`permissions`)) {
+          self$`permissions` <- FileInfoObject$`permissions`
+        }
+        if (!is.null(FileInfoObject$`system`)) {
+          self$`system` <- FileInfoObject$`system`
+        }
+        if (!is.null(FileInfoObject$`type`)) {
+          typeObject <- FileType$new()
+          typeObject$fromJSON(jsonlite::toJSON(FileInfoObject$type, auto_unbox = TRUE))
+          self$`type` <- typeObject
+        }
       }
     },
     toJSONString = function() {
@@ -161,6 +170,10 @@ FileInfo <- R6::R6Class(
     },
     fromJSONString = function(FileInfoJson) {
       FileInfoObject <- jsonlite::fromJSON(FileInfoJson)
+      if ("result" %in% names(FileInfoObject)) {
+        FileInfoObject <- FileInfoObject$result
+      }
+      
       self$`format` <- FileInfoObject$`format`
       self$`lastModified` <- FileInfoObject$`lastModified`
       self$`length` <- FileInfoObject$`length`
