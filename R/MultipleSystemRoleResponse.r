@@ -51,8 +51,7 @@ MultipleSystemRoleResponse <- R6::R6Class(
 
       MultipleSystemRoleResponseObject
     },
-    fromJSON = function(MultipleSystemRoleResponseJson) {
-      MultipleSystemRoleResponseObject <- jsonlite::fromJSON(MultipleSystemRoleResponseJson)
+    fromJSON = function(MultipleSystemRoleResponseObject) {
       if (!is.null(MultipleSystemRoleResponseObject$`message`)) {
         self$`message` <- MultipleSystemRoleResponseObject$`message`
       }

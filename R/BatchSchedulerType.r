@@ -23,8 +23,7 @@ BatchSchedulerType <- R6::R6Class(
 
       BatchSchedulerTypeObject
     },
-    fromJSON = function(BatchSchedulerTypeJson) {
-      BatchSchedulerTypeObject <- jsonlite::fromJSON(BatchSchedulerTypeJson)
+    fromJSON = function(BatchSchedulerTypeObject) {
     },
     toJSONString = function() {
        sprintf(

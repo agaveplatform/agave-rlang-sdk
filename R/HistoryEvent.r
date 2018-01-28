@@ -59,8 +59,7 @@ HistoryEvent <- R6::R6Class(
 
       HistoryEventObject
     },
-    fromJSON = function(HistoryEventJson) {
-      HistoryEventObject <- jsonlite::fromJSON(HistoryEventJson)
+    fromJSON = function(HistoryEventObject) {
       if (!is.null(HistoryEventObject$`created`)) {
         self$`created` <- HistoryEventObject$`created`
       }
@@ -95,7 +94,7 @@ HistoryEvent <- R6::R6Class(
       self$`created` <- HistoryEventObject$`created`
       self$`description` <- HistoryEventObject$`description`
       self$`status` <- HistoryEventObject$`status`
-      TransferTaskProgressSummaryObject -> TransferTaskProgressSummary$new()
+      TransferTaskProgressSummaryObject <- TransferTaskProgressSummary$new()
       self$`progress` <- TransferTaskProgressSummaryObject$fromJSON(jsonlite::toJSON(HistoryEventObject$progress, auto_unbox = TRUE))
     }
   )

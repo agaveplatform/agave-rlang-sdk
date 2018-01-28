@@ -51,8 +51,7 @@ MultiplePermissionResponse <- R6::R6Class(
 
       MultiplePermissionResponseObject
     },
-    fromJSON = function(MultiplePermissionResponseJson) {
-      MultiplePermissionResponseObject <- jsonlite::fromJSON(MultiplePermissionResponseJson)
+    fromJSON = function(MultiplePermissionResponseObject) {
       if (!is.null(MultiplePermissionResponseObject$`message`)) {
         self$`message` <- MultiplePermissionResponseObject$`message`
       }

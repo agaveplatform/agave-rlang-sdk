@@ -50,8 +50,7 @@ SingleInternalUserResponse <- R6::R6Class(
 
       SingleInternalUserResponseObject
     },
-    fromJSON = function(SingleInternalUserResponseJson) {
-      SingleInternalUserResponseObject <- jsonlite::fromJSON(SingleInternalUserResponseJson)
+    fromJSON = function(SingleInternalUserResponseObject) {
       if (!is.null(SingleInternalUserResponseObject$`message`)) {
         self$`message` <- SingleInternalUserResponseObject$`message`
       }
@@ -79,7 +78,7 @@ SingleInternalUserResponse <- R6::R6Class(
     fromJSONString = function(SingleInternalUserResponseJson) {
       SingleInternalUserResponseObject <- jsonlite::fromJSON(SingleInternalUserResponseJson)
       self$`message` <- SingleInternalUserResponseObject$`message`
-      InternalUserObject -> InternalUser$new()
+      InternalUserObject <- InternalUser$new()
       self$`result` <- InternalUserObject$fromJSON(jsonlite::toJSON(SingleInternalUserResponseObject$result, auto_unbox = TRUE))
       self$`status` <- SingleInternalUserResponseObject$`status`
     }

@@ -51,8 +51,7 @@ MultipleTransformResponse <- R6::R6Class(
 
       MultipleTransformResponseObject
     },
-    fromJSON = function(MultipleTransformResponseJson) {
-      MultipleTransformResponseObject <- jsonlite::fromJSON(MultipleTransformResponseJson)
+    fromJSON = function(MultipleTransformResponseObject) {
       if (!is.null(MultipleTransformResponseObject$`message`)) {
         self$`message` <- MultipleTransformResponseObject$`message`
       }

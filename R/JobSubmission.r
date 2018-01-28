@@ -140,8 +140,7 @@ JobSubmission <- R6::R6Class(
 
       JobSubmissionObject
     },
-    fromJSON = function(JobSubmissionJson) {
-      JobSubmissionObject <- jsonlite::fromJSON(JobSubmissionJson)
+    fromJSON = function(JobSubmissionObject) {
       if (!is.null(JobSubmissionObject$`archive`)) {
         self$`archive` <- JobSubmissionObject$`archive`
       }
@@ -230,7 +229,7 @@ JobSubmission <- R6::R6Class(
       self$`maxMemory` <- JobSubmissionObject$`maxMemory`
       self$`nodeCount` <- JobSubmissionObject$`nodeCount`
       self$`notifications` <- lapply(JobSubmissionObject$`notifications`, function(x) Notification$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
-      TODO_OBJECT_MAPPINGObject -> TODO_OBJECT_MAPPING$new()
+      TODO_OBJECT_MAPPINGObject <- TODO_OBJECT_MAPPING$new()
       self$`parameters` <- TODO_OBJECT_MAPPINGObject$fromJSON(jsonlite::toJSON(JobSubmissionObject$parameters, auto_unbox = TRUE))
       self$`processorsPerNode` <- JobSubmissionObject$`processorsPerNode`
       self$`batchQueue` <- JobSubmissionObject$`batchQueue`

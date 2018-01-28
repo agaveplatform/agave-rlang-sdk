@@ -51,8 +51,7 @@ MultipleRemoteFileResponse <- R6::R6Class(
 
       MultipleRemoteFileResponseObject
     },
-    fromJSON = function(MultipleRemoteFileResponseJson) {
-      MultipleRemoteFileResponseObject <- jsonlite::fromJSON(MultipleRemoteFileResponseJson)
+    fromJSON = function(MultipleRemoteFileResponseObject) {
       if (!is.null(MultipleRemoteFileResponseObject$`message`)) {
         self$`message` <- MultipleRemoteFileResponseObject$`message`
       }

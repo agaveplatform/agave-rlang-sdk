@@ -68,8 +68,7 @@ FileImportRequest <- R6::R6Class(
 
       FileImportRequestObject
     },
-    fromJSON = function(FileImportRequestJson) {
-      FileImportRequestObject <- jsonlite::fromJSON(FileImportRequestJson)
+    fromJSON = function(FileImportRequestObject) {
       if (!is.null(FileImportRequestObject$`fileType`)) {
         self$`fileType` <- FileImportRequestObject$`fileType`
       }

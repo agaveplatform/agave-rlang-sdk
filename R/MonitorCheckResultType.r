@@ -23,8 +23,7 @@ MonitorCheckResultType <- R6::R6Class(
 
       MonitorCheckResultTypeObject
     },
-    fromJSON = function(MonitorCheckResultTypeJson) {
-      MonitorCheckResultTypeObject <- jsonlite::fromJSON(MonitorCheckResultTypeJson)
+    fromJSON = function(MonitorCheckResultTypeObject) {
     },
     toJSONString = function() {
        sprintf(

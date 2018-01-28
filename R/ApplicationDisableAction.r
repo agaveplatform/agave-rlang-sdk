@@ -32,8 +32,7 @@ ApplicationDisableAction <- R6::R6Class(
 
       ApplicationDisableActionObject
     },
-    fromJSON = function(ApplicationDisableActionJson) {
-      ApplicationDisableActionObject <- jsonlite::fromJSON(ApplicationDisableActionJson)
+    fromJSON = function(ApplicationDisableActionObject) {
       if (!is.null(ApplicationDisableActionObject$`action`)) {
         actionObject <- ApplicationActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(ApplicationDisableActionObject$action, auto_unbox = TRUE))
@@ -50,7 +49,7 @@ ApplicationDisableAction <- R6::R6Class(
     },
     fromJSONString = function(ApplicationDisableActionJson) {
       ApplicationDisableActionObject <- jsonlite::fromJSON(ApplicationDisableActionJson)
-      ApplicationActionTypeObject -> ApplicationActionType$new()
+      ApplicationActionTypeObject <- ApplicationActionType$new()
       self$`action` <- ApplicationActionTypeObject$fromJSON(jsonlite::toJSON(ApplicationDisableActionObject$action, auto_unbox = TRUE))
     }
   )

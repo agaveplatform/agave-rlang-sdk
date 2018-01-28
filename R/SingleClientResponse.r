@@ -50,8 +50,7 @@ SingleClientResponse <- R6::R6Class(
 
       SingleClientResponseObject
     },
-    fromJSON = function(SingleClientResponseJson) {
-      SingleClientResponseObject <- jsonlite::fromJSON(SingleClientResponseJson)
+    fromJSON = function(SingleClientResponseObject) {
       if (!is.null(SingleClientResponseObject$`message`)) {
         self$`message` <- SingleClientResponseObject$`message`
       }
@@ -77,10 +76,10 @@ SingleClientResponse <- R6::R6Class(
       )
     },
     fromJSONString = function(SingleClientResponseJson) {
-      SingleClientResponseObject <- jsonlite::fromJSON(SingleClientResponseJson)
+      SingleClientResponseObject <- jsonlite::fromJSON(SingleClientResponseJson, simplifyVector = TRUE)
       self$`message` <- SingleClientResponseObject$`message`
-      ClientObject -> Client$new()
-      self$`result` <- ClientObject$fromJSON(jsonlite::toJSON(SingleClientResponseObject$result, auto_unbox = TRUE))
+      ClientObject <- Client$new()
+      self$`result` <- ClientObject$fromJSON(SingleClientResponseObject$result)
       self$`status` <- SingleClientResponseObject$`status`
     }
   )

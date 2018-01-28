@@ -23,8 +23,7 @@ ClientSubscriptionTier <- R6::R6Class(
 
       ClientSubscriptionTierObject
     },
-    fromJSON = function(ClientSubscriptionTierJson) {
-      ClientSubscriptionTierObject <- jsonlite::fromJSON(ClientSubscriptionTierJson)
+    fromJSON = function(ClientSubscriptionTierObject) {
     },
     toJSONString = function() {
        sprintf(

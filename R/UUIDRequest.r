@@ -32,8 +32,7 @@ UUIDRequest <- R6::R6Class(
 
       UUIDRequestObject
     },
-    fromJSON = function(UUIDRequestJson) {
-      UUIDRequestObject <- jsonlite::fromJSON(UUIDRequestJson)
+    fromJSON = function(UUIDRequestObject) {
       if (!is.null(UUIDRequestObject$`type`)) {
         self$`type` <- UUIDRequestObject$`type`
       }

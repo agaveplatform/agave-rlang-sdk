@@ -69,8 +69,7 @@ Tag <- R6::R6Class(
 
       TagObject
     },
-    fromJSON = function(TagJson) {
-      TagObject <- jsonlite::fromJSON(TagJson)
+    fromJSON = function(TagObject) {
       if (!is.null(TagObject$`id`)) {
         self$`id` <- TagObject$`id`
       }

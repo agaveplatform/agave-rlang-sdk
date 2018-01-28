@@ -177,8 +177,7 @@ SystemRequest <- R6::R6Class(
 
       SystemRequestObject
     },
-    fromJSON = function(SystemRequestJson) {
-      SystemRequestObject <- jsonlite::fromJSON(SystemRequestJson)
+    fromJSON = function(SystemRequestObject) {
       if (!is.null(SystemRequestObject$`description`)) {
         self$`description` <- SystemRequestObject$`description`
       }
@@ -291,25 +290,25 @@ SystemRequest <- R6::R6Class(
       SystemRequestObject <- jsonlite::fromJSON(SystemRequestJson)
       self$`description` <- SystemRequestObject$`description`
       self$`environment` <- SystemRequestObject$`environment`
-      SystemExecutionTypeObject -> SystemExecutionType$new()
+      SystemExecutionTypeObject <- SystemExecutionType$new()
       self$`executionType` <- SystemExecutionTypeObject$fromJSON(jsonlite::toJSON(SystemRequestObject$executionType, auto_unbox = TRUE))
       self$`id` <- SystemRequestObject$`id`
-      SystemLoginConfigObject -> SystemLoginConfig$new()
+      SystemLoginConfigObject <- SystemLoginConfig$new()
       self$`login` <- SystemLoginConfigObject$fromJSON(jsonlite::toJSON(SystemRequestObject$login, auto_unbox = TRUE))
       self$`maxSystemJobs` <- SystemRequestObject$`maxSystemJobs`
       self$`maxSystemJobsPerUser` <- SystemRequestObject$`maxSystemJobsPerUser`
       self$`name` <- SystemRequestObject$`name`
       self$`queues` <- lapply(SystemRequestObject$`queues`, function(x) BatchQueue$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
-      BatchSchedulerTypeObject -> BatchSchedulerType$new()
+      BatchSchedulerTypeObject <- BatchSchedulerType$new()
       self$`scheduler` <- BatchSchedulerTypeObject$fromJSON(jsonlite::toJSON(SystemRequestObject$scheduler, auto_unbox = TRUE))
       self$`scratchDir` <- SystemRequestObject$`scratchDir`
       self$`site` <- SystemRequestObject$`site`
       self$`startupScript` <- SystemRequestObject$`startupScript`
-      SystemStatusTypeObject -> SystemStatusType$new()
+      SystemStatusTypeObject <- SystemStatusType$new()
       self$`status` <- SystemStatusTypeObject$fromJSON(jsonlite::toJSON(SystemRequestObject$status, auto_unbox = TRUE))
-      SystemStorageConfigObject -> SystemStorageConfig$new()
+      SystemStorageConfigObject <- SystemStorageConfig$new()
       self$`storage` <- SystemStorageConfigObject$fromJSON(jsonlite::toJSON(SystemRequestObject$storage, auto_unbox = TRUE))
-      SystemTypeObject -> SystemType$new()
+      SystemTypeObject <- SystemType$new()
       self$`type` <- SystemTypeObject$fromJSON(jsonlite::toJSON(SystemRequestObject$type, auto_unbox = TRUE))
       self$`workDir` <- SystemRequestObject$`workDir`
     }

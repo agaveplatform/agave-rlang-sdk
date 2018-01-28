@@ -23,8 +23,7 @@ ApplicationActionType <- R6::R6Class(
 
       ApplicationActionTypeObject
     },
-    fromJSON = function(ApplicationActionTypeJson) {
-      ApplicationActionTypeObject <- jsonlite::fromJSON(ApplicationActionTypeJson)
+    fromJSON = function(ApplicationActionTypeObject) {
     },
     toJSONString = function() {
        sprintf(

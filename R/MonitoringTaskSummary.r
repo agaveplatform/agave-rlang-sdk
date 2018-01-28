@@ -75,8 +75,7 @@ MonitoringTaskSummary <- R6::R6Class(
 
       MonitoringTaskSummaryObject
     },
-    fromJSON = function(MonitoringTaskSummaryJson) {
-      MonitoringTaskSummaryObject <- jsonlite::fromJSON(MonitoringTaskSummaryJson)
+    fromJSON = function(MonitoringTaskSummaryObject) {
       if (!is.null(MonitoringTaskSummaryObject$`active`)) {
         self$`active` <- MonitoringTaskSummaryObject$`active`
       }

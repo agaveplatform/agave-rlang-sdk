@@ -66,8 +66,7 @@ ApplicationArgumentDetails <- R6::R6Class(
 
       ApplicationArgumentDetailsObject
     },
-    fromJSON = function(ApplicationArgumentDetailsJson) {
-      ApplicationArgumentDetailsObject <- jsonlite::fromJSON(ApplicationArgumentDetailsJson)
+    fromJSON = function(ApplicationArgumentDetailsObject) {
       if (!is.null(ApplicationArgumentDetailsObject$`description`)) {
         self$`description` <- ApplicationArgumentDetailsObject$`description`
       }

@@ -32,8 +32,7 @@ ApplicationCloneAction <- R6::R6Class(
 
       ApplicationCloneActionObject
     },
-    fromJSON = function(ApplicationCloneActionJson) {
-      ApplicationCloneActionObject <- jsonlite::fromJSON(ApplicationCloneActionJson)
+    fromJSON = function(ApplicationCloneActionObject) {
       if (!is.null(ApplicationCloneActionObject$`action`)) {
         actionObject <- ApplicationActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(ApplicationCloneActionObject$action, auto_unbox = TRUE))
@@ -50,7 +49,7 @@ ApplicationCloneAction <- R6::R6Class(
     },
     fromJSONString = function(ApplicationCloneActionJson) {
       ApplicationCloneActionObject <- jsonlite::fromJSON(ApplicationCloneActionJson)
-      ApplicationActionTypeObject -> ApplicationActionType$new()
+      ApplicationActionTypeObject <- ApplicationActionType$new()
       self$`action` <- ApplicationActionTypeObject$fromJSON(jsonlite::toJSON(ApplicationCloneActionObject$action, auto_unbox = TRUE))
     }
   )

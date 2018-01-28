@@ -51,8 +51,7 @@ MultipleApplicationResponse <- R6::R6Class(
 
       MultipleApplicationResponseObject
     },
-    fromJSON = function(MultipleApplicationResponseJson) {
-      MultipleApplicationResponseObject <- jsonlite::fromJSON(MultipleApplicationResponseJson)
+    fromJSON = function(MultipleApplicationResponseObject) {
       if (!is.null(MultipleApplicationResponseObject$`message`)) {
         self$`message` <- MultipleApplicationResponseObject$`message`
       }

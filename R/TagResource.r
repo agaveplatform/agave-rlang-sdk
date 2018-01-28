@@ -32,8 +32,7 @@ TagResource <- R6::R6Class(
 
       TagResourceObject
     },
-    fromJSON = function(TagResourceJson) {
-      TagResourceObject <- jsonlite::fromJSON(TagResourceJson)
+    fromJSON = function(TagResourceObject) {
       if (!is.null(TagResourceObject$`id`)) {
         self$`id` <- TagResourceObject$`id`
       }

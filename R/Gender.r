@@ -23,8 +23,7 @@ Gender <- R6::R6Class(
 
       GenderObject
     },
-    fromJSON = function(GenderJson) {
-      GenderObject <- jsonlite::fromJSON(GenderJson)
+    fromJSON = function(GenderObject) {
     },
     toJSONString = function() {
        sprintf(

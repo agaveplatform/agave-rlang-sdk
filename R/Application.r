@@ -311,8 +311,7 @@ Application <- R6::R6Class(
 
       ApplicationObject
     },
-    fromJSON = function(ApplicationJson) {
-      ApplicationObject <- jsonlite::fromJSON(ApplicationJson)
+    fromJSON = function(ApplicationObject) {
       if (!is.null(ApplicationObject$`available`)) {
         self$`available` <- ApplicationObject$`available`
       }

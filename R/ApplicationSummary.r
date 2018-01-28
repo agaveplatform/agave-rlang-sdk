@@ -94,8 +94,7 @@ ApplicationSummary <- R6::R6Class(
 
       ApplicationSummaryObject
     },
-    fromJSON = function(ApplicationSummaryJson) {
-      ApplicationSummaryObject <- jsonlite::fromJSON(ApplicationSummaryJson)
+    fromJSON = function(ApplicationSummaryObject) {
       if (!is.null(ApplicationSummaryObject$`id`)) {
         self$`id` <- ApplicationSummaryObject$`id`
       }

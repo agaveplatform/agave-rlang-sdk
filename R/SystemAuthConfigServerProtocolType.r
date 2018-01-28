@@ -23,8 +23,7 @@ SystemAuthConfigServerProtocolType <- R6::R6Class(
 
       SystemAuthConfigServerProtocolTypeObject
     },
-    fromJSON = function(SystemAuthConfigServerProtocolTypeJson) {
-      SystemAuthConfigServerProtocolTypeObject <- jsonlite::fromJSON(SystemAuthConfigServerProtocolTypeJson)
+    fromJSON = function(SystemAuthConfigServerProtocolTypeObject) {
     },
     toJSONString = function() {
        sprintf(

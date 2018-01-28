@@ -23,8 +23,7 @@ ApplicationParallelism <- R6::R6Class(
 
       ApplicationParallelismObject
     },
-    fromJSON = function(ApplicationParallelismJson) {
-      ApplicationParallelismObject <- jsonlite::fromJSON(ApplicationParallelismJson)
+    fromJSON = function(ApplicationParallelismObject) {
     },
     toJSONString = function() {
        sprintf(

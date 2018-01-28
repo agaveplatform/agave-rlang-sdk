@@ -76,8 +76,7 @@ PostItRequest <- R6::R6Class(
 
       PostItRequestObject
     },
-    fromJSON = function(PostItRequestJson) {
-      PostItRequestObject <- jsonlite::fromJSON(PostItRequestJson)
+    fromJSON = function(PostItRequestObject) {
       if (!is.null(PostItRequestObject$`url`)) {
         self$`url` <- PostItRequestObject$`url`
       }
@@ -121,7 +120,7 @@ PostItRequest <- R6::R6Class(
       PostItRequestObject <- jsonlite::fromJSON(PostItRequestJson)
       self$`url` <- PostItRequestObject$`url`
       self$`internalUsername` <- PostItRequestObject$`internalUsername`
-      PostItRequestMethodObject -> PostItRequestMethod$new()
+      PostItRequestMethodObject <- PostItRequestMethod$new()
       self$`method` <- PostItRequestMethodObject$fromJSON(jsonlite::toJSON(PostItRequestObject$method, auto_unbox = TRUE))
       self$`lifetime` <- PostItRequestObject$`lifetime`
       self$`maxUses` <- PostItRequestObject$`maxUses`

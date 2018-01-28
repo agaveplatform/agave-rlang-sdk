@@ -248,8 +248,10 @@ Job <- R6::R6Class(
 
       JobObject
     },
-    fromJSON = function(JobJson) {
-      JobObject <- jsonlite::fromJSON(JobJson)
+    fromJSON = function(JobObject) {
+      if ("result" %in% names(JobObject)) {
+        JobObject <- JobObject$result
+      }
       if (!is.null(JobObject$`appId`)) {
         self$`appId` <- JobObject$`appId`
       }
@@ -391,7 +393,10 @@ Job <- R6::R6Class(
       )
     },
     fromJSONString = function(JobJson) {
-      JobObject <- jsonlite::fromJSON(JobJson)
+      JobObject <- jsonlite::fromJSON(JobJson, simplifyVector = TRUE)
+      if ("result" %in% names(JobObject)) {
+        JobObject <- JobObject$result
+      }
       self$`appId` <- JobObject$`appId`
       self$`archive` <- JobObject$`archive`
       self$`archivePath` <- JobObject$`archivePath`
@@ -400,7 +405,7 @@ Job <- R6::R6Class(
       self$`endTime` <- JobObject$`endTime`
       self$`executionSystem` <- JobObject$`executionSystem`
       self$`id` <- JobObject$`id`
-      JobInputsObject -> JobInputs$new()
+      JobInputsObject <- JobInputs$new()
       self$`inputs` <- JobInputsObject$fromJSON(jsonlite::toJSON(JobObject$inputs, auto_unbox = TRUE))
       self$`localId` <- JobObject$`localId`
       self$`memoryPerNode` <- JobObject$`memoryPerNode`
@@ -410,7 +415,7 @@ Job <- R6::R6Class(
       self$`notifications` <- lapply(JobObject$`notifications`, function(x) Notification$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
       self$`outputPath` <- JobObject$`outputPath`
       self$`owner` <- JobObject$`owner`
-      JobParametersObject -> JobParameters$new()
+      JobParametersObject <- JobParameters$new()
       self$`parameters` <- JobParametersObject$fromJSON(jsonlite::toJSON(JobObject$parameters, auto_unbox = TRUE))
       self$`processorsPerNode` <- JobObject$`processorsPerNode`
       self$`maxRunTime` <- JobObject$`maxRunTime`

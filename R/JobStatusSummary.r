@@ -41,8 +41,7 @@ JobStatusSummary <- R6::R6Class(
 
       JobStatusSummaryObject
     },
-    fromJSON = function(JobStatusSummaryJson) {
-      JobStatusSummaryObject <- jsonlite::fromJSON(JobStatusSummaryJson)
+    fromJSON = function(JobStatusSummaryObject) {
       if (!is.null(JobStatusSummaryObject$`id`)) {
         self$`id` <- JobStatusSummaryObject$`id`
       }

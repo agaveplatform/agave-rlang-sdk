@@ -23,8 +23,7 @@ SystemCredentialType <- R6::R6Class(
 
       SystemCredentialTypeObject
     },
-    fromJSON = function(SystemCredentialTypeJson) {
-      SystemCredentialTypeObject <- jsonlite::fromJSON(SystemCredentialTypeJson)
+    fromJSON = function(SystemCredentialTypeObject) {
     },
     toJSONString = function() {
        sprintf(

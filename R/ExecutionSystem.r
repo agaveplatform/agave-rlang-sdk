@@ -147,8 +147,7 @@ ExecutionSystem <- R6::R6Class(
 
       ExecutionSystemObject
     },
-    fromJSON = function(ExecutionSystemJson) {
-      ExecutionSystemObject <- jsonlite::fromJSON(ExecutionSystemJson)
+    fromJSON = function(ExecutionSystemObject) {
       if (!is.null(ExecutionSystemObject$`description`)) {
         self$`description` <- ExecutionSystemObject$`description`
       }
@@ -244,11 +243,11 @@ ExecutionSystem <- R6::R6Class(
       self$`revision` <- ExecutionSystemObject$`revision`
       self$`scratchDir` <- ExecutionSystemObject$`scratchDir`
       self$`site` <- ExecutionSystemObject$`site`
-      SystemStatusTypeObject -> SystemStatusType$new()
+      SystemStatusTypeObject <- SystemStatusType$new()
       self$`status` <- SystemStatusTypeObject$fromJSON(jsonlite::toJSON(ExecutionSystemObject$status, auto_unbox = TRUE))
-      SystemStorageConfigObject -> SystemStorageConfig$new()
+      SystemStorageConfigObject <- SystemStorageConfig$new()
       self$`storage` <- SystemStorageConfigObject$fromJSON(jsonlite::toJSON(ExecutionSystemObject$storage, auto_unbox = TRUE))
-      SystemTypeObject -> SystemType$new()
+      SystemTypeObject <- SystemType$new()
       self$`type` <- SystemTypeObject$fromJSON(jsonlite::toJSON(ExecutionSystemObject$type, auto_unbox = TRUE))
       self$`uuid` <- ExecutionSystemObject$`uuid`
     }

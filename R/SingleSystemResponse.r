@@ -50,8 +50,7 @@ SingleSystemResponse <- R6::R6Class(
 
       SingleSystemResponseObject
     },
-    fromJSON = function(SingleSystemResponseJson) {
-      SingleSystemResponseObject <- jsonlite::fromJSON(SingleSystemResponseJson)
+    fromJSON = function(SingleSystemResponseObject) {
       if (!is.null(SingleSystemResponseObject$`message`)) {
         self$`message` <- SingleSystemResponseObject$`message`
       }
@@ -79,7 +78,7 @@ SingleSystemResponse <- R6::R6Class(
     fromJSONString = function(SingleSystemResponseJson) {
       SingleSystemResponseObject <- jsonlite::fromJSON(SingleSystemResponseJson)
       self$`message` <- SingleSystemResponseObject$`message`
-      SystemObject -> System$new()
+      SystemObject <- System$new()
       self$`result` <- SystemObject$fromJSON(jsonlite::toJSON(SingleSystemResponseObject$result, auto_unbox = TRUE))
       self$`status` <- SingleSystemResponseObject$`status`
     }

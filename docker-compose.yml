@@ -1,0 +1,19 @@
+version: '2'
+
+volumes:
+  training-volume:
+
+services:
+  rstudio:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: agaveplatform/rstudio:3.4.3
+    restart: on-failure
+    environment:
+      - "ROOT=TRUE"
+    ports:
+      - "8787:8787"
+    volumes:
+      - training-volume:/home/rstudio/work
+      - .:/home/rstudio/rAgave

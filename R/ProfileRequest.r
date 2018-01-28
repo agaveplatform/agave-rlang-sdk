@@ -167,8 +167,7 @@ ProfileRequest <- R6::R6Class(
 
       ProfileRequestObject
     },
-    fromJSON = function(ProfileRequestJson) {
-      ProfileRequestObject <- jsonlite::fromJSON(ProfileRequestJson)
+    fromJSON = function(ProfileRequestObject) {
       if (!is.null(ProfileRequestObject$`username`)) {
         self$`username` <- ProfileRequestObject$`username`
       }
@@ -267,7 +266,7 @@ ProfileRequest <- R6::R6Class(
       self$`department` <- ProfileRequestObject$`department`
       self$`fax` <- ProfileRequestObject$`fax`
       self$`firstName` <- ProfileRequestObject$`firstName`
-      GenderObject -> Gender$new()
+      GenderObject <- Gender$new()
       self$`gender` <- GenderObject$fromJSON(jsonlite::toJSON(ProfileRequestObject$gender, auto_unbox = TRUE))
       self$`institution` <- ProfileRequestObject$`institution`
       self$`lastName` <- ProfileRequestObject$`lastName`

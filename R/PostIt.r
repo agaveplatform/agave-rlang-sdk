@@ -103,8 +103,7 @@ PostIt <- R6::R6Class(
 
       PostItObject
     },
-    fromJSON = function(PostItJson) {
-      PostItObject <- jsonlite::fromJSON(PostItJson)
+    fromJSON = function(PostItObject) {
       if (!is.null(PostItObject$`created`)) {
         self$`created` <- PostItObject$`created`
       }

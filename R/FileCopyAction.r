@@ -41,8 +41,7 @@ FileCopyAction <- R6::R6Class(
 
       FileCopyActionObject
     },
-    fromJSON = function(FileCopyActionJson) {
-      FileCopyActionObject <- jsonlite::fromJSON(FileCopyActionJson)
+    fromJSON = function(FileCopyActionObject) {
       if (!is.null(FileCopyActionObject$`action`)) {
         actionObject <- FileManagementActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(FileCopyActionObject$action, auto_unbox = TRUE))
@@ -64,7 +63,7 @@ FileCopyAction <- R6::R6Class(
     },
     fromJSONString = function(FileCopyActionJson) {
       FileCopyActionObject <- jsonlite::fromJSON(FileCopyActionJson)
-      FileManagementActionTypeObject -> FileManagementActionType$new()
+      FileManagementActionTypeObject <- FileManagementActionType$new()
       self$`action` <- FileManagementActionTypeObject$fromJSON(jsonlite::toJSON(FileCopyActionObject$action, auto_unbox = TRUE))
       self$`path` <- FileCopyActionObject$`path`
     }

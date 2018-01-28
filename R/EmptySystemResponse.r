@@ -50,8 +50,7 @@ EmptySystemResponse <- R6::R6Class(
 
       EmptySystemResponseObject
     },
-    fromJSON = function(EmptySystemResponseJson) {
-      EmptySystemResponseObject <- jsonlite::fromJSON(EmptySystemResponseJson)
+    fromJSON = function(EmptySystemResponseObject) {
       if (!is.null(EmptySystemResponseObject$`message`)) {
         self$`message` <- EmptySystemResponseObject$`message`
       }

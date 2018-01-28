@@ -49,8 +49,7 @@ NotificationRequest <- R6::R6Class(
 
       NotificationRequestObject
     },
-    fromJSON = function(NotificationRequestJson) {
-      NotificationRequestObject <- jsonlite::fromJSON(NotificationRequestJson)
+    fromJSON = function(NotificationRequestObject) {
       if (!is.null(NotificationRequestObject$`associatedUuid`)) {
         self$`associatedUuid` <- NotificationRequestObject$`associatedUuid`
       }

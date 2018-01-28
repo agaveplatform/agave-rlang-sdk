@@ -59,8 +59,7 @@ SystemLoginConfig <- R6::R6Class(
 
       SystemLoginConfigObject
     },
-    fromJSON = function(SystemLoginConfigJson) {
-      SystemLoginConfigObject <- jsonlite::fromJSON(SystemLoginConfigJson)
+    fromJSON = function(SystemLoginConfigObject) {
       if (!is.null(SystemLoginConfigObject$`auth`)) {
         authObject <- SystemAuthConfig$new()
         authObject$fromJSON(jsonlite::toJSON(SystemLoginConfigObject$auth, auto_unbox = TRUE))
@@ -94,11 +93,11 @@ SystemLoginConfig <- R6::R6Class(
     },
     fromJSONString = function(SystemLoginConfigJson) {
       SystemLoginConfigObject <- jsonlite::fromJSON(SystemLoginConfigJson)
-      SystemAuthConfigObject -> SystemAuthConfig$new()
+      SystemAuthConfigObject <- SystemAuthConfig$new()
       self$`auth` <- SystemAuthConfigObject$fromJSON(jsonlite::toJSON(SystemLoginConfigObject$auth, auto_unbox = TRUE))
       self$`host` <- SystemLoginConfigObject$`host`
       self$`port` <- SystemLoginConfigObject$`port`
-      SystemLoginProtocolTypeObject -> SystemLoginProtocolType$new()
+      SystemLoginProtocolTypeObject <- SystemLoginProtocolType$new()
       self$`protocol` <- SystemLoginProtocolTypeObject$fromJSON(jsonlite::toJSON(SystemLoginConfigObject$protocol, auto_unbox = TRUE))
     }
   )

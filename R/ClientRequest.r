@@ -59,8 +59,7 @@ ClientRequest <- R6::R6Class(
 
       ClientRequestObject
     },
-    fromJSON = function(ClientRequestJson) {
-      ClientRequestObject <- jsonlite::fromJSON(ClientRequestJson)
+    fromJSON = function(ClientRequestObject) {
       if (!is.null(ClientRequestObject$`name`)) {
         self$`name` <- ClientRequestObject$`name`
       }
@@ -94,7 +93,7 @@ ClientRequest <- R6::R6Class(
       ClientRequestObject <- jsonlite::fromJSON(ClientRequestJson)
       self$`name` <- ClientRequestObject$`name`
       self$`description` <- ClientRequestObject$`description`
-      ClientSubscriptionTierObject -> ClientSubscriptionTier$new()
+      ClientSubscriptionTierObject <- ClientSubscriptionTier$new()
       self$`tier` <- ClientSubscriptionTierObject$fromJSON(jsonlite::toJSON(ClientRequestObject$tier, auto_unbox = TRUE))
       self$`callbackUrl` <- ClientRequestObject$`callbackUrl`
     }

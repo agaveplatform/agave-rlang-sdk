@@ -23,8 +23,7 @@ JobActionType <- R6::R6Class(
 
       JobActionTypeObject
     },
-    fromJSON = function(JobActionTypeJson) {
-      JobActionTypeObject <- jsonlite::fromJSON(JobActionTypeJson)
+    fromJSON = function(JobActionTypeObject) {
     },
     toJSONString = function() {
        sprintf(

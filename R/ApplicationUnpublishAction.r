@@ -32,8 +32,7 @@ ApplicationUnpublishAction <- R6::R6Class(
 
       ApplicationUnpublishActionObject
     },
-    fromJSON = function(ApplicationUnpublishActionJson) {
-      ApplicationUnpublishActionObject <- jsonlite::fromJSON(ApplicationUnpublishActionJson)
+    fromJSON = function(ApplicationUnpublishActionObject) {
       if (!is.null(ApplicationUnpublishActionObject$`action`)) {
         actionObject <- ApplicationActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(ApplicationUnpublishActionObject$action, auto_unbox = TRUE))
@@ -50,7 +49,7 @@ ApplicationUnpublishAction <- R6::R6Class(
     },
     fromJSONString = function(ApplicationUnpublishActionJson) {
       ApplicationUnpublishActionObject <- jsonlite::fromJSON(ApplicationUnpublishActionJson)
-      ApplicationActionTypeObject -> ApplicationActionType$new()
+      ApplicationActionTypeObject <- ApplicationActionType$new()
       self$`action` <- ApplicationActionTypeObject$fromJSON(jsonlite::toJSON(ApplicationUnpublishActionObject$action, auto_unbox = TRUE))
     }
   )

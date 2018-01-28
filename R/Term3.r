@@ -23,8 +23,7 @@ Term3 <- R6::R6Class(
 
       Term3Object
     },
-    fromJSON = function(Term3Json) {
-      Term3Object <- jsonlite::fromJSON(Term3Json)
+    fromJSON = function(Term3Object) {
     },
     toJSONString = function() {
        sprintf(

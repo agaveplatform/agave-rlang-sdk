@@ -39,8 +39,7 @@ FilePermissionStanza <- R6::R6Class(
 
       FilePermissionStanzaObject
     },
-    fromJSON = function(FilePermissionStanzaJson) {
-      FilePermissionStanzaObject <- jsonlite::fromJSON(FilePermissionStanzaJson)
+    fromJSON = function(FilePermissionStanzaObject) {
       if (!is.null(FilePermissionStanzaObject$`read`)) {
         self$`read` <- FilePermissionStanzaObject$`read`
       }

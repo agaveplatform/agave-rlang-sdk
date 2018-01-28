@@ -50,8 +50,7 @@ SingleSubscriptionResponse <- R6::R6Class(
 
       SingleSubscriptionResponseObject
     },
-    fromJSON = function(SingleSubscriptionResponseJson) {
-      SingleSubscriptionResponseObject <- jsonlite::fromJSON(SingleSubscriptionResponseJson)
+    fromJSON = function(SingleSubscriptionResponseObject) {
       if (!is.null(SingleSubscriptionResponseObject$`message`)) {
         self$`message` <- SingleSubscriptionResponseObject$`message`
       }
@@ -79,7 +78,7 @@ SingleSubscriptionResponse <- R6::R6Class(
     fromJSONString = function(SingleSubscriptionResponseJson) {
       SingleSubscriptionResponseObject <- jsonlite::fromJSON(SingleSubscriptionResponseJson)
       self$`message` <- SingleSubscriptionResponseObject$`message`
-      ClientAPISubscriptionObject -> ClientAPISubscription$new()
+      ClientAPISubscriptionObject <- ClientAPISubscription$new()
       self$`result` <- ClientAPISubscriptionObject$fromJSON(jsonlite::toJSON(SingleSubscriptionResponseObject$result, auto_unbox = TRUE))
       self$`status` <- SingleSubscriptionResponseObject$`status`
     }

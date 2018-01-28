@@ -167,8 +167,7 @@ InternalUser <- R6::R6Class(
 
       InternalUserObject
     },
-    fromJSON = function(InternalUserJson) {
-      InternalUserObject <- jsonlite::fromJSON(InternalUserJson)
+    fromJSON = function(InternalUserObject) {
       if (!is.null(InternalUserObject$`city`)) {
         self$`city` <- InternalUserObject$`city`
       }
@@ -266,7 +265,7 @@ InternalUser <- R6::R6Class(
       self$`email` <- InternalUserObject$`email`
       self$`fax` <- InternalUserObject$`fax`
       self$`firstName` <- InternalUserObject$`firstName`
-      GenderObject -> Gender$new()
+      GenderObject <- Gender$new()
       self$`gender` <- GenderObject$fromJSON(jsonlite::toJSON(InternalUserObject$gender, auto_unbox = TRUE))
       self$`institution` <- InternalUserObject$`institution`
       self$`lastName` <- InternalUserObject$`lastName`

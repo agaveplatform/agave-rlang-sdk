@@ -59,8 +59,7 @@ ApplicationInput <- R6::R6Class(
 
       ApplicationInputObject
     },
-    fromJSON = function(ApplicationInputJson) {
-      ApplicationInputObject <- jsonlite::fromJSON(ApplicationInputJson)
+    fromJSON = function(ApplicationInputObject) {
       if (!is.null(ApplicationInputObject$`details`)) {
         detailsObject <- ApplicationArgumentDetails$new()
         detailsObject$fromJSON(jsonlite::toJSON(ApplicationInputObject$details, auto_unbox = TRUE))
@@ -96,12 +95,12 @@ ApplicationInput <- R6::R6Class(
     },
     fromJSONString = function(ApplicationInputJson) {
       ApplicationInputObject <- jsonlite::fromJSON(ApplicationInputJson)
-      ApplicationArgumentDetailsObject -> ApplicationArgumentDetails$new()
+      ApplicationArgumentDetailsObject <- ApplicationArgumentDetails$new()
       self$`details` <- ApplicationArgumentDetailsObject$fromJSON(jsonlite::toJSON(ApplicationInputObject$details, auto_unbox = TRUE))
       self$`id` <- ApplicationInputObject$`id`
-      ApplicationArgumentSemanticsObject -> ApplicationArgumentSemantics$new()
+      ApplicationArgumentSemanticsObject <- ApplicationArgumentSemantics$new()
       self$`semantics` <- ApplicationArgumentSemanticsObject$fromJSON(jsonlite::toJSON(ApplicationInputObject$semantics, auto_unbox = TRUE))
-      ApplicationArgumentValueObject -> ApplicationArgumentValue$new()
+      ApplicationArgumentValueObject <- ApplicationArgumentValue$new()
       self$`value` <- ApplicationArgumentValueObject$fromJSON(jsonlite::toJSON(ApplicationInputObject$value, auto_unbox = TRUE))
     }
   )

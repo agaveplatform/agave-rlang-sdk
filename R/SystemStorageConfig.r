@@ -121,8 +121,7 @@ SystemStorageConfig <- R6::R6Class(
 
       SystemStorageConfigObject
     },
-    fromJSON = function(SystemStorageConfigJson) {
-      SystemStorageConfigObject <- jsonlite::fromJSON(SystemStorageConfigJson)
+    fromJSON = function(SystemStorageConfigObject) {
       if (!is.null(SystemStorageConfigObject$`auth`)) {
         authObject <- SystemAuthConfig$new()
         authObject$fromJSON(jsonlite::toJSON(SystemStorageConfigObject$auth, auto_unbox = TRUE))
@@ -191,14 +190,14 @@ SystemStorageConfig <- R6::R6Class(
     },
     fromJSONString = function(SystemStorageConfigJson) {
       SystemStorageConfigObject <- jsonlite::fromJSON(SystemStorageConfigJson)
-      SystemAuthConfigObject -> SystemAuthConfig$new()
+      SystemAuthConfigObject <- SystemAuthConfig$new()
       self$`auth` <- SystemAuthConfigObject$fromJSON(jsonlite::toJSON(SystemStorageConfigObject$auth, auto_unbox = TRUE))
       self$`containerName` <- SystemStorageConfigObject$`containerName`
       self$`homeDir` <- SystemStorageConfigObject$`homeDir`
       self$`host` <- SystemStorageConfigObject$`host`
       self$`port` <- SystemStorageConfigObject$`port`
       self$`mirror` <- SystemStorageConfigObject$`mirror`
-      SystemStorageProtocolTypeObject -> SystemStorageProtocolType$new()
+      SystemStorageProtocolTypeObject <- SystemStorageProtocolType$new()
       self$`protocol` <- SystemStorageProtocolTypeObject$fromJSON(jsonlite::toJSON(SystemStorageConfigObject$protocol, auto_unbox = TRUE))
       self$`publicAppsDir` <- SystemStorageConfigObject$`publicAppsDir`
       self$`resource` <- SystemStorageConfigObject$`resource`

@@ -50,8 +50,7 @@ EmptySubscriptionResponse <- R6::R6Class(
 
       EmptySubscriptionResponseObject
     },
-    fromJSON = function(EmptySubscriptionResponseJson) {
-      EmptySubscriptionResponseObject <- jsonlite::fromJSON(EmptySubscriptionResponseJson)
+    fromJSON = function(EmptySubscriptionResponseObject) {
       if (!is.null(EmptySubscriptionResponseObject$`message`)) {
         self$`message` <- EmptySubscriptionResponseObject$`message`
       }

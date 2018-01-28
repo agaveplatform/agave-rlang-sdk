@@ -77,8 +77,7 @@ FilePermission <- R6::R6Class(
 
       FilePermissionObject
     },
-    fromJSON = function(FilePermissionJson) {
-      FilePermissionObject <- jsonlite::fromJSON(FilePermissionJson)
+    fromJSON = function(FilePermissionObject) {
       if (!is.null(FilePermissionObject$`username`)) {
         self$`username` <- FilePermissionObject$`username`
       }
@@ -122,7 +121,7 @@ FilePermission <- R6::R6Class(
       FilePermissionObject <- jsonlite::fromJSON(FilePermissionJson)
       self$`username` <- FilePermissionObject$`username`
       self$`internalUsername` <- FilePermissionObject$`internalUsername`
-      PermissionStanzaObject -> PermissionStanza$new()
+      PermissionStanzaObject <- PermissionStanza$new()
       self$`permission` <- PermissionStanzaObject$fromJSON(jsonlite::toJSON(FilePermissionObject$permission, auto_unbox = TRUE))
       self$`created` <- FilePermissionObject$`created`
       self$`lastUpdated` <- FilePermissionObject$`lastUpdated`

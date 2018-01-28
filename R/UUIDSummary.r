@@ -60,8 +60,7 @@ UUIDSummary <- R6::R6Class(
 
       UUIDSummaryObject
     },
-    fromJSON = function(UUIDSummaryJson) {
-      UUIDSummaryObject <- jsonlite::fromJSON(UUIDSummaryJson)
+    fromJSON = function(UUIDSummaryObject) {
       if (!is.null(UUIDSummaryObject$`message`)) {
         self$`message` <- UUIDSummaryObject$`message`
       }

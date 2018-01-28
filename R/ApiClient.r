@@ -43,8 +43,20 @@ ApiClient  <- R6::R6Class(
         self$`userAgent` <- 'Swagger-Codegen/1.0.0/r'
     },
     callApi = function(url, method, queryParams, headerParams, body, ...){
-        headers <- httr::add_headers(headerParams)
+        if (!missing(headerParams) && length(headerParams) > 0) {
+          headers <- httr::add_headers(headerParams)
+        }
+        else {
+          headers <- httr::add_headers(.headers = self$defaultHeaders)
+        }
 
+        if (!missing(queryParams)) {
+          queryParams <- list(naked = "true")
+        }
+        else {
+          queryParams <- modifyList(list(naked = "true"), queryParams)
+        }
+      
         if (method == "GET") {
             httr::GET(url, queryParams, headers, ...)
         }

@@ -41,8 +41,7 @@ FileRenameAction <- R6::R6Class(
 
       FileRenameActionObject
     },
-    fromJSON = function(FileRenameActionJson) {
-      FileRenameActionObject <- jsonlite::fromJSON(FileRenameActionJson)
+    fromJSON = function(FileRenameActionObject) {
       if (!is.null(FileRenameActionObject$`action`)) {
         actionObject <- FileManagementActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(FileRenameActionObject$action, auto_unbox = TRUE))
@@ -64,7 +63,7 @@ FileRenameAction <- R6::R6Class(
     },
     fromJSONString = function(FileRenameActionJson) {
       FileRenameActionObject <- jsonlite::fromJSON(FileRenameActionJson)
-      FileManagementActionTypeObject -> FileManagementActionType$new()
+      FileManagementActionTypeObject <- FileManagementActionType$new()
       self$`action` <- FileManagementActionTypeObject$fromJSON(jsonlite::toJSON(FileRenameActionObject$action, auto_unbox = TRUE))
       self$`path` <- FileRenameActionObject$`path`
     }

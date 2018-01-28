@@ -50,8 +50,7 @@ EmptyRemoteFileResponse <- R6::R6Class(
 
       EmptyRemoteFileResponseObject
     },
-    fromJSON = function(EmptyRemoteFileResponseJson) {
-      EmptyRemoteFileResponseObject <- jsonlite::fromJSON(EmptyRemoteFileResponseJson)
+    fromJSON = function(EmptyRemoteFileResponseObject) {
       if (!is.null(EmptyRemoteFileResponseObject$`message`)) {
         self$`message` <- EmptyRemoteFileResponseObject$`message`
       }

@@ -23,8 +23,7 @@ FileManagementActionType <- R6::R6Class(
 
       FileManagementActionTypeObject
     },
-    fromJSON = function(FileManagementActionTypeJson) {
-      FileManagementActionTypeObject <- jsonlite::fromJSON(FileManagementActionTypeJson)
+    fromJSON = function(FileManagementActionTypeObject) {
     },
     toJSONString = function() {
        sprintf(

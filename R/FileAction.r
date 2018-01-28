@@ -41,8 +41,7 @@ FileAction <- R6::R6Class(
 
       FileActionObject
     },
-    fromJSON = function(FileActionJson) {
-      FileActionObject <- jsonlite::fromJSON(FileActionJson)
+    fromJSON = function(FileActionObject) {
       if (!is.null(FileActionObject$`action`)) {
         actionObject <- FileManagementActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(FileActionObject$action, auto_unbox = TRUE))
@@ -64,7 +63,7 @@ FileAction <- R6::R6Class(
     },
     fromJSONString = function(FileActionJson) {
       FileActionObject <- jsonlite::fromJSON(FileActionJson)
-      FileManagementActionTypeObject -> FileManagementActionType$new()
+      FileManagementActionTypeObject <- FileManagementActionType$new()
       self$`action` <- FileManagementActionTypeObject$fromJSON(jsonlite::toJSON(FileActionObject$action, auto_unbox = TRUE))
       self$`path` <- FileActionObject$`path`
     }

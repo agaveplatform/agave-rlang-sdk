@@ -47,8 +47,7 @@ ACL <- R6::R6Class(
 
       ACLObject
     },
-    fromJSON = function(ACLJson) {
-      ACLObject <- jsonlite::fromJSON(ACLJson)
+    fromJSON = function(ACLObject) {
       if (!is.null(ACLObject$`execute`)) {
         self$`execute` <- ACLObject$`execute`
       }

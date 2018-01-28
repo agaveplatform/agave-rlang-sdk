@@ -23,8 +23,7 @@ SystemRoleType <- R6::R6Class(
 
       SystemRoleTypeObject
     },
-    fromJSON = function(SystemRoleTypeJson) {
-      SystemRoleTypeObject <- jsonlite::fromJSON(SystemRoleTypeJson)
+    fromJSON = function(SystemRoleTypeObject) {
     },
     toJSONString = function() {
        sprintf(

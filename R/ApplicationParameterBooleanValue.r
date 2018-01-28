@@ -92,8 +92,7 @@ ApplicationParameterBooleanValue <- R6::R6Class(
 
       ApplicationParameterBooleanValueObject
     },
-    fromJSON = function(ApplicationParameterBooleanValueJson) {
-      ApplicationParameterBooleanValueObject <- jsonlite::fromJSON(ApplicationParameterBooleanValueJson)
+    fromJSON = function(ApplicationParameterBooleanValueObject) {
       if (!is.null(ApplicationParameterBooleanValueObject$`defaultValue`)) {
         self$`defaultValue` <- ApplicationParameterBooleanValueObject$`defaultValue`
       }

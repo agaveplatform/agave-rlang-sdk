@@ -50,8 +50,7 @@ SystemAuthConfigServer <- R6::R6Class(
 
       SystemAuthConfigServerObject
     },
-    fromJSON = function(SystemAuthConfigServerJson) {
-      SystemAuthConfigServerObject <- jsonlite::fromJSON(SystemAuthConfigServerJson)
+    fromJSON = function(SystemAuthConfigServerObject) {
       if (!is.null(SystemAuthConfigServerObject$`endpoint`)) {
         self$`endpoint` <- SystemAuthConfigServerObject$`endpoint`
       }
@@ -80,7 +79,7 @@ SystemAuthConfigServer <- R6::R6Class(
       SystemAuthConfigServerObject <- jsonlite::fromJSON(SystemAuthConfigServerJson)
       self$`endpoint` <- SystemAuthConfigServerObject$`endpoint`
       self$`port` <- SystemAuthConfigServerObject$`port`
-      SystemAuthConfigServerProtocolTypeObject -> SystemAuthConfigServerProtocolType$new()
+      SystemAuthConfigServerProtocolTypeObject <- SystemAuthConfigServerProtocolType$new()
       self$`protocol` <- SystemAuthConfigServerProtocolTypeObject$fromJSON(jsonlite::toJSON(SystemAuthConfigServerObject$protocol, auto_unbox = TRUE))
     }
   )

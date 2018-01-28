@@ -50,8 +50,7 @@ FileHistoryResponse <- R6::R6Class(
 
       FileHistoryResponseObject
     },
-    fromJSON = function(FileHistoryResponseJson) {
-      FileHistoryResponseObject <- jsonlite::fromJSON(FileHistoryResponseJson)
+    fromJSON = function(FileHistoryResponseObject) {
       if (!is.null(FileHistoryResponseObject$`message`)) {
         self$`message` <- FileHistoryResponseObject$`message`
       }

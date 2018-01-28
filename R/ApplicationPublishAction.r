@@ -32,8 +32,7 @@ ApplicationPublishAction <- R6::R6Class(
 
       ApplicationPublishActionObject
     },
-    fromJSON = function(ApplicationPublishActionJson) {
-      ApplicationPublishActionObject <- jsonlite::fromJSON(ApplicationPublishActionJson)
+    fromJSON = function(ApplicationPublishActionObject) {
       if (!is.null(ApplicationPublishActionObject$`action`)) {
         actionObject <- ApplicationActionType$new()
         actionObject$fromJSON(jsonlite::toJSON(ApplicationPublishActionObject$action, auto_unbox = TRUE))
@@ -50,7 +49,7 @@ ApplicationPublishAction <- R6::R6Class(
     },
     fromJSONString = function(ApplicationPublishActionJson) {
       ApplicationPublishActionObject <- jsonlite::fromJSON(ApplicationPublishActionJson)
-      ApplicationActionTypeObject -> ApplicationActionType$new()
+      ApplicationActionTypeObject <- ApplicationActionType$new()
       self$`action` <- ApplicationActionTypeObject$fromJSON(jsonlite::toJSON(ApplicationPublishActionObject$action, auto_unbox = TRUE))
     }
   )

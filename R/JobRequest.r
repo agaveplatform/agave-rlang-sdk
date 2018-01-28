@@ -140,8 +140,7 @@ JobRequest <- R6::R6Class(
 
       JobRequestObject
     },
-    fromJSON = function(JobRequestJson) {
-      JobRequestObject <- jsonlite::fromJSON(JobRequestJson)
+    fromJSON = function(JobRequestObject) {
       if (!is.null(JobRequestObject$`appId`)) {
         self$`appId` <- JobRequestObject$`appId`
       }
@@ -229,13 +228,13 @@ JobRequest <- R6::R6Class(
       self$`archivePath` <- JobRequestObject$`archivePath`
       self$`archiveSystem` <- JobRequestObject$`archiveSystem`
       self$`batchQueue` <- JobRequestObject$`batchQueue`
-      TODO_OBJECT_MAPPINGObject -> TODO_OBJECT_MAPPING$new()
+      TODO_OBJECT_MAPPINGObject <- TODO_OBJECT_MAPPING$new()
       self$`inputs` <- TODO_OBJECT_MAPPINGObject$fromJSON(jsonlite::toJSON(JobRequestObject$inputs, auto_unbox = TRUE))
       self$`memoryPerNode` <- JobRequestObject$`memoryPerNode`
       self$`name` <- JobRequestObject$`name`
       self$`nodeCount` <- JobRequestObject$`nodeCount`
       self$`notifications` <- lapply(JobRequestObject$`notifications`, function(x) Notification$new()$fromJSON(jsonlite::toJSON(x, auto_unbox = TRUE)))
-      TODO_OBJECT_MAPPINGObject -> TODO_OBJECT_MAPPING$new()
+      TODO_OBJECT_MAPPINGObject <- TODO_OBJECT_MAPPING$new()
       self$`parameters` <- TODO_OBJECT_MAPPINGObject$fromJSON(jsonlite::toJSON(JobRequestObject$parameters, auto_unbox = TRUE))
       self$`processorsPerNode` <- JobRequestObject$`processorsPerNode`
       self$`maxRunTime` <- JobRequestObject$`maxRunTime`

@@ -50,8 +50,7 @@ SingleProfileResponse <- R6::R6Class(
 
       SingleProfileResponseObject
     },
-    fromJSON = function(SingleProfileResponseJson) {
-      SingleProfileResponseObject <- jsonlite::fromJSON(SingleProfileResponseJson)
+    fromJSON = function(SingleProfileResponseObject) {
       if (!is.null(SingleProfileResponseObject$`message`)) {
         self$`message` <- SingleProfileResponseObject$`message`
       }
@@ -79,7 +78,7 @@ SingleProfileResponse <- R6::R6Class(
     fromJSONString = function(SingleProfileResponseJson) {
       SingleProfileResponseObject <- jsonlite::fromJSON(SingleProfileResponseJson)
       self$`message` <- SingleProfileResponseObject$`message`
-      ProfileObject -> Profile$new()
+      ProfileObject <- Profile$new()
       self$`result` <- ProfileObject$fromJSON(jsonlite::toJSON(SingleProfileResponseObject$result, auto_unbox = TRUE))
       self$`status` <- SingleProfileResponseObject$`status`
     }

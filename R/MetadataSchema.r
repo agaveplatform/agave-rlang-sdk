@@ -77,8 +77,7 @@ MetadataSchema <- R6::R6Class(
 
       MetadataSchemaObject
     },
-    fromJSON = function(MetadataSchemaJson) {
-      MetadataSchemaObject <- jsonlite::fromJSON(MetadataSchemaJson)
+    fromJSON = function(MetadataSchemaObject) {
       if (!is.null(MetadataSchemaObject$`created`)) {
         self$`created` <- MetadataSchemaObject$`created`
       }

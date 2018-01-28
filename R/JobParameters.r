@@ -32,8 +32,7 @@ JobParameters <- R6::R6Class(
 
       JobParametersObject
     },
-    fromJSON = function(JobParametersJson) {
-      JobParametersObject <- jsonlite::fromJSON(JobParametersJson)
+    fromJSON = function(JobParametersObject) {
       if (!is.null(JobParametersObject$`parameter1`)) {
         self$`parameter1` <- JobParametersObject$`parameter1`
       }
