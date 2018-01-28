@@ -21,3 +21,18 @@
 #docs/*.md
 # Then explicitly reverse the ignore rule for a single file:
 #!docs/README.md
+LICENSE
+DESCRIPTION
+NAMESPACE
+.gitignore
+R/Agave.r
+R/AgaveCache.r
+R/Token.r
+R/TokensApi.r
+
+R/TenantsApi.r
+R/Tenants.r
+R/TenantContact.r
+
+R/Client.r
+R/ClientsApi.r

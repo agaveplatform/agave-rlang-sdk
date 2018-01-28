@@ -38,3 +38,4 @@ vignettes/*.pdf
 .bash_history
 docker.Rproj
 Dockerfile.inc
+docker.Rproj.RData

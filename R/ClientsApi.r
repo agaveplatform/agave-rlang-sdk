@@ -86,7 +86,7 @@ ClientsApi <- R6::R6Class(
       urlPath <- "/clients/v2/"
       resp <- httr::POST(url = paste0(self$apiClient$basePath, urlPath),
                          queryParams = queryParams,
-                         httr::add_headers(api$clients$apiClient$defaultHeaders),
+                         httr::add_headers(self$apiClient$defaultHeaders),
                          body = body,
                          encode = "form",
                          ...)
@@ -123,7 +123,7 @@ ClientsApi <- R6::R6Class(
       
       resp <- httr::POST(url = paste0(self$apiClient$basePath, urlPath),
                          queryParams = queryParams,
-                         httr::add_headers(api$clients$apiClient$defaultHeaders),
+                         httr::add_headers(self$apiClient$defaultHeaders),
                          encode = "form",
                          body = body,
                          ...)
@@ -151,7 +151,7 @@ ClientsApi <- R6::R6Class(
       
       resp <- httr::DELETE(url = paste0(self$apiClient$basePath, urlPath),
                            queryParams = queryParams,
-                           httr::add_headers(api$clients$apiClient$defaultHeaders),
+                           httr::add_headers(self$apiClient$defaultHeaders),
                            body = body,
                            ...)
       
@@ -178,7 +178,7 @@ ClientsApi <- R6::R6Class(
       
       resp <- httr::DELETE(url = paste0(self$apiClient$basePath, urlPath),
                            queryParams = queryParams,
-                           httr::add_headers(api$clients$apiClient$defaultHeaders),
+                           httr::add_headers(self$apiClient$defaultHeaders),
                            ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
@@ -203,7 +203,7 @@ ClientsApi <- R6::R6Class(
       
       resp <- httr::GET(url = paste0(self$apiClient$basePath, urlPath),
                         queryParams = queryParams,
-                        httr::add_headers(api$clients$apiClient$defaultHeaders),
+                        httr::add_headers(self$apiClient$defaultHeaders),
                         ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
@@ -236,7 +236,7 @@ ClientsApi <- R6::R6Class(
       
       resp <- httr::GET(url = paste0(self$apiClient$basePath, urlPath),
                         queryParams = queryParams,
-                        httr::add_headers(api$clients$apiClient$defaultHeaders),
+                        httr::add_headers(self$apiClient$defaultHeaders),
                         ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
@@ -258,7 +258,7 @@ ClientsApi <- R6::R6Class(
       urlPath <- "/clients/v2/"
       resp <- httr::GET(url = paste0(self$apiClient$basePath, urlPath),
                         queryParams = queryParams,
-                        httr::add_headers(api$clients$apiClient$defaultHeaders),
+                        httr::add_headers(self$apiClient$defaultHeaders),
                         ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
