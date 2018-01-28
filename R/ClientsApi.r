@@ -92,12 +92,19 @@ ClientsApi <- R6::R6Class(
                          ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- Client$new()
-        result <- returnObject$fromJSONString(httr::content(resp, "text", encoding = "UTF-8"))
+        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        jsonResp <- jsonlite::fromJSON(httr::content(resp))
+        if ("result" %in% names(jsonResp)) {
+          jsonResp <- jsonResp$result
+        }
+        
         if (updateCache) {
+          returnObject <- Client$new()
+          result <- returnObject$fromJSONString(httr::content(resp, "text", encoding = "UTF-8"))
           private$authCache$setClient(returnObject)
         }
-        Response$new(returnObject, resp)
+        
+        jsonResp
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -129,9 +136,12 @@ ClientsApi <- R6::R6Class(
                          ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- SingleSubscriptionResponse$new()
-        result <- returnObject$fromJSON(httr::content(resp))
-        Response$new(returnObject$result, resp)
+        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        jsonResp <- jsonlite::fromJSON(httr::content(resp))
+        if ("result" %in% names(jsonResp)) {
+          jsonResp <- jsonResp$result
+        }
+        jsonResp
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -156,9 +166,12 @@ ClientsApi <- R6::R6Class(
                            ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- EmptyClientResponse$new()
-        result <- returnObject$fromJSON(httr::content(resp))
-        Response$new(returnObject, resp)
+        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        jsonResp <- jsonlite::fromJSON(httr::content(resp))
+        if ("result" %in% names(jsonResp)) {
+          jsonResp <- jsonResp$result
+        }
+        jsonResp
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -182,9 +195,12 @@ ClientsApi <- R6::R6Class(
                            ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- EmptyClientResponse$new()
-        result <- returnObject$fromJSONString(httr::content(resp, "text", encoding = "UTF-8"))
-        Response$new(returnObject, resp)
+        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        jsonResp <- jsonlite::fromJSON(httr::content(resp))
+        if ("result" %in% names(jsonResp)) {
+          jsonResp <- jsonResp$result
+        }
+        jsonResp
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -207,9 +223,12 @@ ClientsApi <- R6::R6Class(
                         ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- Client$new()
-        result <- returnObject$fromJSON(httr::content(resp))
-        Response$new(returnObject, resp)
+        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        jsonResp <- jsonlite::fromJSON(httr::content(resp))
+        if ("result" %in% names(jsonResp)) {
+          jsonResp <- jsonResp$result
+        }
+        jsonResp
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -240,9 +259,12 @@ ClientsApi <- R6::R6Class(
                         ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- MultipleSubscriptionResponse$new()
-        result <- returnObject$fromJSON(httr::content(resp))
-        Response$new(returnObject$result, resp)
+        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        jsonResp <- jsonlite::fromJSON(httr::content(resp))
+        if ("result" %in% names(jsonResp)) {
+          jsonResp <- jsonResp$result
+        }
+        jsonResp
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
@@ -262,9 +284,12 @@ ClientsApi <- R6::R6Class(
                         ...)
       
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        returnObject <- MultipleClientResponse$new()
-        result <- returnObject$fromJSON(httr::content(resp))
-        Response$new(returnObject, resp)
+        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        jsonResp <- jsonlite::fromJSON(httr::content(resp))
+        if ("result" %in% names(jsonResp)) {
+          jsonResp <- jsonResp$result
+        }
+        jsonResp
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
         Response$new("API client error", resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {

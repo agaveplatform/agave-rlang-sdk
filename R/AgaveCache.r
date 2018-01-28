@@ -49,8 +49,11 @@ AgaveCache  <- R6::R6Class(
     cacheFilePath = NULL
   ),
   active = list(
-    dump = function(value) {
-      jsonlite::toJSON(private$config, auto_unbox=TRUE, null="null", na="null")
+    current = function() {
+      jsonlite::fromJSON(jsonlite::toJSON(private$config, auto_unbox=TRUE, null="null", na="null", pretty=TRUE))
+    },
+    toJSON = function() {
+      jsonlite::toJSON(private$config, auto_unbox=TRUE, null="null", na="null", pretty=TRUE)
     }
   ),
   public = list(

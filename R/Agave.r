@@ -18,7 +18,6 @@
 #' @title Agave API parent class
 #' @description rAgave.Agave
 #'
-#' @field baseUrl The base URL of the tenant
 #' @field apps AppsAPI instance
 #' @field clients = ClientsAPI instance
 #' @field jobs = JobsAPI instance
@@ -44,6 +43,10 @@
 #'
 #' store
 #' 
+#' restore
+#' 
+#' 
+#' 
 #' resolveConfigurationProperty
 #'
 #' }
@@ -56,14 +59,14 @@ Agave  <- R6::R6Class(
     client = NULL,
     token = NULL,
     tenant = NULL,
-    
+    baseUrl = "https://public.agaveapi.co",
     initClientAndAuth = function(accessToken, refreshToken, username, password, clientKey, clientSecret) {
       
       private$token <- private$authCache$getToken();
       private$client <- private$authCache$getClient();
       private$tenant <- private$authCache$getTenant();
       
-      private$tenant$baseUrl <- self$baseUrl
+      private$tenant$baseUrl <- private$baseUrl
       
       # use the provided client key or pull it from the environment or auth cache
       private$client$key <- self$resolveConfigurationProperty(explicitValue = clientKey, configPropertyName = "apikey", envPropertyName = "AGAVE_CLIENT_KEY")
@@ -99,7 +102,7 @@ Agave  <- R6::R6Class(
       # init the ClientsApi api client with basic auth using the user's u/p
       if (!is.null(private$token) && !is.null(private$token$username) && !is.null(private$token$password)) { 
         base64Hash <- jsonlite::base64_enc(paste(c(private$token$username,":",private$token$password), collapse=""))
-        self$clients <- ClientsApi$new(ApiClient$new(basePath = self$baseUrl, defaultHeaders = c(Authorization = paste(c("Basic", base64Hash), collapse = " "))), cache = private$authCache)
+        self$clients <- ClientsApi$new(ApiClient$new(basePath = private$baseUrl, defaultHeaders = c(Authorization = paste(c("Basic", base64Hash), collapse = " "))), cache = private$authCache)
       }
       # Null it out if no user credentials are set
       else {
@@ -109,7 +112,7 @@ Agave  <- R6::R6Class(
       # init the TokensApi api client with basic auth using the client key and secret
       if (!is.null(private$client) && !is.null(private$client$key) && !is.null(private$client$secret)) { 
         base64Hash <- jsonlite::base64_enc(paste(c(private$client$key,":",private$client$secret), collapse=""))
-        self$tokens <- TokensApi$new(ApiClient$new(basePath = self$baseUrl, 
+        self$tokens <- TokensApi$new(ApiClient$new(basePath = private$baseUrl, 
                                                   defaultHeaders = c(Authorization = paste(c("Basic", base64Hash), collapse = " "))), 
                                      client = private$client, 
                                      username = private$token$username, 
@@ -121,11 +124,12 @@ Agave  <- R6::R6Class(
         if (!is.null(private$token$refresh_token)) { 
           resp <- self$tokens$refresh(refreshToken = private$token$refresh_token)
           if (httr::status_code(resp$response) >= 200 && httr::status_code(resp$response) <= 299) {
-            private$token <- resp$content
-            private$token$username <- private$token$username
-            private$token$password <- private$token$password
-            private$token$created_at <- format(Sys.time(), "%a %b %d %H:%M:%S %Y")
-            private$token$expires_at <- format(Sys.time() + as.integer(private$token$expires_in), "%a %b %d %H:%M:%S %Y")
+            token <- resp$content
+            token$username <- private$token$username
+            token$password <- private$token$password
+            token$created_at <- format(Sys.time(), "%a %b %d %H:%M:%S %Y")
+            token$expires_at <- format(Sys.time() + as.integer(private$token$expires_in), "%a %b %d %H:%M:%S %Y")
+            private$token <- token
             private$authCache$setToken(private$token)
             #logger.debug("Successfully refreshed the existing token")
           }
@@ -141,11 +145,12 @@ Agave  <- R6::R6Class(
         if (is.null(resp) && !is.null(private$token$username) && !is.null(private$token$password)) {
           resp <- self$tokens$create()
           if (httr::status_code(resp$response) >= 200 && httr::status_code(resp$response) <= 299) {
-            private$token <- resp$content
-            private$token$username <- private$token$username
-            private$token$password <- private$token$password
-            private$token$created_at <- format(Sys.time(), "%a %b %d %H:%M:%S %Y")
-            private$token$expires_at <- format(Sys.time() + as.integer(private$token$expires_in), "%a %b %d %H:%M:%S %Y")
+            token <- resp$content
+            token$username <- private$token$username
+            token$password <- private$token$password
+            token$created_at <- format(Sys.time(), "%a %b %d %H:%M:%S %Y")
+            token$expires_at <- format(Sys.time() + as.integer(private$token$expires_in), "%a %b %d %H:%M:%S %Y")
+            private$token <- token
             private$authCache$setToken(private$token)
             #logger.debug("Successfully obtained a fresh token")
           }
@@ -169,7 +174,7 @@ Agave  <- R6::R6Class(
       if (!is.null(private$token$access_token)) {
         # generate an api client for oauth2 authorization using the private$token$access_token previously
         # initialized
-        oauthApiClient <- ApiClient$new(basePath = self$baseUrl, 
+        oauthApiClient <- ApiClient$new(basePath = private$baseUrl, 
                                         defaultHeaders = c(Authorization = paste("Bearer", private$token$access_token)))
         
         # init the remaining apis using bearer token auth
@@ -202,7 +207,6 @@ Agave  <- R6::R6Class(
     }
   ),
   public = list(
-    baseUrl = "https://public.agaveapi.co",
     apps = NULL,
     clients = NULL,
     jobs = NULL,
@@ -219,6 +223,8 @@ Agave  <- R6::R6Class(
     uuids = NULL,
     initialize = function(baseUrl, cacheDir, username, password, clientKey, clientSecret, accessToken, refreshToken){
       
+      logger.setup(debugLog = "agave.log", infoLog = "agave.log", errorLog = "agave.log", fatalLog = "agave.log")
+      
       # init the auth cache object to manage our tenant, client, and credential cache
       if (!missing(cacheDir)){
         private$cacheDir <- cacheDir
@@ -227,12 +233,12 @@ Agave  <- R6::R6Class(
       
      
       # use the given API Base url if provided
-      if (!missing(baseUrl)) {
-        self$baseUrl <- baseUrl
+      if (!missing(baseUrl) && nchar(baseUrl) > 0) {
+        private$baseUrl <- baseUrl
       }
       # lookup from the auth cache if not provided, othewise, we use the public tenant
       else if (! is.null(private$authCache$baseurl)) {
-        self$baseUrl <- private$authCache$baseurl
+        private$baseUrl <- private$authCache$baseurl
       }
       
       if (missing(username)) {username = NULL}
@@ -245,11 +251,11 @@ Agave  <- R6::R6Class(
       # set the user token using the passed in values. If an access token is
       # passed in, that is enough. A refresh
       private$initClientAndAuth(accessToken, refreshToken, username, password, clientKey, clientSecret)
-
+      
       private$initResources()
     },
     
-    refresh = function(client, token, tenant) {
+    restore = function(client, token, tenant) {
       
       if (!missing(token)) {
         private$token = token
@@ -272,7 +278,6 @@ Agave  <- R6::R6Class(
       private$authCache$setTenant(private$tenant)
       private$authCache$write();
     },
-    
     resolveConfigurationProperty = function(explicitValue, configPropertyName, envPropertyName) {
       
       val <- NULL
@@ -293,16 +298,30 @@ Agave  <- R6::R6Class(
   ),
   active = list(
     cache = function(value) {
-      private$authCache
+      private$authCache$current
     },
-    context = function(value) {
+    tenant_info = function(value) {
       private$tenant$toJSON()
     },
-    credentials = function(value) {
-      private$token
+    token_info = function(value) {
+      private$token$toJSON()
     },
-    keys = function(value) {
-      private$client
+    client_info = function(value) {
+      private$client$toJSON()
+    },
+    auth_check = function(value) {
+      # store the current session to disk to ensure
+      # the cache is up to date
+      self$store()
+     
+      # force the cache to reread
+      private$authCache$load()
+      
+      # now dump the cache info
+      private$authCache$current
+    },
+    logLevel = function(value) {
+      logger.setLevel(value)
     }
     # ,
     # outputFormat = function(value) {
@@ -310,5 +329,6 @@ Agave  <- R6::R6Class(
     #   
     #   private$dataFormat <- value
     # }
+    
   )
 )

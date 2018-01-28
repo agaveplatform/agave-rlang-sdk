@@ -164,7 +164,6 @@ TokensApi  <- R6::R6Class(
         Response$new("API server error", resp)
       }
     },
-    
     create = function(updateCache, client, username, password) {
       if (missing(updateCache)) {
         updateCache <- FALSE
