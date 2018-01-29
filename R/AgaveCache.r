@@ -58,17 +58,38 @@ AgaveCache  <- R6::R6Class(
   ),
   public = list(
     initialize = function(cacheDir){
-      if (!(missing(cacheDir) || is.null(cacheDir))) {
-        private$cacheDir = cacheDir
-      }
-      else if (is.null(Sys.getenv("AGAVE_CACHE_DIR"))) {
-        private$cacheDir = Sys.getenv("AGAVE_CACHE_DIR");
+      if (!missing(cacheDir)) {
+        if ( is.null(cacheDir) || nchar(cacheDir) == 0) {
+          logger.trace("Invalid cacheDir value passed into AgaveCache constructor. Environment will be searched next")
+        }
+        else {
+          logger.trace(paste0(c("Cache file path ",cacheDir," was passe into the AgaveCache constructor"), collapse = " "))
+          private$cacheDir <- cacheDir
+        }
       }
       else {
-        private$cacheDir = paste(c(Sys.getenv("HOME"),"/.agave"), collapse = "");
+        logger.trace("No cacheDir value passed into AgaveCache constructor. Environment will be searched next")
       }
       
-      private$cacheFilePath <- paste(c(private$cacheDir,"/current"),collapse =  "")
+      if (is.null(private$cacheDir) || nchar(private$cacheDir) == 0 ) {
+        cacheDir <- Sys.getenv("AGAVE_CACHE_DIR")
+        if (is.null(cacheDir) || nchar(cacheDir) == 0) {
+          logger.trace("No value found for AGAVE_CACHE_DIR in the environment. The default cache location location will be used")
+        }
+        else {
+          logger.trace("AGAVE_CACHE_DIR was found in the enviornment. ")
+          private$cacheDir <- cacheDir
+        }
+      }
+      
+      if ( is.null(private$cacheDir) || nchar(private$cacheDir) == 0 ) {
+        private$cacheDir = paste0(c(Sys.getenv("HOME"),".agave"), collapse = .Platform$file.sep)
+        logger.trace(paste0(c("The default cache location, ",private$cacheDir, ", will be used."), collapse = ""))
+      }
+      
+      private$cacheFilePath <- paste0(c(private$cacheDir,"current"),collapse = .Platform$file.sep)
+      
+      logger.debug(paste0(c("Auth cache file path is:",private$cacheFilePath), collapse = " "))
       
       self$load(private$cacheFilePath)
     },
@@ -80,13 +101,17 @@ AgaveCache  <- R6::R6Class(
         cacheFilePath = private$cacheFilePath
       }
       
+      logger.trace(paste0(c("Loading auth cache file from",private$cacheFilePath), collapse = " "))
       
       # check that the file is not a directory 
       if (file.exists(cacheFilePath) && is.character(list.files(cacheFilePath))) {
         private$config <- jsonlite::read_json(private$cacheFilePath, simplifyVector = FALSE)
+        logger.debug(paste0(c("Succesfully loaded auth cache file from",private$cacheFilePath), collapse = " "))
+        logger.trace(str(private$config))
       }
       # otherwise, set the config to NULL
       else {
+        logger.debug(paste0(c("No auth config file found at",private$cacheFilePath), collapse = " "))
         private$config <- NULL
       }
     },
@@ -101,6 +126,8 @@ AgaveCache  <- R6::R6Class(
       if (!dir.exists(dirname(cacheFilePath))) {
         dir.create(path = dirname(cacheFilePath), recursive=TRUE, mode="770")
       }
+      
+      logger.debug(paste0(c("Writing auth cache config to",private$cacheFilePath), collapse = " "))
       
       sjson <- sprintf('{"tenantid": %s,"baseurl": %s,"devurl": %s,"apisecret": %s,"apikey": %s,"username": %s,"access_token": %s,"refresh_token": %s,"created_at": %s,"expires_in": %s,"expires_at": %s,"client_name": %s}',
                        ifelse(is.null(private$config$tenantid), "null", paste(c('"',private$config$tenantid,'"'),collapse = '')),
@@ -117,11 +144,14 @@ AgaveCache  <- R6::R6Class(
                        ifelse(is.null(private$config$client_name), "null", paste(c('"',private$config$client_name,'"'),collapse = ''))
       )
       
+      logger.trace(sjson)
+      
       #jsonlite::write_json(private$config, cacheFilePath, auto_unbox=TRUE, null="null", na="null")
       
       fileConn<-file(cacheFilePath)
       writeLines(sjson, fileConn)
       close(fileConn)
+      logger.debug(paste0(c("Succesfully wrote auth cache config to",private$cacheFilePath), collapse = " "))
     },
     
     getClient = function() {

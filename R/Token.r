@@ -107,19 +107,19 @@ Token <- R6::R6Class(
     toJSONString = function() {
       sprintf(
         '{
-           "access_token": "%s",
-           "refresh_token": "%s",
-           "created_at": "%s",
-           "expires_in": "%s",
-           "expires_at": "%s",
-           "username": "%s"
+           "access_token": %s,
+           "refresh_token": %s,
+           "created_at": %s,
+           "expires_in": %d,
+           "expires_at": %s,
+           "username": %s
         }',
-        self$`access_token`,
-        self$`refresh_token`,
-        self$`created_at`,
-        self$`expires_in`,
-        self$`expires_at`,
-        self$`username`
+        private$enquote(self$`access_token`),
+        private$enquote(self$`refresh_token`),
+        private$enquote(self$`created_at`),
+        private$enquote(self$`expires_in`),
+        private$enquote(self$`expires_at`),
+        private$enquote(self$`username`)
       )
     },
     fromJSONString = function(TokenJson) {
@@ -131,6 +131,19 @@ Token <- R6::R6Class(
       self$`expires_at` <- TokenObject$`expires_at`
       self$`username` <- TokenObject$`username`
       self$`password` <- TokenObject$`password`
+    }
+  ),
+  private = list(
+    enquote = function(val) {
+      if (is.null(val)) {
+        "null"
+      }
+      else if (is.numeric(val)) {
+        val
+      }
+      else {
+        paste0(c('"',self$`access_token`,'"'),collapse = '')
+      }
     }
   )
 )

@@ -124,12 +124,12 @@ Client <- R6::R6Class(
            "clientName": %s,
            "tier": %s
         }',
-        self$`key`,
-        self$`secret`,
-        self$`callbackUrl`,
-        self$`description`,
-        self$`clientName`,
-        self$`tier`
+        private$enquote(self$`key`),
+        private$enquote(self$`secret`),
+        private$enquote(self$`callbackUrl`),
+        private$enquote(self$`description`),
+        private$enquote(self$`clientName`),
+        private$enquote(self$`tier`)
       )
     },
     fromJSONString = function(ClientJson) {
@@ -143,6 +143,19 @@ Client <- R6::R6Class(
       self$`description` <- ClientObject$`description`
       self$`clientName` <- ClientObject$`name`
       self$`tier` <- ClientObject$`tier`
+    }
+  ),
+  private = list(
+    enquote = function(val) {
+      if (is.null(val)) {
+        "null"
+      }
+      else if (is.numeric(val)) {
+        val
+      }
+      else {
+        paste0(c('"',self$`access_token`,'"'),collapse = '')
+      }
     }
   )
 )

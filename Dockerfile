@@ -6,8 +6,11 @@ USER root
 
 # Install Agave Platform SDKs
 RUN apt-get update && \
-    apt-get install -y libssh2-1-dev zlib1g-dev && \
-    Rscript -e 'if(!require(devtools)) { install.packages("devtools") }' -e 'library(devtools)' -e 'if(!require(rAgave)) { install_github("agaveplatform/r-sdk") }'
+    apt-get install -y libssh2-1-dev zlib1g-dev libxml2-dev && \
+    Rscript -e 'if(!require(devtools)) { install.packages("devtools") }' \
+            -e 'if(!require(xml2)) { install.packages("xml2") }' \
+            -e 'library(devtools)' \
+            -e 'if(!require(rAgave)) { install_github("agaveplatform/r-sdk") }'
 
 RUN echo '\n\
     \n# Add in devtools and rAgave SDK to the default environment \
@@ -17,7 +20,7 @@ RUN echo '\n\
 
 RUN apt-get install -y python-pip python3-pip && \
     pip install agavepy
-    
+
 ADD examples /home/rstudio/examples
 
 RUN chown -R 755 /home/rstudio/examples

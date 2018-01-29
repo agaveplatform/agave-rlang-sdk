@@ -63,35 +63,36 @@ Agave  <- R6::R6Class(
     initClientAndAuth = function(accessToken, refreshToken, username, password, clientKey, clientSecret) {
       
       private$token <- private$authCache$getToken();
+      logger.trace(str(private$token$toJSON()))
       private$client <- private$authCache$getClient();
       private$tenant <- private$authCache$getTenant();
       
       private$tenant$baseUrl <- private$baseUrl
       
       # use the provided client key or pull it from the environment or auth cache
-      private$client$key <- self$resolveConfigurationProperty(explicitValue = clientKey, configPropertyName = "apikey", envPropertyName = "AGAVE_CLIENT_KEY")
+      private$client$key <- private$resolveConfigurationProperty(explicitValue = clientKey, configPropertyName = "apikey", envPropertyName = "AGAVE_CLIENT_KEY")
       
       # use the provided client secret or pull it from the environment or auth cache
-      private$client$secret <- self$resolveConfigurationProperty(explicitValue = clientSecret, configPropertyName = "apisecret", envPropertyName = "AGAVE_CLIENT_SECRET")
+      private$client$secret <- private$resolveConfigurationProperty(explicitValue = clientSecret, configPropertyName = "apisecret", envPropertyName = "AGAVE_CLIENT_SECRET")
       
       # look for the username of the user in the environment and auth cache. 
       # This will be used for interaction with the clients api and for token generation
       # as well as name resolution for auto-generated templates, etc.
-      private$token$username <- self$resolveConfigurationProperty(explicitValue = username, configPropertyName = "username", envPropertyName = "AGAVE_USERNAME")
-      
+      private$token$username <- private$resolveConfigurationProperty(explicitValue = username, configPropertyName = "username", envPropertyName = "AGAVE_USERNAME")
+      logger.trace(str(private$token$toJSON()))
       # look for the password of the user in the environment and auth cache (should not be there). 
       # This will be used for interaction with the clients api and for token generation
       # as well as name resolution for auto-generated templates, etc.
-      private$token$password <- self$resolveConfigurationProperty(explicitValue = password, configPropertyName = "password", envPropertyName = "AGAVE_PASSWORD")
-      
+      private$token$password <- private$resolveConfigurationProperty(explicitValue = password, configPropertyName = "password", envPropertyName = "AGAVE_PASSWORD")
+      logger.trace(str(private$token$toJSON()))
       # look for an access token explicitly provided for use in all authenticated api calls.
       # If present, this will be used for interaction with the clients api and for token generation
-      private$token$access_token <- self$resolveConfigurationProperty(explicitValue = accessToken, configPropertyName = "access_token", envPropertyName = "AGAVE_ACCESS_TOKEN")
-      
+      private$token$access_token <- private$resolveConfigurationProperty(explicitValue = accessToken, configPropertyName = "access_token", envPropertyName = "AGAVE_ACCESS_TOKEN")
+      logger.trace(str(private$token$toJSON()))
       # look for a refresh token explicitly provided for use in all authenticated api calls.
       # If present, this will be used to obtain a new access token when th previous one expires
-      private$token$refresh_token <- self$resolveConfigurationProperty(explicitValue = refreshToken, configPropertyName = "refresh_token", envPropertyName = "AGAVE_REFRESH_TOKEN")
-      
+      private$token$refresh_token <- private$resolveConfigurationProperty(explicitValue = refreshToken, configPropertyName = "refresh_token", envPropertyName = "AGAVE_REFRESH_TOKEN")
+      logger.trace(str(private$token$toJSON()))
     },
     
     initResources = function() {
@@ -120,22 +121,34 @@ Agave  <- R6::R6Class(
                                      cache = private$authCache)
         
         # refresh the token so they're ready to geaux
+       logger.trace("Before initial check")
+       logger.trace(str(private$token$toJSON()))
+            
         resp <- NULL
         if (!is.null(private$token$refresh_token)) { 
           resp <- self$tokens$refresh(refreshToken = private$token$refresh_token)
-          if (httr::status_code(resp$response) >= 200 && httr::status_code(resp$response) <= 299) {
-            token <- resp$content
+          if ("access_token" %in% names(resp)) {
+            logger.trace("After call to refresh token")
+            logger.trace(str(resp))
+            token <- Token$new()
+            token$fromJSON(resp)
+            #logger.trace("After marshalling to object")
+            #print(token)
+            
             token$username <- private$token$username
             token$password <- private$token$password
             token$created_at <- format(Sys.time(), "%a %b %d %H:%M:%S %Y")
-            token$expires_at <- format(Sys.time() + as.integer(private$token$expires_in), "%a %b %d %H:%M:%S %Y")
+            token$expires_at <- format(Sys.time() + token$expires_in, "%a %b %d %H:%M:%S %Y")
             private$token <- token
+            logger.trace("After refresh token initialization")
+            logger.trace(str(private$token$toJSON()))
+            
             private$authCache$setToken(private$token)
-            #logger.debug("Successfully refreshed the existing token")
+            logger.info("Successfully refreshed the existing token")
           }
           else {
             # leave it be
-            #logger.debug("Failed to refresh token \n%s", httr::content(resp$response, "text", encoding = "UTF-8"))
+            logger.warn("Failed to refresh token \n%s", httr::content(resp$response, "text", encoding = "UTF-8"))
             resp <- NULL
             
           }
@@ -144,15 +157,22 @@ Agave  <- R6::R6Class(
         # or pull a fresh token
         if (is.null(resp) && !is.null(private$token$username) && !is.null(private$token$password)) {
           resp <- self$tokens$create()
-          if (httr::status_code(resp$response) >= 200 && httr::status_code(resp$response) <= 299) {
-            token <- resp$content
+          if ("access_token" %in% names(resp)) {
+            logger.trace("After call to create token")
+            logger.trace(str(resp))
+            token <- Token$new()
+            token$fromJSON(resp)
+            #logger.trace("After marshalling to object")
+            #logger.trace(token$toJSONString())
             token$username <- private$token$username
             token$password <- private$token$password
             token$created_at <- format(Sys.time(), "%a %b %d %H:%M:%S %Y")
-            token$expires_at <- format(Sys.time() + as.integer(private$token$expires_in), "%a %b %d %H:%M:%S %Y")
+            token$expires_at <- format(Sys.time() + token$expires_in, "%a %b %d %H:%M:%S %Y")
             private$token <- token
+            logger.trace("After new token initialization")
+            logger.trace(private$token$toJSONString())
             private$authCache$setToken(private$token)
-            #logger.debug("Successfully obtained a fresh token")
+            logger.info("Successfully obtained a fresh token")
           }
           else {
            # leave it be
@@ -204,6 +224,24 @@ Agave  <- R6::R6Class(
         self$tags <- NULL
         self$notifications <- NULL
       }
+    },
+    
+    resolveConfigurationProperty = function(explicitValue, configPropertyName, envPropertyName) {
+      
+      val <- NULL
+      if (!missing(explicitValue) && !is.null(explicitValue) && nchar(explicitValue) > 1) {
+        val <- explicitValue
+      }
+
+      if ((is.null(val) || nchar(val) == 0) && !missing(envPropertyName) && !is.null(envPropertyName)) {
+        val <- Sys.getenv(envPropertyName)
+      }
+
+      if ((is.null(val) || nchar(val) == 0) && !missing(configPropertyName) && !is.null(configPropertyName)) {
+        val <- private$authCache$getProperty(configPropertyName)
+      }
+
+      val
     }
   ),
   public = list(
@@ -221,16 +259,26 @@ Agave  <- R6::R6Class(
     tokens = NULL,
     transforms = NULL,
     uuids = NULL,
-    initialize = function(baseUrl, cacheDir, username, password, clientKey, clientSecret, accessToken, refreshToken){
+    initialize = function(baseUrl, cacheDir, username, password, clientKey, clientSecret, accessToken, refreshToken, logLevel){
       
-      logger.setup(debugLog = "agave.log", infoLog = "agave.log", errorLog = "agave.log", fatalLog = "agave.log")
+      if (missing(logLevel)) {
+        logger.setup()  
+        logger.setLevel(NULL)
+      }
+      else {
+        logger.setup(debugLog = "agave.log", infoLog = "agave.log", warnLog = "agave.log", errorLog = "agave.log", fatalLog = "agave.log")
+        logger.setLevel(logLevel)
+      }
+      
       
       # init the auth cache object to manage our tenant, client, and credential cache
       if (!missing(cacheDir)){
         private$cacheDir <- cacheDir
+        private$authCache <- AgaveCache$new(private$authCache)
       }
-      private$authCache <- AgaveCache$new(private$cacheDir)
-      
+      else {
+        private$authCache <- AgaveCache$new()
+      }
      
       # use the given API Base url if provided
       if (!missing(baseUrl) && nchar(baseUrl) > 0) {
@@ -277,39 +325,22 @@ Agave  <- R6::R6Class(
       private$authCache$setClient(private$client)
       private$authCache$setTenant(private$tenant)
       private$authCache$write();
-    },
-    resolveConfigurationProperty = function(explicitValue, configPropertyName, envPropertyName) {
-      
-      val <- NULL
-      if (!missing(explicitValue) && !is.null(explicitValue) && nchar(explicitValue) > 1) {
-        val <- explicitValue
-      }
-
-      if ((is.null(val) || nchar(val) == 0) && !missing(envPropertyName) && !is.null(envPropertyName)) {
-        val <- Sys.getenv(envPropertyName)
-      }
-
-      if ((is.null(val) || nchar(val) == 0) && !missing(configPropertyName) && !is.null(configPropertyName)) {
-        val <- private$authCache$getProperty(configPropertyName)
-      }
-
-      val
     }
   ),
   active = list(
     cache = function(value) {
       private$authCache$current
     },
-    tenant_info = function(value) {
+    tenantInfo = function(value) {
       private$tenant$toJSON()
     },
-    token_info = function(value) {
-      private$token$toJSON()
+    tokenInfo = function(value) {
+      private$token
     },
-    client_info = function(value) {
+    clientInfo = function(value) {
       private$client$toJSON()
     },
-    auth_check = function(value) {
+    authCheck = function(value) {
       # store the current session to disk to ensure
       # the cache is up to date
       self$store()
@@ -323,12 +354,5 @@ Agave  <- R6::R6Class(
     logLevel = function(value) {
       logger.setLevel(value)
     }
-    # ,
-    # outputFormat = function(value) {
-    #   stopifnot(value == 'model' || value == 'json')
-    #   
-    #   private$dataFormat <- value
-    # }
-    
   )
 )
