@@ -42,3 +42,4 @@ docker.Rproj.RData
 R copy
 docker-compose.dev.yml
 rAgave.Rproj
+agave.log

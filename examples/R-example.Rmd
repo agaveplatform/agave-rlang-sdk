@@ -1,6 +1,8 @@
 ---
 title: "The Agave R SDK"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
 ---
 
 In this notebook, we introduce some basic uses of the rAgave R library for interacting with the Agave Platform science-as-a-service APIs. The examples primarily draw from the files and metadata services, but the concepts introduced are broadly applicable to all Agave services. For more information about Agave, please see the developer site: http://docs.agaveplatform.org
@@ -35,15 +37,18 @@ if (is.null(myCreds[["AGAVE_BASE_URL"]]) || nchar(myCreds[["AGAVE_BASE_URL"]]) =
 }
 
 ```
+```{r}
+#detach("package:futile.logger", unload=TRUE)
+#detach("package:rAgave", unload=TRUE)
+install("..")
+```
 
 Now we are ready to instantiate the Agave instance. We will explitly pass in the base url of our tenant, username, and password as named parameters. The result will be an Agave instance we can use to interact with the Agave Platform APIs. 
 
 ```{r}
-logger.setLevel(FATAL)
-ag = Agave$new( baseUrl = myCreds[["AGAVE_BASE_URL"]],
+ag <-Agave$new( baseUrl = myCreds[["AGAVE_BASE_URL"]],
                 username = myCreds[["AGAVE_USERNAME"]], 
-                password = myCreds[["AGAVE_PASSWORD"]],
-                logger.setLevel(FATAL))
+                password = myCreds[["AGAVE_PASSWORD"]])
 ```
 
 The rAgave library's Agave class also provides a restore() method for reconstituting previous OAuth sessions. Previous sessions are read from and written to a cache file common to all the Agave SDK, `~/.agave/current`, so that OAuth sessions persist across iPython, Jupyter, and CLI sessions. If you are using the hosted Agave RStudio service, a valid OAuth session was created for you and stored in your `~/.agave/current` file. We can therefore use the restore method to create an OAuth client without needing to pass any credentials:
@@ -52,7 +57,7 @@ If we ever want to inspect the OAuth session being used by our client, we have a
 
 
 ```{r}
-str(ag$tokenInfo)
+str(ag$tokenInfo$toJSON())
 ```
 
 
@@ -61,17 +66,17 @@ ag$restore()
 ```
 
 ```{r}
-str(ag$tokenInfo)
+str(ag$tokenInfo$toJSON())
 ```
 
 This shows us both the access and refresh tokens being used. We can also see the end user profile associated with these tokens:
 
 ```{r}
-profile <- ag$profiles$getProfile()
+profile <- ag$profiles$getProfile(username="me")
 str(profile)
 ```
 ```{r}
-#do.call(rbind, ag$profiles$list_profiles())
+#do.call(rbind, ag$profiles$listProfiles())
 ```
 
 Finally, we can inspect the ag object directly for attributes like api_key, api_secret, api_server, etc.
@@ -133,7 +138,7 @@ Stepping back for a second, let's explore the apps collection a bit. We can alwa
 
 
 ```{r}
-ag$apps
+print(ag$apps)
 ```
 
 Also notice that we have tab-completion on these operations. So, if we start typing "ag$apps$l" and then hit tab, RStudio provides a select box of operations beginning with "l". Try putting the following cell in focus and then hitting the tab key (but don't actually hit enter or try to execute the cell; otherwise you'll get an exception because there's no method called "l"):
@@ -183,49 +188,23 @@ The operator is optional and defaults to equality ('eq'). For example, the follo
 
 
 ```{r}
-ag$apps$listApps(id = app$id)[[1]]
+str(ag$apps$listApps(id = app$id)[[1]])
 ```
 
 Equivalently, we could explicitly set the equality operator:
 
 
 ```{r}
-ag$apps$listApps(search=c("id.eq" = app$id))[[1]]
+str(ag$apps$listApps(search=list("id.eq" = app$id))[[1]])
 ```
 
 Typically, the list of available search terms is identical to the attributes included in the JSON returned when requesting the full resource description. Operators include 'like', 'lt', 'gt', 'lte', 'gte', etc. See the official Agave documentation for the complete list. 
 
-Here we retrieve all apps with a name is "like" opensees:
+Here we retrieve all apps with a name is "like" "docker":
 
 ```{r}
-queryParams <- list("name.like" = "opensees")
+apps = ag$apps$listApps(search=list("id.like" = "*docker*"), limit=2)
 
-if (missing(queryParams)) {
-  queryParams <- list(naked = "true")
-} else if (!("naked" %in% names(queryParams))){
-  queryParams['naked'] = "true"
-}
-queryParams
-paste0(c("http://example.com", paste0(lapply(names(queryParams), function(x) paste0(c(x,queryParams[x]), collapse = '=')), collapse = '&')), collapse = '?')
-logger.trace()
-```
-
-```{R}
-ag = Agave$new( baseUrl = myCreds[["AGAVE_BASE_URL"]],
-                username = myCreds[["AGAVE_USERNAME"]], 
-                password = myCreds[["AGAVE_PASSWORD"]])
-ag$logLevel <- INFO
-```
-```{r}
-getwd()
-```
-
-```{r}
-#logger.setup(debugLog = "agave.log", infoLog = "agave.log", errorLog = "agave.log", fatalLog = "agave.log")
-#logger.setLevel(INFO)
-apps = ag$apps$list_apps(search=list("id.like" = "*docker*"), limit=2)
-#httr::content(apps$response, 'text', encode="UTF-8")
-length(apps)
 ```
 
 ```{r}
@@ -239,7 +218,7 @@ You can include multiple search expressions in the form of additional key:value 
 
 
 ```{R}
-ag$apps$list(search=c("name.like" = "*docker*", "revision.gte" = 3))
+str(ag$apps$listApps(search=list("name.like" = "*docker*", "revision.gte" = 2)))
 ```
 
 We hope this gives you enough general information to begin exploring the Agave services using rAgave on your own. In subsequent notebooks, we'll take deeper dives into specific topics such as using rAgave to launch and monitor an Agave job executing OpenSees on Stampede.

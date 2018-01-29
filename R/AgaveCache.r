@@ -60,31 +60,31 @@ AgaveCache  <- R6::R6Class(
     initialize = function(cacheDir){
       if (!missing(cacheDir)) {
         if ( is.null(cacheDir) || nchar(cacheDir) == 0) {
-          logger.trace("Invalid cacheDir value passed into AgaveCache constructor. Environment will be searched next")
+          logger.warn("Invalid cacheDir value passed into AgaveCache constructor. Environment will be searched next")
         }
         else {
-          logger.trace(paste0(c("Cache file path ",cacheDir," was passe into the AgaveCache constructor"), collapse = " "))
+          #logger.debug(paste0(c("Cache file path ",cacheDir," was passe into the AgaveCache constructor"), collapse = " "))
           private$cacheDir <- cacheDir
         }
       }
       else {
-        logger.trace("No cacheDir value passed into AgaveCache constructor. Environment will be searched next")
+        logger.debug("No cacheDir value passed into AgaveCache constructor. Environment will be searched next")
       }
       
       if (is.null(private$cacheDir) || nchar(private$cacheDir) == 0 ) {
         cacheDir <- Sys.getenv("AGAVE_CACHE_DIR")
         if (is.null(cacheDir) || nchar(cacheDir) == 0) {
-          logger.trace("No value found for AGAVE_CACHE_DIR in the environment. The default cache location location will be used")
+          logger.debug("No value found for AGAVE_CACHE_DIR in the environment. The default cache location location will be used")
         }
         else {
-          logger.trace("AGAVE_CACHE_DIR was found in the enviornment. ")
+          logger.debug("AGAVE_CACHE_DIR was found in the enviornment. ")
           private$cacheDir <- cacheDir
         }
       }
       
       if ( is.null(private$cacheDir) || nchar(private$cacheDir) == 0 ) {
         private$cacheDir = paste0(c(Sys.getenv("HOME"),".agave"), collapse = .Platform$file.sep)
-        logger.trace(paste0(c("The default cache location, ",private$cacheDir, ", will be used."), collapse = ""))
+        logger.debug(paste0(c("The default cache location, ",private$cacheDir, ", will be used."), collapse = ""))
       }
       
       private$cacheFilePath <- paste0(c(private$cacheDir,"current"),collapse = .Platform$file.sep)
@@ -101,13 +101,13 @@ AgaveCache  <- R6::R6Class(
         cacheFilePath = private$cacheFilePath
       }
       
-      logger.trace(paste0(c("Loading auth cache file from",private$cacheFilePath), collapse = " "))
+      logger.debug(paste0(c("Loading auth cache file from",private$cacheFilePath), collapse = " "))
       
       # check that the file is not a directory 
       if (file.exists(cacheFilePath) && is.character(list.files(cacheFilePath))) {
         private$config <- jsonlite::read_json(private$cacheFilePath, simplifyVector = FALSE)
         logger.debug(paste0(c("Succesfully loaded auth cache file from",private$cacheFilePath), collapse = " "))
-        logger.trace(str(private$config))
+        # logger.debug(str(private$config))
       }
       # otherwise, set the config to NULL
       else {
@@ -144,9 +144,7 @@ AgaveCache  <- R6::R6Class(
                        ifelse(is.null(private$config$client_name), "null", paste(c('"',private$config$client_name,'"'),collapse = ''))
       )
       
-      logger.trace(sjson)
-      
-      #jsonlite::write_json(private$config, cacheFilePath, auto_unbox=TRUE, null="null", na="null")
+      logger.debug(sjson)
       
       fileConn<-file(cacheFilePath)
       writeLines(sjson, fileConn)
