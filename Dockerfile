@@ -23,7 +23,7 @@ RUN apt-get install -y python-pip python3-pip && \
 
 ADD examples /home/rstudio/examples
 
-RUN chown -R 755 /home/rstudio/examples
+RUN chown -R rstudio /home/rstudio/examples
 
 LABEL org.agaveplatform.devops.architecture="x86_64"                                \
       org.agaveplatform.devops.build-date="$BUILD_DATE"                             \
@@ -33,6 +33,6 @@ LABEL org.agaveplatform.devops.architecture="x86_64"                            
       org.agaveplatform.devops.version="$VERSION"                                   \
       org.agaveplatform.devops.vcs-type="git"                                       \
       org.agaveplatform.devops.vcs-url="https://github.com/agaveplatform/rstudio"   \
-      org.agaveplatform.devops.rstudio.version="3.4.2"                              \
+      org.agaveplatform.devops.rstudio.version="3.4.3"                              \
       org.agaveplatform.devops.environment="training"                               \
       org.agaveplatform.training="rstudio"

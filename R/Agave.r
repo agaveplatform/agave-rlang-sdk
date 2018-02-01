@@ -259,7 +259,11 @@ Agave  <- R6::R6Class(
     initialize = function(baseUrl, cacheDir, username, password, clientKey, clientSecret, accessToken, refreshToken, logLevel=FATAL, logFile="agave.log"){
       
       if (missing(logFile)) {
-        logFile = "agave.log"
+        logFile = paste0(c(getwd(),"agave.log"), collapse = .Platform$file.sep)
+      }
+      
+      if (!file.exists(logFile)) {
+        file.create(logFile)
       }
       
       logger.setup(debugLog = logFile, infoLog = logFile, warnLog = logFile, errorLog = logFile, fatalLog = logFile, traceLog = logFile)

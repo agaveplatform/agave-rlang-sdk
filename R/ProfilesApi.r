@@ -53,15 +53,66 @@ ProfilesApi <- R6::R6Class(
   'ProfilesApi',
   private = list(
     userAgent = "Swagger-Codegen/1.0.0/r",
-    apiClient = NULL
+    apiClient = NULL,
+    responseType = 'list',
+    formatResponse = function(resp, args=list()) {
+      
+      # read the args from the unnamed request args
+      responseType = getElement(args, 'responseType')
+      
+      if (is.null(responseType) || nchar(responseType) == 0) {
+        responseType = private$responseType
+      }
+      
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+        logger.debug(jsonlite::toJSON(httr::content(resp,stringsAsFactors = FALSE), auto_unbox=TRUE, null="null", na="null"))
+        
+        if (responseType == 'raw') {
+          httr::content(resp, 'text', encode="UTF-8")
+        }
+        else {
+          jsonResp <- httr::content(resp)
+          if ("result" %in% names(jsonResp)) {
+            jsonResp <- jsonResp$result
+          }
+          
+          if (responseType == 'df' && length(jsonResp) > 0) {
+            # convert to a list of dataframes
+            do.call("rbind", lapply(jsonResp, as.data.frame, col.names=factor(names(jsonResp[[1]]))))
+          }
+          else {
+            jsonResp
+          }
+        }
+        
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        httr::content(resp)
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        httr::content(resp)
+      }
+    }
   ),
   public = list(
-    initialize = function(apiClient){
+    initialize = function(apiClient, responseType){
       if (!missing(apiClient)) {
         private$apiClient <- apiClient
       }
       else {
         private$apiClient <- ApiClient$new()
+      }
+      
+      if (missing(responseType) || is.null(responseType) || nchar(responseType) == 0) {
+        # we ignore and use the default
+      }
+      else if (responseType != 'raw' && responseType != 'list' && responseType != 'df') {
+        stop("Invalid responseType. Please specify one of: raw, list, df") 
+      }
+      else {
+        # set the response type to the class default to be used
+        # whenever it is not explicitly set on a request
+        private$responseType = responseType
       }
     },
     addProfile = function(body, naked, ...){
@@ -89,21 +140,8 @@ ProfilesApi <- R6::R6Class(
                                  headerParams = headerParams,
                                  body = body,
                                  ...)
-
-      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        jsonResp <- httr::content(resp)
-        if ("result" %in% names(jsonResp)) {
-          jsonResp <- jsonResp$result
-        }
-        jsonResp
-      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        httr::content(resp)
-      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        httr::content(resp)
-      }
+      
+      private$formatResponse(resp, args);
     },
     deleteProfile = function(username, naked, filter, ...){
       args <- list(...)
@@ -130,22 +168,9 @@ ProfilesApi <- R6::R6Class(
                                  body = body,
                                  ...)
 
-      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        jsonResp <- httr::content(resp)
-        if ("result" %in% names(jsonResp)) {
-          jsonResp <- jsonResp$result
-        }
-        jsonResp
-      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        httr::content(resp)
-      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        httr::content(resp)
-      }
+      private$formatResponse(resp, args);
     },
-    getProfile = function(username, naked, filter, ...){
+    getProfile = function(username="me", naked, filter, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -159,7 +184,7 @@ ProfilesApi <- R6::R6Class(
       }
 
       if (missing(username) || is.null(username) || nchar(username) == 0) {
-        username <= "me"
+        username <- "me"
       }
 
       urlPath <- "/profiles/v2/{apiUsername}"
@@ -174,22 +199,7 @@ ProfilesApi <- R6::R6Class(
                                  body = body,
                                  ...)
 
-      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        jsonResp <- httr::content(resp)
-        if ("result" %in% names(jsonResp)) {
-          jsonResp$result
-        }
-        else {
-          jsonResp
-        }
-      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        httr::content(resp)
-      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        httr::content(resp)
-      }
+      private$formatResponse(resp, args);
     },
     listProfiles = function(naked, username, name, email, ...){
       args <- list(...)
@@ -219,21 +229,8 @@ ProfilesApi <- R6::R6Class(
                                  headerParams = headerParams,
                                  body = body,
                                  ...)
-
-      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        jsonResp <- httr::content(resp)
-        if ("result" %in% names(jsonResp)) {
-          jsonResp <- jsonResp$result
-        }
-        jsonResp
-      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        httr::content(resp)
-      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        httr::content(resp)
-      }
+      
+      private$formatResponse(resp, args)
     },
     updateProfile = function(username, body, naked, ...){
       args <- list(...)
@@ -264,20 +261,7 @@ ProfilesApi <- R6::R6Class(
                                  body = body,
                                  ...)
 
-      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
-        logger.debug(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        jsonResp <- httr::content(resp)
-        if ("result" %in% names(jsonResp)) {
-          jsonResp <- jsonResp$result
-        }
-        jsonResp
-      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        httr::content(resp)
-      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
-        httr::content(resp)
-      }
+      private$formatResponse(resp, args);
     }
   )
 )
