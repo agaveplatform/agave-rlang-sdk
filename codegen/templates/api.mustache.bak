@@ -26,7 +26,7 @@
     apiClient = NULL
   ),
   public = list(
-    initialize = function(apiClient){
+    initialize = function(apiClient, responseType){
       if (!missing(apiClient)) {
         private$apiClient <- apiClient
       }
@@ -109,7 +109,7 @@
         jsonResp
 
         # jsonResp <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"), simplifyVector = FALSE)
-        #returnArray <- vector('list', length(jsonResp$result))
+        #returnArray <- vector("list", length(jsonResp$result))
         #i <- 1
         #for (returnJsonObject in jsonResp$result){
         #  returnObject <- {{returnType}}$new()
@@ -137,11 +137,11 @@
         # void response, no need to return anything
         {{/returnType}}
       } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        logger.warn(jsonlite::toJSON(httr::content(resp, "text", encoding="UTF-8"), auto_unbox=TRUE, null="null", na="null"))
         #Response$new("API client error", resp)
         httr::content(resp)
       } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
-        logger.warn(jsonlite::toJSON(httr::content(resp), auto_unbox=TRUE, null="null", na="null"))
+        logger.warn(jsonlite::toJSON(httr::content(resp, "text", encoding="UTF-8"), auto_unbox=TRUE, null="null", na="null"))
         #Response$new("API server error", resp)
         httr::content(resp)
       }

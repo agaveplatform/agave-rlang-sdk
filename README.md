@@ -58,14 +58,20 @@ contains a full example of use.
 
 ## Quickstart
 
-The first step is to create an ``Agave`` R object pointing to
-your tenant:
+Import the library into your current session namespace.
 
 ```R
-   > library(rAgave)
-   > api = Agave$new(baseUrl='https://public.agaveapi.org',
-                      username='myusername',
-                      password='mypassword')
+> library(rAgave)
+```  
+
+Now we can create an ``Agave`` instance pointing to your tenant:
+
+
+```R
+> library(rAgave)
+> api = Agave$new(baseUrl="https://public.agaveapi.org",
+                  username="myusername",
+                  password="mypassword")
 ```
 
 Once the object is instantiated, interact with it according to the
@@ -74,14 +80,14 @@ methods in the API documentation.
 For example, create a new client with:
 
 ```R
-> clientData <- Client$new(clientName = 'my_client')
+> clientData <- Client$new(clientName="my_client")
 > api$clients$add_client(body=clientData)$content
 ```  
 
 You may also pass in a list, if preferred, over the object model  
 
 ```R  
-> api$clients$create(body=list(clientName = 'my_client'))
+> api$clients$create(body=list(clientName="my_client"))
 ```
 
 Access any endpoint with:
@@ -97,17 +103,17 @@ To make use of an existing client, pass the client's credentials into the Agave 
 
 ```R
 > library("rAgave")
-> api = Agave$new(baseUrl='https://public.agaveapi.co',
-              username='myusername', password='mypassword',
-              clientKey='123', clientSecret='abc')
+> api = Agave$new(baseUrl="https://public.agaveapi.co",
+              username="myusername", password="mypassword",
+              clientKey="123", clientSecret="abc")
 ```  
 
 Alternatively, the SDK will attempt to recover the client credentials from a predictable location disk. The default cache directory is `$HOME/.agave`. You can configure the location of the cache directory when instantiating a new `Agave` object:
 
 ```R  
 > library("rAgave")
-> api = Agave$new(baseUrl='https://public.agaveapi.co',
-              username='myusername', password='mypassword',
+> api = Agave$new(baseUrl="https://public.agaveapi.co",
+              username="myusername", password="mypassword",
               cacheDir="/Dropbox/agave/cache")
 ```  
 
@@ -118,9 +124,30 @@ Alternatively, the SDK will attempt to recover the client credentials from a pre
 rAgave will automatically update the cache file any time you create or update your client or authenticate. Thus, subsequent instantiations can be streamlined to use the no-arg constructor as rAgave will automatically refresh your access token for you.  
 
 ```R
-
-> from agavepy.agave import Agave
 > api = Agave$new()
+```  
+
+rAgave leverages the `futile.logger` package to provide a custom logging output similar to log4j. You can enabled logging at runtime by specifying the `logLevel` parameter in the constructor. The following log levels are predefined as constants: TRACE, DEBUG, INFO, WARN, FATAL. The log level is set to FATAL by default.
+
+```R
+> api = Agave$new(logLevel = INFO)
+```  
+
+You can also change the log level at runtime by upating the `logLevel` attibute of an Agave class instance.  
+
+```R
+> api = Agave$new()
+> api$logLevel <- TRACE
+> profile <- api$profiles$getDetails()
+> api$logLevel <- DEBUG
+> profile <- api$jobs$listJobs()
+> api$logLevel <- FATAL
+```  
+
+When enabled, logs will be written to `agave.log` in the currrent directory (`getwd()`). You can specify an alternative location by specifying the `logFilePath` parameter in the constructor.
+
+```R
+> api = Agave$new(logFilePath = "/var/log/rAgave.log", logLevel = INFO)
 ```  
 
 ## References  

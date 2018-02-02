@@ -9,6 +9,9 @@ In this notebook, we introduce some basic uses of the rAgave R library for inter
 
 The rAgave library provides a high-level R binding to the Agave API. The first step is to import the Agave class:
 ```{r}
+install.packages("plyr")
+library("plyr")
+install("/home/rstudio/rAgave")
 library("rAgave")
 ```
 
@@ -37,11 +40,6 @@ if (is.null(myCreds[["AGAVE_BASE_URL"]]) || nchar(myCreds[["AGAVE_BASE_URL"]]) =
 }
 
 ```
-```{r}
-#detach("package:futile.logger", unload=TRUE)
-#detach("package:rAgave", unload=TRUE)
-install("..")
-```
 
 Now we are ready to instantiate the Agave instance. We will explitly pass in the base url of our tenant, username, and password as named parameters. The result will be an Agave instance we can use to interact with the Agave Platform APIs. 
 
@@ -51,7 +49,7 @@ ag <-Agave$new( baseUrl = myCreds[["AGAVE_BASE_URL"]],
                 password = myCreds[["AGAVE_PASSWORD"]])
 ```
 
-The rAgave library's Agave class also provides a restore() method for reconstituting previous OAuth sessions. Previous sessions are read from and written to a cache file common to all the Agave SDK, `~/.agave/current`, so that OAuth sessions persist across iPython, Jupyter, and CLI sessions. If you are using the hosted Agave RStudio service, a valid OAuth session was created for you and stored in your `~/.agave/current` file. We can therefore use the restore method to create an OAuth client without needing to pass any credentials:
+The rAgave library's Agave class also provides a restore() method for reconstituting previous OAuth sessions. Previous sessions are read from and written to a cache file common to all the Agave SDK, `~/.agave/current`, so that OAuth sessions persist across RStudio, Zeplin, Jupyter, and CLI sessions. If you are using the hosted Agave RStudio service, a valid OAuth session was created for you and stored in your `~/.agave/current` file. We can therefore use the restore method to create an OAuth client without needing to pass any credentials:
 
 If we ever want to inspect the OAuth session being used by our client, we have a few methods available to us. First, we can print the token_info list on the token object:
 
@@ -72,11 +70,32 @@ str(ag$tokenInfo$toJSON())
 This shows us both the access and refresh tokens being used. We can also see the end user profile associated with these tokens:
 
 ```{r}
-profile <- ag$profiles$getProfile(username="me")
+profile <- ag$profiles$getProfile()
 str(profile)
 ```
+
+
 ```{r}
-#do.call(rbind, ag$profiles$listProfiles())
+hprofiles <- head(ag$profiles$listProfiles(), 10)
+hprofiles
+# get object column names
+objFields <- lapply(names(hprofiles[[1]]), function(x) x) 
+
+# convert to data frame
+df <- do.call("rbind", lapply(hprofiles, as.data.frame, col.names=objFields, stringsAsFactors = TRUE))
+typeof(df)
+as.data.frame(df)
+df[[1]]
+
+```
+
+```{r}
+fprofiles <- ag$profiles$listProfiles(responseType="raw")
+print(fprofiles,quote = FALSE)
+# get object column names
+#fdf <- do.call("rbind", lapply(fprofiles, as.data.frame, col.names=factor(names(fprofiles[[1]]))))
+#fdf$username
+
 ```
 
 Finally, we can inspect the ag object directly for attributes like api_key, api_secret, api_server, etc.
@@ -104,7 +123,7 @@ str(head(ag$apps$listApps(),5))
 ```
 
 
-What we see in the output above is a python list representing the JSON object returned from Agave's apps service. It is a list of objects, each of which representing a single app. Let's capture the first app object and inspect it. To do that we can use normal R list notation:
+What we see in the output above is a serialized R list of the first 5 JSON objects returned from Agave's apps service. It is a list of objects, each of which representing a single app. Let's capture the first app object and inspect it. To do that we can use normal R list notation:
 
 
 ```{r}
@@ -182,13 +201,13 @@ app$inputs[[1]]$id
 
 You now have the ability to fully explore individual Agave objects returned from rAgave, but what about searching for objects? The Agave platform provides a powerful search feature across most services, and rAgave supports that as well. 
 
-Every retrieval operation in rAgave (for example, apps$list_apps) supports a "search" argument. The syntax for the search argument is identical to that described in the Agave documentation: it uses a dot notation combining search terms, values and (optional) operators. The search object itself should be a python dictionary with strings for the keys and values. Formally, each key:value pair in the dictionary adheres to the following form: 
+Every retrieval operation in rAgave (for example, `apps$list_apps()`) supports a "search" argument. The syntax for the search argument is identical to that described in the Agave documentation: it uses a dot notation combining search terms, values and (optional) operators. The search object itself should be a `list` of key value pairs where both the keys and values are string values. Formally, each "key" = "value" pair in the dictionary adheres to the following form: 
                         $$term.operator:value$$
 The operator is optional and defaults to equality ('eq'). For example, the following search filters the list of all apps down to just those with the id attribute equal to our app$id:
 
 
 ```{r}
-str(ag$apps$listApps(id = app$id)[[1]])
+str(ag$apps$listApps(search=list("id" = app$id))[[1]])
 ```
 
 Equivalently, we could explicitly set the equality operator:
@@ -204,12 +223,11 @@ Here we retrieve all apps with a name is "like" "docker":
 
 ```{r}
 apps = ag$apps$listApps(search=list("id.like" = "*docker*"), limit=2)
-
+str(lapply(apps, function(app) app$id))
 ```
 
 ```{r}
 str(lapply(apps, function(x) x$id ))
-
 ```
 
 Two results were returned, both with name containing the term, "docker".

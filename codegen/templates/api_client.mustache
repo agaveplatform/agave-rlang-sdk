@@ -43,31 +43,33 @@ ApiClient  <- R6::R6Class(
           headers <- httr::add_headers(.headers = self$defaultHeaders)
         }
 
-        # force naked responses to 
-        if (!missing(queryParams)) {
+        # force naked responses to
+        if (missing(queryParams)) {
           queryParams <- list(naked = "true")
         }
-        else {
-          queryParams <- modifyList(list(naked = "true"), queryParams)
+        else if (!("naked" %in% names(queryParams))){
+          queryParams['naked'] = "true"
         }
 
+        logger.info(paste0(c(url, paste0(lapply(names(queryParams), function(x) paste0(c(x,queryParams[x]), collapse = '=')), collapse = '&')), collapse = '?'))
+
         if (method == "GET") {
-            httr::GET(url, queryParams, headers, ...)
+            httr::GET(url, query = queryParams, headers, ...)
         }
         else if (method == "POST") {
-            httr::POST(url, queryParams, headers, body = body, ...)
+            httr::POST(url, query = queryParams, headers, body = body, ...)
         }
         else if (method == "PUT") {
-            httr::PUT(url, queryParams, headers, body = body, ...)
+            httr::PUT(url, query = queryParams, headers, body = body, ...)
         }
         else if (method == "PATCH") {
-            httr::PATCH(url, queryParams, headers, body = body, ...)
+            httr::PATCH(url, query = queryParams, headers, body = body, ...)
         }
         else if (method == "HEAD") {
-            httr::HEAD(url, queryParams, headers, ...)
+            httr::HEAD(url, query = queryParams, headers, ...)
         }
         else if (method == "DELETE") {
-            httr::DELETE(url, queryParams, headers, ...)
+            httr::DELETE(url, query = queryParams, headers, ...)
         }
         else {
             stop("http method must be `GET`, `HEAD`, `OPTIONS`, `POST`, `PATCH`, `PUT` or `DELETE`.")

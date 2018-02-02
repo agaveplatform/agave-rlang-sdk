@@ -4,8 +4,10 @@
 
 #' {{classname}} Class
 #'
+#' {{description}}
+#'
 {{#vars}}
-#' @field {{baseName}} {{title}}
+#' @field {{baseName}} {{#title}}{{title}}{{/title}}{{^title}}{{description}}{{/title}}
 {{/vars}}
 #'
 #' @importFrom R6 R6Class
@@ -125,7 +127,7 @@
         {{/isListContainer}}
         {{^isListContainer}}
         {{#isPrimitiveType}}
-        ifelse( is.null(self$`{{baseName}}`),"null",paste0(c('"', self$`{{baseName}}`, '"')){{#hasMore}},{{/hasMore}}
+        ifelse( is.null(self$`{{baseName}}`),"null",paste0(c('"', self$`{{baseName}}`, '"'))){{#hasMore}},{{/hasMore}}
         {{/isPrimitiveType}}
         {{^isPrimitiveType}}
         self$`{{baseName}}`{{^isPrimitiveType}}$toJSON(){{/isPrimitiveType}}{{#hasMore}},{{/hasMore}}

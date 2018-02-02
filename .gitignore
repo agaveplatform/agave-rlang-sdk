@@ -30,17 +30,22 @@ vignettes/*.pdf
 /*_cache/
 /cache/
 
+# custom build target folder
+dist
+
 # Temporary files created by R markdown
 *.utf8.md
 *.knit.md
 .Rproj.user
-.agave
+.agave*
 .bash_history
 docker.Rproj
 Dockerfile.inc
-docker.Rproj.RData
+*.Rproj.RData
 R copy
 docker-compose.dev.yml
 rAgave.Rproj
 agave.log
-.agave.bak
+dist.sh
+R.bak
+R.pre-dish_sh

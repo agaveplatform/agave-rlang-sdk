@@ -10,7 +10,7 @@ RUN apt-get update && \
     Rscript -e 'if(!require(devtools)) { install.packages("devtools") }' \
             -e 'if(!require(xml2)) { install.packages("xml2") }' \
             -e 'library(devtools)' \
-            -e 'if(!require(rAgave)) { install_github("agaveplatform/r-sdk") }'
+            -e 'if(!require(rAgave)) { install_github("agaveplatform/r-sdk") }' 
 
 RUN echo '\n\
     \n# Add in devtools and rAgave SDK to the default environment \
