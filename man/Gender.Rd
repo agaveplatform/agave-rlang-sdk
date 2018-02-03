@@ -9,6 +9,6 @@
 Gender
 }
 \description{
-Gender Class
+The gender of the user
 }
 \keyword{datasets}

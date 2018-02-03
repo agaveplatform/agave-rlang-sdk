@@ -11,6 +11,15 @@ apps <- AppsApi$new( apiClient = ApiClient$new(), cache = AgaveCache$new() )
 \description{
 AppsApi Class
 }
+\details{
+An app, in the context of Agave, is an executable code available for invocation through the Agave Jobs service on a specific execution system. Put another way, an app is a piece of code that you can run on a specific system. If a single code needs to be run on multiple systems, each combination of app and system needs to be defined as an app.
+
+Apps are language agnostic and may or may not carry with them their own dependencies. (More on bundling your app in a moment.) Any code that can be forked at the command line or submitted to a batch scheduler can be registered as an Agave app and run through the Jobs service.
+
+The Apps service is the central registry for all Agave apps. The Apps service provides permissions, validation, archiving, and revision information about each app in addition to the usual discovery capability. The rest of this tutorial explains in detail how to register an app to the Apps service, how to manage and share apps, and what the different application scopes mean.
+
+Read more about the Apps API in the \href{http://docs.agaveplatform.org/#/apps}{Agave Developer's Guide}
+}
 \section{Arguments}{
 
 \describe{
@@ -34,74 +43,79 @@ AppsApi Class
 
 \describe{
 
-\code{addApp} Register and update new applications.
+\code{$addApp()} Register and update new applications.
 
-\strong{Usage}\preformatted{
-
-`addAppPermission` Grant a user permission for an application.
-
-**Usage**
-
+\strong{Usage}\preformatted{apps$addApp$listApps(naked, body, )
 }
 
-\code{clearAppPermissions} Deletes all permissions on an application.
+\code{$addAppPermission()} Grant a user permission for an application.
 
-\strong{Usage}\preformatted{
-
-`deleteApp` Deletes an application.
-
-**Usage**
-
+\strong{Usage}\preformatted{apps$addAppPermission$listApps(appId, body, naked, )
 }
 
-\code{deleteAppPermission} Deletes all permissions for the given user on an application.
+\code{$clearAppPermissions()} Deletes all permissions on an application.
 
-\strong{Usage}\preformatted{
-
-`getAppDetails` Get details of an application by its unique id.
-
-**Usage**
-
+\strong{Usage}\preformatted{apps$clearAppPermissions$listApps(appId, naked, )
 }
 
-\code{getAppPermission} Get a specific user permission for an application.
+\code{$deleteApp()} Deletes an application.
 
-\strong{Usage}\preformatted{
-
-`getAppSubmissionForm` Get a submission form for the named application.
-
-**Usage**
-
+\strong{Usage}\preformatted{apps$deleteApp$listApps(appId, naked, )
 }
 
-\code{invokeAppAction} Edit an application.
+\code{$deleteAppPermission()} Deletes all permissions for the given user on an application.
 
-\strong{Usage}\preformatted{
-
-`listAppHistory` List the event history of this app
-
-**Usage**
-
+\strong{Usage}\preformatted{apps$deleteAppPermission$listApps(appId, username, naked, )
 }
 
-\code{listAppPermissions} Get the permission for this application.
+\code{$getAppDetails()} Get details of an application by its unique id.
 
-\strong{Usage}\preformatted{
-
-`listApps` List apps
-
-**Usage**
-
+\strong{Usage}\preformatted{apps$getAppDetails$listApps(appId, naked, search, )
+apps$getAppDetails$listApps(search=list("foo"="bar"))
 }
 
-\code{updateApp} Update an application.
+\code{$getAppPermission()} Get a specific user permission for an application.
 
-\strong{Usage}\preformatted{
+\strong{Usage}\preformatted{apps$getAppPermission$listApps(appId, username, filter, naked, )
+}
 
-`updateAppPermission` Add or update a user permission for an application.
+\code{$getAppSubmissionForm()} Get a submission form for the named application.
 
-**Usage**
+\strong{Usage}\preformatted{apps$getAppSubmissionForm$listApps(appId, naked, search, )
+apps$getAppSubmissionForm$listApps(search=list("foo"="bar"))
+}
 
+\code{$invokeAppAction()} Edit an application.
+
+\strong{Usage}\preformatted{apps$invokeAppAction$listApps(appId, body, naked, )
+}
+
+\code{$listAppHistory()} List the event history of this app
+
+\strong{Usage}\preformatted{apps$listAppHistory$listApps(naked, appId, status, created, limit, offset, search, )
+apps$listAppHistory$listApps(search=list("foo"="bar"))
+}
+
+\code{$listAppPermissions()} Get the permission for this application.
+
+\strong{Usage}\preformatted{apps$listAppPermissions$listApps(appId, filter, naked, limit, offset, search, )
+apps$listAppPermissions$listApps(search=list("foo"="bar"))
+}
+
+\code{$listApps()} List apps
+
+\strong{Usage}\preformatted{apps$listApps$listApps(public, name, executionSystem, tags, filter, naked, limit, offset, search, )
+apps$listApps$listApps(search=list("foo"="bar"))
+}
+
+\code{$updateApp()} Update an application.
+
+\strong{Usage}\preformatted{apps$updateApp$listApps(appId, body, naked, )
+}
+
+\code{$updateAppPermission()} Add or update a user permission for an application.
+
+\strong{Usage}\preformatted{apps$updateAppPermission$listApps(appId, username, body, naked, )
 }
 
 }

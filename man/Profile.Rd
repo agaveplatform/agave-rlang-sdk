@@ -14,7 +14,37 @@ Profile Class
 \section{Fields}{
 
 \describe{
-\item{\code{uuid}}{}
+\item{\code{city}}{The city of the user}
+
+\item{\code{country}}{The country of the user}
+
+\item{\code{department}}{The institutional department of the user}
+
+\item{\code{email}}{The unique email address of the user}
+
+\item{\code{fax}}{The fax number of the user}
+
+\item{\code{firstName}}{The first name of the user}
+
+\item{\code{gender}}{The gender of the user: "male" or "female"}
+
+\item{\code{institution}}{The home institution of the user}
+
+\item{\code{lastName}}{The last name of the user}
+
+\item{\code{phone}}{The phone number of the user}
+
+\item{\code{position}}{The position of employment of the user}
+
+\item{\code{researchArea}}{The primary area of research of the user}
+
+\item{\code{state}}{The state of the user}
+
+\item{\code{username}}{The unique username of the user}
+
+\item{\code{password}}{The password to set for this profile}
+
+\item{\code{uuid}}{The uuid of the user}
 }}
 
 \keyword{datasets}

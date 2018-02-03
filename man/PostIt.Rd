@@ -22,7 +22,7 @@ PostIt Class
 
 \item{\code{internalUsername}}{The username of the internal user attached to this PostIt.}
 
-\item{\code{method}}{The url that will be invoked when the PostIt is redeemed.}
+\item{\code{method}}{The HTTP method to be invoked on the target URL when this PostIt is redeemed}
 
 \item{\code{postit}}{The PostIt nonce.}
 

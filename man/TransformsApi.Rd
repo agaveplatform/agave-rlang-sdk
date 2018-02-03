@@ -11,6 +11,9 @@ transforms <- TransformsApi$new( apiClient = ApiClient$new(), cache = AgaveCache
 \description{
 TransformsApi Class
 }
+\details{
+Read more about the Transforms API in the \href{http://docs.agaveplatform.org/#/transforms}{Agave Developer's Guide}
+}
 \section{Arguments}{
 
 \describe{
@@ -34,24 +37,26 @@ TransformsApi Class
 
 \describe{
 
-\code{asyncTransform} Transform a file and stage it to a specified location.
+\code{$asyncTransform()} Transform a file and stage it to a specified location.
 
-\strong{Usage}\preformatted{
-
-`getTransform` Find the transform of the given uuid
-
-**Usage**
-
+\strong{Usage}\preformatted{transforms$asyncTransform$listTransforms(transformId, owner, filePath, body, naked, )
 }
 
-\code{listTransforms} List and search for transforms
+\code{$getTransform()} Find the transform of the given uuid
 
-\strong{Usage}\preformatted{
+\strong{Usage}\preformatted{transforms$getTransform$listTransforms(transformId, naked, search, )
+transforms$getTransform$listTransforms(search=list("foo"="bar"))
+}
 
-`syncTransform` Transform a file and download it directly.
+\code{$listTransforms()} List and search for transforms
 
-**Usage**
+\strong{Usage}\preformatted{transforms$listTransforms$listTransforms(naked, name, version, limit, offset, tags, search, )
+transforms$listTransforms$listTransforms(search=list("foo"="bar"))
+}
 
+\code{$syncTransform()} Transform a file and download it directly.
+
+\strong{Usage}\preformatted{transforms$syncTransform$listTransforms(transformId, owner, filePath, body, naked, )
 }
 
 }

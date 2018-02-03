@@ -11,6 +11,11 @@ meta <- MetaApi$new( apiClient = ApiClient$new(), cache = AgaveCache$new() )
 \description{
 MetaApi Class
 }
+\details{
+The Agave Metadata service allows you to manage metadata and associate it with Agave entities via associated UUIDs. It supports JSON schema for structured JSON metadata; it also accepts any valid JSON-formatted metadata or plain text String when no schema is specified. As with other Agave services, a full access control layer is available, enabling you to keep your metadata private or share it with your colleagues.
+
+Read more about the Meta API in the \href{http://docs.agaveplatform.org/#/meta}{Agave Developer's Guide}
+}
 \section{Arguments}{
 
 \describe{
@@ -34,114 +39,118 @@ MetaApi Class
 
 \describe{
 
-\code{addMetadata} Update or Add new Metadata.
+\code{$addMetadata()} Update or Add new Metadata.
 
-\strong{Usage}\preformatted{
-
-`addMetadataPermission` Add a user permission for the given metadata.
-
-**Usage**
-
+\strong{Usage}\preformatted{meta$addMetadata$listMeta(body, naked, )
 }
 
-\code{addMetadataSchema} Add a new Metadata Schema.
+\code{$addMetadataPermission()} Add a user permission for the given metadata.
 
-\strong{Usage}\preformatted{
-
-`addMetadataSchemaPermission` Add a user permission for the given schema.
-
-**Usage**
-
+\strong{Usage}\preformatted{meta$addMetadataPermission$listMeta(uuid, body, naked, )
 }
 
-\code{clearMetadataPermissions} Deletes all permissions on the given metadata.
+\code{$addMetadataSchema()} Add a new Metadata Schema.
 
-\strong{Usage}\preformatted{
-
-`clearMetadataSchemaPermissions` Deletes all permissions on the given schema.
-
-**Usage**
-
+\strong{Usage}\preformatted{meta$addMetadataSchema$listMeta(body, naked, )
 }
 
-\code{deleteMetadata} Remove Metadata from the system.
+\code{$addMetadataSchemaPermission()} Add a user permission for the given schema.
 
-\strong{Usage}\preformatted{
-
-`deleteMetadataPermission` Removes user permissions for a user on a given metadata resource.
-
-**Usage**
-
+\strong{Usage}\preformatted{meta$addMetadataSchemaPermission$listMeta(uuid, body, naked, )
 }
 
-\code{deleteMetadataSchema} Remove Metadata Schema from the system.
+\code{$clearMetadataPermissions()} Deletes all permissions on the given metadata.
 
-\strong{Usage}\preformatted{
-
-`deleteSchemaPermission` Deletes all metadata schema permissions on the given metadata.
-
-**Usage**
-
+\strong{Usage}\preformatted{meta$clearMetadataPermissions$listMeta(uuid, naked, )
 }
 
-\code{getMetadata} Retrieve Metadata.
+\code{$clearMetadataSchemaPermissions()} Deletes all permissions on the given schema.
 
-\strong{Usage}\preformatted{
-
-`getMetadataPermission` Get the user permission for this metadata.
-
-**Usage**
-
+\strong{Usage}\preformatted{meta$clearMetadataSchemaPermissions$listMeta(uuid, naked, )
 }
 
-\code{getMetadataSchema} Retrieve Metadata Schemata.
+\code{$deleteMetadata()} Remove Metadata from the system.
 
-\strong{Usage}\preformatted{
-
-`getMetadataSchemaPermission` Get the user permission for this schema.
-
-**Usage**
-
+\strong{Usage}\preformatted{meta$deleteMetadata$listMeta(uuid, naked, )
 }
 
-\code{listMetadata} List and/or search metadata.
+\code{$deleteMetadataPermission()} Removes user permissions for a user on a given metadata resource.
 
-\strong{Usage}\preformatted{
-
-`listMetadataPermissions` Get the permission ACL for this metadata.
-
-**Usage**
-
+\strong{Usage}\preformatted{meta$deleteMetadataPermission$listMeta(uuid, username, naked, )
 }
 
-\code{listMetadataSchema} List and query Metadata Schemata.
+\code{$deleteMetadataSchema()} Remove Metadata Schema from the system.
 
-\strong{Usage}\preformatted{
-
-`listMetadataSchemaPermissions` Get the permission for this schema.
-
-**Usage**
-
+\strong{Usage}\preformatted{meta$deleteMetadataSchema$listMeta(uuid, naked, )
 }
 
-\code{updateMetadata} Update or Add new Metadata.
+\code{$deleteSchemaPermission()} Deletes all metadata schema permissions on the given metadata.
 
-\strong{Usage}\preformatted{
-
-`updateMetadataPermission` Update a user permission for the given metadata.
-
-**Usage**
-
+\strong{Usage}\preformatted{meta$deleteSchemaPermission$listMeta(uuid, username, naked, )
 }
 
-\code{updateMetadataSchema} Update an existing Metadata Schema.
+\code{$getMetadata()} Retrieve Metadata.
 
-\strong{Usage}\preformatted{
+\strong{Usage}\preformatted{meta$getMetadata$listMeta(uuid, naked, )
+}
 
-`updateMetadataSchemaPermission` Add or update a user permission for the given metadata schema.
+\code{$getMetadataPermission()} Get the user permission for this metadata.
 
-**Usage**
+\strong{Usage}\preformatted{meta$getMetadataPermission$listMeta(uuid, username, naked, )
+}
 
+\code{$getMetadataSchema()} Retrieve Metadata Schemata.
+
+\strong{Usage}\preformatted{meta$getMetadataSchema$listMeta(uuid, naked, )
+}
+
+\code{$getMetadataSchemaPermission()} Get the user permission for this schema.
+
+\strong{Usage}\preformatted{meta$getMetadataSchemaPermission$listMeta(uuid, username, naked, )
+}
+
+\code{$listMetadata()} List and/or search metadata.
+
+\strong{Usage}\preformatted{meta$listMetadata$listMeta(q, naked, limit, offset, search, )
+meta$listMetadata$listMeta(search=list("foo"="bar"))
+}
+
+\code{$listMetadataPermissions()} Get the permission ACL for this metadata.
+
+\strong{Usage}\preformatted{meta$listMetadataPermissions$listMeta(uuid, naked, limit, offset, search, )
+meta$listMetadataPermissions$listMeta(search=list("foo"="bar"))
+}
+
+\code{$listMetadataSchema()} List and query Metadata Schemata.
+
+\strong{Usage}\preformatted{meta$listMetadataSchema$listMeta(q, naked, limit, offset, search, )
+meta$listMetadataSchema$listMeta(search=list("foo"="bar"))
+}
+
+\code{$listMetadataSchemaPermissions()} Get the permission for this schema.
+
+\strong{Usage}\preformatted{meta$listMetadataSchemaPermissions$listMeta(uuid, naked, limit, offset, search, )
+meta$listMetadataSchemaPermissions$listMeta(search=list("foo"="bar"))
+}
+
+\code{$updateMetadata()} Update or Add new Metadata.
+
+\strong{Usage}\preformatted{meta$updateMetadata$listMeta(uuid, body, naked, )
+}
+
+\code{$updateMetadataPermission()} Update a user permission for the given metadata.
+
+\strong{Usage}\preformatted{meta$updateMetadataPermission$listMeta(uuid, username, body, naked, )
+}
+
+\code{$updateMetadataSchema()} Update an existing Metadata Schema.
+
+\strong{Usage}\preformatted{meta$updateMetadataSchema$listMeta(uuid, body, naked, )
+}
+
+\code{$updateMetadataSchemaPermission()} Add or update a user permission for the given metadata schema.
+
+\strong{Usage}\preformatted{meta$updateMetadataSchemaPermission$listMeta(uuid, username, body, naked, )
 }
 
 }

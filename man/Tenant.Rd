@@ -14,19 +14,22 @@ Tenant Class
 \section{Fields}{
 
 \describe{
-\item{\code{id}}{}
+\item{\code{id}}{uuid of the tenant}
 
-\item{\code{name}}{}
+\item{\code{name}}{human readable name of the tenant organization}
 
-\item{\code{baseUrl}}{}
+\item{\code{baseUrl}}{The base url for all tenant requests. This should always be SSL enabled.}
 
-\item{\code{code}}{}
+\item{\code{code}}{The code by which this tenant is known, eg. "agave.prod"}
 
-\item{\code{created}}{}
+\item{\code{created}}{When the tenant was created in ISO8601 format}
 
-\item{\code{lastUpdated}}{}
+\item{\code{lastUpdated}}{When the tenant was last updated in ISO8601 format}
 
-\item{\code{contact}}{}
+\item{\code{contact}}{\link[rAgave:TenantContact]{rAgave::TenantContact} representing who to contact about tenant related issues}
 }}
 
+\seealso{
+\link[rAgave:TenantContact]{rAgave::TenantContact}
+}
 \keyword{datasets}

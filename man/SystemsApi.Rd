@@ -11,6 +11,15 @@ systems <- SystemsApi$new( apiClient = ApiClient$new(), cache = AgaveCache$new()
 \description{
 SystemsApi Class
 }
+\details{
+A system in Agave represents a server or collection of servers. A server can be physical, virtual, or a collection of servers exposed through a single hostname or ip address. Systems are identified and referenced in Agave by a unique ID unrelated to their ip address or hostname. Because of this, a single physical system may be registered multiple times. This allows different users to configure and use a system in whatever way they need to for their specific needs.
+
+Systems come in two flavors: storage and execution. Storage systems are only used for storing and interacting with data. Execution systems are used for running apps (aka jobs or batch jobs) as well as storing and interacting with data.
+
+The Systems service gives you the ability to add and discover storage and compute resources for use in the rest of the API. You may add as many or as few storage systems as you need to power your digital lab. When you register a system, it is private to you and you alone. Systems can also be published into the public space for all users to use. Depending on who is administering Agave for your organization, this may have already happened and you may already have one or more storage systems available to you by default.
+
+Read more about the Systems API in the \href{http://docs.agaveplatform.org/#/systems}{Agave Developer's Guide}
+}
 \section{Arguments}{
 
 \describe{
@@ -34,114 +43,120 @@ SystemsApi Class
 
 \describe{
 
-\code{addExecutionSystem} Add a new execution system
+\code{$addExecutionSystem()} Add a new execution system
 
-\strong{Usage}\preformatted{
-
-`addStorageSystem` Add  a storage system
-
-**Usage**
-
+\strong{Usage}\preformatted{systems$addExecutionSystem$listSystems(body, naked, )
 }
 
-\code{addSystemCredential} Add an internal user's credential on a system. This applies both to storage and, if applicable, login credentials.
+\code{$addStorageSystem()} Add  a storage system
 
-\strong{Usage}\preformatted{
-
-`addSystemRole` Adds a role on the system for the given user
-
-**Usage**
-
+\strong{Usage}\preformatted{systems$addStorageSystem$listSystems(body, naked, )
 }
 
-\code{clearSystemAuthCredentials} Deletes all credentials registered to a system.
+\code{$addSystemCredential()} Add an internal user's credential on a system. This applies both to storage and, if applicable, login credentials.
 
-\strong{Usage}\preformatted{
-
-`clearSystemAuthCredentialsForInternalUser` Deletes all internal user credentials registered to a system.
-
-**Usage**
-
+\strong{Usage}\preformatted{systems$addSystemCredential$listSystems(systemId, body, naked, )
 }
 
-\code{clearSystemRoles} Deletes all roles on a system.
+\code{$addSystemRole()} Adds a role on the system for the given user
 
-\strong{Usage}\preformatted{
-
-`deleteSystem` Delete a system.
-
-**Usage**
-
+\strong{Usage}\preformatted{systems$addSystemRole$listSystems(systemId, body, naked, )
 }
 
-\code{deleteSystemAuthCredentialForInternalUser} Deletes the internal user credentials for the given credential type on a system.
+\code{$clearSystemAuthCredentials()} Deletes all credentials registered to a system.
 
-\strong{Usage}\preformatted{
-
-`deleteSystemRole` Deletes all roles for a user on a system.
-
-**Usage**
-
+\strong{Usage}\preformatted{systems$clearSystemAuthCredentials$listSystems(systemId, naked, )
 }
 
-\code{getSystemCredential} Get the internal user credential of the given type on the system.
+\code{$clearSystemAuthCredentialsForInternalUser()} Deletes all internal user credentials registered to a system.
 
-\strong{Usage}\preformatted{
-
-`getSystemDetails` Find information about an individual system.
-
-**Usage**
-
+\strong{Usage}\preformatted{systems$clearSystemAuthCredentialsForInternalUser$listSystems(systemId, internalUsername, naked, )
 }
 
-\code{getSystemRole} Get a specific user role on this system.
+\code{$clearSystemRoles()} Deletes all roles on a system.
 
-\strong{Usage}\preformatted{
-
-`invokeSystemAction` Perform a management action on the system.
-
-**Usage**
-
+\strong{Usage}\preformatted{systems$clearSystemRoles$listSystems(systemId, naked, )
 }
 
-\code{listCredentialsForInternalUser} Get a list of all internal users and their credentials on this system.
+\code{$deleteSystem()} Delete a system.
 
-\strong{Usage}\preformatted{
-
-`listSystemCredentials` Get a list of all internal user credentials on this system.
-
-**Usage**
-
+\strong{Usage}\preformatted{systems$deleteSystem$listSystems(systemId, naked, )
 }
 
-\code{listSystemRoles} Get a list of all users and their roles on this system.
+\code{$deleteSystemAuthCredentialForInternalUser()} Deletes the internal user credentials for the given credential type on a system.
 
-\strong{Usage}\preformatted{
-
-`listSystems` Show all systems available to the user.
-
-**Usage**
-
+\strong{Usage}\preformatted{systems$deleteSystemAuthCredentialForInternalUser$listSystems(systemId, internalUsername, credentialType, naked, )
 }
 
-\code{updateSystem} Update a system description
+\code{$deleteSystemRole()} Deletes all roles for a user on a system.
 
-\strong{Usage}\preformatted{
-
-`updateSystemCredential` Update an internal user credential on a system.
-
-**Usage**
-
+\strong{Usage}\preformatted{systems$deleteSystemRole$listSystems(systemId, username, naked, )
 }
 
-\code{updateSystemCredentialOfType} Add or update a credential of the given type on a system.
+\code{$getSystemCredential()} Get the internal user credential of the given type on the system.
 
-\strong{Usage}\preformatted{
+\strong{Usage}\preformatted{systems$getSystemCredential$listSystems(systemId, internalUsername, credentialType, naked, search, )
+systems$getSystemCredential$listSystems(search=list("foo"="bar"))
+}
 
-`updateSystemRole` Update a user role on a system.
+\code{$getSystemDetails()} Find information about an individual system.
 
-**Usage**
+\strong{Usage}\preformatted{systems$getSystemDetails$listSystems(systemId, naked, search, )
+systems$getSystemDetails$listSystems(search=list("foo"="bar"))
+}
 
+\code{$getSystemRole()} Get a specific user role on this system.
+
+\strong{Usage}\preformatted{systems$getSystemRole$listSystems(systemId, username, naked, )
+}
+
+\code{$invokeSystemAction()} Perform a management action on the system.
+
+\strong{Usage}\preformatted{systems$invokeSystemAction$listSystems(systemId, body, naked, )
+}
+
+\code{$listCredentialsForInternalUser()} Get a list of all internal users and their credentials on this system.
+
+\strong{Usage}\preformatted{systems$listCredentialsForInternalUser$listSystems(systemId, internalUsername, search, )
+systems$listCredentialsForInternalUser$listSystems(search=list("foo"="bar"))
+}
+
+\code{$listSystemCredentials()} Get a list of all internal user credentials on this system.
+
+\strong{Usage}\preformatted{systems$listSystemCredentials$listSystems(systemId, naked, limit, offset, search, )
+systems$listSystemCredentials$listSystems(search=list("foo"="bar"))
+}
+
+\code{$listSystemRoles()} Get a list of all users and their roles on this system.
+
+\strong{Usage}\preformatted{systems$listSystemRoles$listSystems(systemId, naked, limit, offset, search, )
+systems$listSystemRoles$listSystems(search=list("foo"="bar"))
+}
+
+\code{$listSystems()} Show all systems available to the user.
+
+\strong{Usage}\preformatted{systems$listSystems$listSystems(naked, offset, type, default, public, limit, search, )
+systems$listSystems$listSystems(search=list("foo"="bar"))
+}
+
+\code{$updateSystem()} Update a system description
+
+\strong{Usage}\preformatted{systems$updateSystem$listSystems(systemId, body, naked, )
+}
+
+\code{$updateSystemCredential()} Update an internal user credential on a system.
+
+\strong{Usage}\preformatted{systems$updateSystemCredential$listSystems(systemId, internalUsername, body, naked, )
+}
+
+\code{$updateSystemCredentialOfType()} Add or update a credential of the given type on a system.
+
+\strong{Usage}\preformatted{systems$updateSystemCredentialOfType$listSystems(systemId, internalUsername, credentialType, body, naked, )
+}
+
+\code{$updateSystemRole()} Update a user role on a system.
+
+\strong{Usage}\preformatted{systems$updateSystemRole$listSystems(systemId, username, body, naked, )
 }
 
 }

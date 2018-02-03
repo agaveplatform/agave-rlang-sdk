@@ -1,10 +1,12 @@
 {{>partial_header}}
-{{#operations}}
-#' @title Agave {{baseName}} API operations
+{{#operations}}{{#operation}}{{#-first}}{{#tags}}{{#-first}}
+#' {{description}}
+#'
+#' Read more about the {{baseName}} API in the [Agave Developer's Guide](http://docs.agaveplatform.org/#/{{classVarName}})
+#'
+{{/-first}}{{/tags}}{{/-first}}{{/operation}}#' @title Agave {{baseName}} API operations
 #' @description
 #' {{classname}} Class
-#'
-#' {{description}}
 #'
 #' @section Arguments:
 #' \describe{
@@ -30,16 +32,16 @@
 #' \describe{
 {{#operation}}
 #'
-#' `{{operationIdLowerCamelCase}}` {{#summary}}{{summary}}{{/summary}}{{^summary}}{{notes}}{{/summary}}
+#' `${{operationIdLowerCamelCase}}()` {{#summary}}{{summary}}{{/summary}}{{^summary}}{{notes}}{{/summary}}
 #'
 #' **Usage**
 #'
 #' ```
-#` {{classVarName}}s${{operationIdLowerCamelCase}}$$list{{baseName}}({{#allParams}}{{baseName}}, {{/allParams}}{{#isRestfulIndex}}search, {{/isRestfulIndex}})
+#' {{classVarName}}${{operationIdLowerCamelCase}}$list{{baseName}}({{#allParams}}{{baseName}}, {{/allParams}}{{#isRestfulIndex}}search, {{/isRestfulIndex}})
 {{#isRestfulIndex}}
-#` {{classVarName}}s${{operationIdLowerCamelCase}}$$list{{baseName}}(search=list("foo"="bar"))
+#' {{classVarName}}${{operationIdLowerCamelCase}}$list{{baseName}}(search=list("foo"="bar"))
 {{/isRestfulIndex}}
-#` ```
+#' ```
 #'
 {{/operation}}
 #' }

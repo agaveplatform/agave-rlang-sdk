@@ -9,22 +9,22 @@
 
 #' Profile Class
 #'
-#' @field city
-#' @field country
-#' @field department
-#' @field email
-#' @field fax
-#' @field firstName
-#' @field gender
-#' @field institution
-#' @field lastName
-#' @field phone
-#' @field position
-#' @field researchArea
-#' @field state
-#' @field username
-#' @field password
-#' @field uuid
+#' @field city The city of the user
+#' @field country The country of the user
+#' @field department The institutional department of the user
+#' @field email The unique email address of the user
+#' @field fax The fax number of the user
+#' @field firstName The first name of the user
+#' @field gender The gender of the user: "male" or "female"
+#' @field institution The home institution of the user
+#' @field lastName The last name of the user
+#' @field phone The phone number of the user
+#' @field position The position of employment of the user
+#' @field researchArea The primary area of research of the user
+#' @field state The state of the user
+#' @field username The unique username of the user
+#' @field password The password to set for this profile
+#' @field uuid The uuid of the user
 #'
 #' @importFrom R6 R6Class
 #' @importFrom jsonlite fromJSON toJSON

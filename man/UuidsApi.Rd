@@ -11,6 +11,11 @@ uuids <- UuidsApi$new( apiClient = ApiClient$new(), cache = AgaveCache$new() )
 \description{
 UuidsApi Class
 }
+\details{
+The Agave UUID service resolves the type and representation of one or more Agave UUID. This is helpful, for instance, when you need to expand the hypermedia response of another resource, get the URL corresponding to a UUID, or fetch the representations of multiple resources in a single request.
+
+Read more about the Uuids API in the \href{http://docs.agaveplatform.org/#/uuids}{Agave Developer's Guide}
+}
 \section{Arguments}{
 
 \describe{
@@ -34,20 +39,22 @@ UuidsApi Class
 
 \describe{
 
-\code{createUuid} Generate a new UUID for a given resource type
+\code{$createUuid()} Generate a new UUID for a given resource type
 
-\strong{Usage}\preformatted{
-
-`resolveUuid` Resolve one or more UUID to their resource URL and type
-
-**Usage**
-
+\strong{Usage}\preformatted{uuids$createUuid$listUuids(body, naked, )
 }
 
-\code{resolveUuids} Resolve one or more UUID to their resource URL and type
+\code{$resolveUuid()} Resolve one or more UUID to their resource URL and type
 
-\strong{Usage}\preformatted{
+\strong{Usage}\preformatted{uuids$resolveUuid$listUuids(uuid, naked, expand, )
 }
+
+\code{$resolveUuids()} Resolve one or more UUID to their resource URL and type
+
+\strong{Usage}\preformatted{uuids$resolveUuids$listUuids(naked, uuids, limit, offset, expand, search, )
+uuids$resolveUuids$listUuids(search=list("foo"="bar"))
+}
+
 }
 }
 

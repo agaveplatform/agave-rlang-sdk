@@ -9,19 +9,19 @@ License: BSD 3-Clause
 URL: https://github.com/agaveplatform/r-sdk
 BugReports: https://github.com/agaveplatform/r-sdk/issues
 LazyData: true
-Suggests: 
+Suggests:
   roxygen2,
   devtools,
   knitr,
   rmarkdown,
-  dplyr, 
+  dplyr,
   styler,
   testthat
-Imports: 
-  jsonlite, 
-  httr, 
-  R6, 
-  futile.logger, 
+Imports:
+  jsonlite,
+  httr,
+  R6,
+  futile.logger,
   plyr
 VignetteBuilder: knitr
 Roxygen: list(markdown = TRUE)

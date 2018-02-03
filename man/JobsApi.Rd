@@ -11,6 +11,11 @@ jobs <- JobsApi$new( apiClient = ApiClient$new(), cache = AgaveCache$new() )
 \description{
 JobsApi Class
 }
+\details{
+The Jobs service is a basic execution service that allows you to run applications registered with the Apps service across multiple, distributed, heterogeneous systems through a common REST interface. The service manages all aspects of execution and job management from data staging, job submission, monitoring, output archiving, event logging, sharing, and notifications. The Jobs service also provides a persistent reference to your job’s output data and a mechanism for sharing all aspects of your job with others. Each feature will be described in more detail below.
+
+Read more about the Jobs API in the \href{http://docs.agaveplatform.org/#/jobs}{Agave Developer's Guide}
+}
 \section{Arguments}{
 
 \describe{
@@ -34,80 +39,88 @@ JobsApi Class
 
 \describe{
 
-\code{addJobPermission} Add a user permission for the given job.
+\code{$addJobPermission()} Add a user permission for the given job.
 
-\strong{Usage}\preformatted{
-
-`clearJobPermissions` Deletes all permissions on an job.
-
-**Usage**
-
+\strong{Usage}\preformatted{jobs$addJobPermission$listJobs(jobId, body, naked, )
 }
 
-\code{deleteJob} Deletes a job from history of the user
+\code{$clearJobPermissions()} Deletes all permissions on an job.
 
-\strong{Usage}\preformatted{
-
-`deleteJobPermission` Deletes all permissions for the given user on an job.
-
-**Usage**
-
+\strong{Usage}\preformatted{jobs$clearJobPermissions$listJobs(jobId, naked, )
 }
 
-\code{downloadJobOutput} Download an output file from a specific job.
+\code{$deleteJob()} Deletes a job from history of the user
 
-\strong{Usage}\preformatted{
-
-`getJobDetails` Get details of the job with the specific job id.
-
-**Usage**
-
+\strong{Usage}\preformatted{jobs$deleteJob$listJobs(jobId, naked, )
 }
 
-\code{getJobHistory} Get the history of this job.
+\code{$deleteJobPermission()} Deletes all permissions for the given user on an job.
 
-\strong{Usage}\preformatted{
-
-`getJobPermission` Get a specific user permission for a job.
-
-**Usage**
-
+\strong{Usage}\preformatted{jobs$deleteJobPermission$listJobs(jobId, username, naked, )
 }
 
-\code{getJobStatus} Get the status of the job.
+\code{$downloadJobOutput()} Download an output file from a specific job.
 
-\strong{Usage}\preformatted{
-
-`listJobOutputs` List the output folder for a job.
-
-**Usage**
-
+\strong{Usage}\preformatted{jobs$downloadJobOutput$listJobs(jobId, filePath, force, search, )
+jobs$downloadJobOutput$listJobs(search=list("foo"="bar"))
 }
 
-\code{listJobPermissions} Get the permissions granted for this job.
+\code{$getJobDetails()} Get details of the job with the specific job id.
 
-\strong{Usage}\preformatted{
-
-`listJobs` Get a list of jobs the authenticated user had submitted.
-
-**Usage**
-
+\strong{Usage}\preformatted{jobs$getJobDetails$listJobs(jobId, naked, search, )
+jobs$getJobDetails$listJobs(search=list("foo"="bar"))
 }
 
-\code{resubmitJob} Resubmits the job with the given job id as a new job with a unique id.
+\code{$getJobHistory()} Get the history of this job.
 
-\strong{Usage}\preformatted{
-
-`submitJob` Submit a new job request.
-
-**Usage**
-
+\strong{Usage}\preformatted{jobs$getJobHistory$listJobs(jobId, naked, limit, offset, search, )
+jobs$getJobHistory$listJobs(search=list("foo"="bar"))
 }
 
-\code{updateJobPermission} Update a user permission for the given job and username
+\code{$getJobPermission()} Get a specific user permission for a job.
 
-\strong{Usage}\preformatted{
+\strong{Usage}\preformatted{jobs$getJobPermission$listJobs(jobId, username, naked, )
 }
+
+\code{$getJobStatus()} Get the status of the job.
+
+\strong{Usage}\preformatted{jobs$getJobStatus$listJobs(jobId, naked, search, )
+jobs$getJobStatus$listJobs(search=list("foo"="bar"))
+}
+
+\code{$listJobOutputs()} List the output folder for a job.
+
+\strong{Usage}\preformatted{jobs$listJobOutputs$listJobs(jobId, filePath, naked, limit, offset, search, )
+jobs$listJobOutputs$listJobs(search=list("foo"="bar"))
+}
+
+\code{$listJobPermissions()} Get the permissions granted for this job.
+
+\strong{Usage}\preformatted{jobs$listJobPermissions$listJobs(jobId, naked, limit, offset, search, )
+jobs$listJobPermissions$listJobs(search=list("foo"="bar"))
+}
+
+\code{$listJobs()} Get a list of jobs the authenticated user had submitted.
+
+\strong{Usage}\preformatted{jobs$listJobs$listJobs(naked, appId, archive, archivePath, archiveSystem, batchQueue, executionSystem, id, inputs, localId, maxRuntime, memoryPerNode, name, nodeCount, outputPath, parameters, processorsPerNode, retries, startTime, status, submitTime, visible, limit, offset, search, )
+jobs$listJobs$listJobs(search=list("foo"="bar"))
+}
+
+\code{$resubmitJob()} Resubmits the job with the given job id as a new job with a unique id.
+
+\strong{Usage}\preformatted{jobs$resubmitJob$listJobs(jobId, body, naked, )
+}
+
+\code{$submitJob()} Submit a new job request.
+
+\strong{Usage}\preformatted{jobs$submitJob$listJobs(body, naked, )
+}
+
+\code{$updateJobPermission()} Update a user permission for the given job and username
+
+\strong{Usage}\preformatted{jobs$updateJobPermission$listJobs(jobId, username, body, naked, )
+}
+
 }
 }
 

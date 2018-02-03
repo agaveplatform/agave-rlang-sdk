@@ -14,23 +14,23 @@ FileInfo Class
 \section{Fields}{
 
 \describe{
-\item{\code{format}}{}
+\item{\code{format}}{The file type of the file.}
 
-\item{\code{lastModified}}{}
+\item{\code{lastModified}}{The date this file was last modified in ISO 8601 format.}
 
-\item{\code{length}}{}
+\item{\code{length}}{The length of the file/folder.}
 
-\item{\code{mimeType}}{}
+\item{\code{mimeType}}{The mime type of the file/folder. If unknown, it defaults to application/binary.}
 
-\item{\code{name}}{}
+\item{\code{name}}{The name of the file/folder.}
 
-\item{\code{path}}{}
+\item{\code{path}}{The absolute path to the file/folder.}
 
-\item{\code{permissions}}{}
+\item{\code{permissions}}{The remote system permission of the invoking user on the file/folder.}
 
-\item{\code{system}}{}
+\item{\code{system}}{The id of the system where this file lives.}
 
-\item{\code{type}}{}
+\item{\code{type}}{The filetype. Almost always "raw-0" or "dir"}
 }}
 
 \keyword{datasets}

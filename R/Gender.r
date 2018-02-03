@@ -9,7 +9,7 @@
 
 #' Gender Class
 #'
-#' 
+#' The gender of the user
 #'
 #'
 #' @importFrom R6 R6Class

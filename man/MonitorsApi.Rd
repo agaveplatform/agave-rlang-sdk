@@ -11,6 +11,11 @@ monitors <- MonitorsApi$new( apiClient = ApiClient$new(), cache = AgaveCache$new
 \description{
 MonitorsApi Class
 }
+\details{
+The Agave Monitors API provides a familiar paradigm for monitoring the use ability and accessibility of storage and execution systems you registered with Agave. Similar to services like Pingdom, Pagerduty, and WebCron, the Monitors API allows you to to create regular health checks on a registered system. Unlike standard uptime services, Agave will check that your system is responsive and accessible by performing proactive tests on availability (ping), accessibility (authentication), and functionality (listing or echo). Each check result is persisted and the check history of a given monitor is queryable through the API. As with all resources in the Agave Platform, a full event model is available so you can subscribe to event you care about such as failed checks, restored system availability, and system disablement.
+
+Read more about the Monitors API in the \href{http://docs.agaveplatform.org/#/monitors}{Agave Developer's Guide}
+}
 \section{Arguments}{
 
 \describe{
@@ -34,44 +39,48 @@ MonitorsApi Class
 
 \describe{
 
-\code{addMonitoringTasks} Add a new monitoring task
+\code{$addMonitoringTasks()} Add a new monitoring task
 
-\strong{Usage}\preformatted{
-
-`deleteMonitoringTask` Deletes a monitor.
-
-**Usage**
-
+\strong{Usage}\preformatted{monitors$addMonitoringTasks$listMonitors(body, naked, )
 }
 
-\code{forceMonitoringTaskCheck} Forces a monitor check to run.
+\code{$deleteMonitoringTask()} Deletes a monitor.
 
-\strong{Usage}\preformatted{
-
-`getMonitoringTask` Retrieve a specific monitor.
-
-**Usage**
-
+\strong{Usage}\preformatted{monitors$deleteMonitoringTask$listMonitors(monitorId, naked, )
 }
 
-\code{getMonitoringTaskCheck} Retrieve a specific monitor check
+\code{$forceMonitoringTaskCheck()} Forces a monitor check to run.
 
-\strong{Usage}\preformatted{
-
-`listMonitoringTaskChecks` Retrieve checks for a specific monitor
-
-**Usage**
-
+\strong{Usage}\preformatted{monitors$forceMonitoringTaskCheck$listMonitors(monitorId, naked, )
 }
 
-\code{listMonitoringTasks} Retrieve Monitor for a specific resource.
+\code{$getMonitoringTask()} Retrieve a specific monitor.
 
-\strong{Usage}\preformatted{
+\strong{Usage}\preformatted{monitors$getMonitoringTask$listMonitors(monitorId, naked, search, )
+monitors$getMonitoringTask$listMonitors(search=list("foo"="bar"))
+}
 
-`updateMonitoringTask` Updates an existing monitor.
+\code{$getMonitoringTaskCheck()} Retrieve a specific monitor check
 
-**Usage**
+\strong{Usage}\preformatted{monitors$getMonitoringTaskCheck$listMonitors(monitorId, checkId, naked, search, )
+monitors$getMonitoringTaskCheck$listMonitors(search=list("foo"="bar"))
+}
 
+\code{$listMonitoringTaskChecks()} Retrieve checks for a specific monitor
+
+\strong{Usage}\preformatted{monitors$listMonitoringTaskChecks$listMonitors(monitorId, naked, startDate, endDate, result, limit, offset, search, )
+monitors$listMonitoringTaskChecks$listMonitors(search=list("foo"="bar"))
+}
+
+\code{$listMonitoringTasks()} Retrieve Monitor for a specific resource.
+
+\strong{Usage}\preformatted{monitors$listMonitoringTasks$listMonitors(naked, target, active, limit, offset, search, )
+monitors$listMonitoringTasks$listMonitors(search=list("foo"="bar"))
+}
+
+\code{$updateMonitoringTask()} Updates an existing monitor.
+
+\strong{Usage}\preformatted{monitors$updateMonitoringTask$listMonitors(body, naked, monitorId, )
 }
 
 }

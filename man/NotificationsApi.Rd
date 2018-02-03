@@ -11,6 +11,13 @@ notifications <- NotificationsApi$new( apiClient = ApiClient$new(), cache = Agav
 \description{
 NotificationsApi Class
 }
+\details{
+Under the covers, the Agave API is an event-driven distributed system implemented on top of a reliable, cloud-based messaging system. This means that every action either observed or taken by Agave is tied to an event. The changing of a job from one status to another is an event. The granting of permissions on a file is an event. Editing a piece of metadata is an event, and to be sure, the moment you created an account with Agave was an event. You get the idea.
+
+Having such a fine-grain event system is helpful for the same reason that having a fine-grain permission model is helpful. It affords you the highest degree of flexibility and control possible to achieve the behavior you desire. With Agave’s event system, you have the ability to alert your users (or yourself) the instant something occurs. You can be proactive rather than reactive, and you can begin orchestrating your complex tasks in a loosely coupled, asynchronous way.
+
+Read more about the Notifications API in the \href{http://docs.agaveplatform.org/#/notifications}{Agave Developer's Guide}
+}
 \section{Arguments}{
 
 \describe{
@@ -34,30 +41,32 @@ NotificationsApi Class
 
 \describe{
 
-\code{addNotification} Add new notification.
+\code{$addNotification()} Add new notification.
 
-\strong{Usage}\preformatted{
-
-`deleteNotification` Remove notification from the system.
-
-**Usage**
-
+\strong{Usage}\preformatted{notifications$addNotification$listNotifications(body, naked, )
 }
 
-\code{getNotification} Retrieve notification.
+\code{$deleteNotification()} Remove notification from the system.
 
-\strong{Usage}\preformatted{
-
-`listNotifications` Retrieve notification for a specific resource.
-
-**Usage**
-
+\strong{Usage}\preformatted{notifications$deleteNotification$listNotifications(uuid, naked, )
 }
 
-\code{updateNotification} Update existing notification.
+\code{$getNotification()} Retrieve notification.
 
-\strong{Usage}\preformatted{
+\strong{Usage}\preformatted{notifications$getNotification$listNotifications(uuid, naked, )
 }
+
+\code{$listNotifications()} Retrieve notification for a specific resource.
+
+\strong{Usage}\preformatted{notifications$listNotifications$listNotifications(associatedUuid, naked, limit, offset, search, )
+notifications$listNotifications$listNotifications(search=list("foo"="bar"))
+}
+
+\code{$updateNotification()} Update existing notification.
+
+\strong{Usage}\preformatted{notifications$updateNotification$listNotifications(uuid, body, naked, )
+}
+
 }
 }
 

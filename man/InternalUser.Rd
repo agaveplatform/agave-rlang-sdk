@@ -26,7 +26,7 @@ A virtual user profile associated with a concrete api user
 
 \item{\code{firstName}}{The first name of the user}
 
-\item{\code{gender}}{}
+\item{\code{gender}}{The gender of the user}
 
 \item{\code{institution}}{The home institution of the user}
 

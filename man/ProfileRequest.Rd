@@ -28,7 +28,7 @@ A profile describing a new user to be created.
 
 \item{\code{firstName}}{The first name of the user}
 
-\item{\code{gender}}{}
+\item{\code{gender}}{The gender of the user}
 
 \item{\code{institution}}{The home institution of the user}
 

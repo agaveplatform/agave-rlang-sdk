@@ -15,7 +15,7 @@
 #' @field creator The api user who made the PostIt creation request.
 #' @field expires The expiration date in ISO 8601 format.
 #' @field internalUsername The username of the internal user attached to this PostIt.
-#' @field method The url that will be invoked when the PostIt is redeemed.
+#' @field method The HTTP method to be invoked on the target URL when this PostIt is redeemed
 #' @field postit The PostIt nonce.
 #' @field remainingUses The number of invocations remaining on this token. 
 #' @field url The url that will be invoked when the PostIt is redeemed.

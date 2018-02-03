@@ -17,7 +17,7 @@
 #' @field email The unique email address of the user
 #' @field fax The fax number of the user
 #' @field firstName The first name of the user
-#' @field gender 
+#' @field gender The gender of the user
 #' @field institution The home institution of the user
 #' @field lastName The last name of the user
 #' @field phone The phone number of the user

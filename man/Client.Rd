@@ -14,17 +14,17 @@ Client Class
 \section{Fields}{
 
 \describe{
-\item{\code{key}}{}
+\item{\code{key}}{The API key for this client.}
 
-\item{\code{secret}}{}
+\item{\code{secret}}{The API secret for this client.}
 
-\item{\code{callbackUrl}}{}
+\item{\code{callbackUrl}}{Callback URL for OAuth authentication grant.}
 
-\item{\code{description}}{}
+\item{\code{description}}{Description of the client. This will be shown to users when authentication via OAuth web flows}
 
-\item{\code{clientName}}{}
+\item{\code{name}}{The name of the client.}
 
-\item{\code{tier}}{}
+\item{\code{tier}}{The access tier for this client. Usually "UNLIMITED"}
 }}
 
 \keyword{datasets}

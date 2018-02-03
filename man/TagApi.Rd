@@ -11,6 +11,9 @@ tag <- TagApi$new( apiClient = ApiClient$new(), cache = AgaveCache$new() )
 \description{
 TagApi Class
 }
+\details{
+Read more about the Tag API in the \href{http://docs.agaveplatform.org/#/tag}{Agave Developer's Guide}
+}
 \section{Arguments}{
 
 \describe{
@@ -34,94 +37,99 @@ TagApi Class
 
 \describe{
 
-\code{addTag} Creat a new tag
+\code{$addTag()} Creat a new tag
 
-\strong{Usage}\preformatted{
-
-`addTagResource` Add resources to tag
-
-**Usage**
-
+\strong{Usage}\preformatted{tag$addTag$listTag(body, naked, )
 }
 
-\code{clearTagPermissions} Clear tag permissions
+\code{$addTagResource()} Add resources to tag
 
-\strong{Usage}\preformatted{
-
-`clearTagResources` Clear all tagged resources
-
-**Usage**
-
+\strong{Usage}\preformatted{tag$addTagResource$listTag(tagId, body, naked, )
 }
 
-\code{deleteTag} Delete tag
+\code{$clearTagPermissions()} Clear tag permissions
 
-\strong{Usage}\preformatted{
-
-`deleteTagPermissionForUser` Remove user tag permission
-
-**Usage**
-
+\strong{Usage}\preformatted{tag$clearTagPermissions$listTag(tagId, naked, )
 }
 
-\code{getTagDetails} Tag Details
+\code{$clearTagResources()} Clear all tagged resources
 
-\strong{Usage}\preformatted{
-
-`getTagPermissionForUser` List tag permissions for a user
-
-**Usage**
-
+\strong{Usage}\preformatted{tag$clearTagResources$listTag(tagId, naked, )
 }
 
-\code{getTaggedResource} Get tagged item details
+\code{$deleteTag()} Delete tag
 
-\strong{Usage}\preformatted{
-
-`listTagHistory` Tag history
-
-**Usage**
-
+\strong{Usage}\preformatted{tag$deleteTag$listTag(tagId, naked, )
 }
 
-\code{listTagPermissions} List permissionss set for a given tag id
+\code{$deleteTagPermissionForUser()} Remove user tag permission
 
-\strong{Usage}\preformatted{
-
-`listTagResources` Tagged items
-
-**Usage**
-
+\strong{Usage}\preformatted{tag$deleteTagPermissionForUser$listTag(tagId, username, naked, )
 }
 
-\code{listTags} Available tags
+\code{$getTagDetails()} Tag Details
 
-\strong{Usage}\preformatted{
-
-`removeTagResource` Remove resource from tag
-
-**Usage**
-
+\strong{Usage}\preformatted{tag$getTagDetails$listTag(tagId, naked, search, )
+tag$getTagDetails$listTag(search=list("foo"="bar"))
 }
 
-\code{updateTag} Update tag
+\code{$getTagPermissionForUser()} List tag permissions for a user
 
-\strong{Usage}\preformatted{
-
-`updateTagPermission` Grant permission
-
-**Usage**
-
+\strong{Usage}\preformatted{tag$getTagPermissionForUser$listTag(tagId, username, naked, )
 }
 
-\code{updateTagPermissionForUser} Update user permission on tag
+\code{$getTaggedResource()} Get tagged item details
 
-\strong{Usage}\preformatted{
+\strong{Usage}\preformatted{tag$getTaggedResource$listTag(tagId, uuid, naked, )
+}
 
-`updateTagResource` Add resource to tag
+\code{$listTagHistory()} Tag history
 
-**Usage**
+\strong{Usage}\preformatted{tag$listTagHistory$listTag(tagId, naked, limit, offset, search, )
+tag$listTagHistory$listTag(search=list("foo"="bar"))
+}
 
+\code{$listTagPermissions()} List permissionss set for a given tag id
+
+\strong{Usage}\preformatted{tag$listTagPermissions$listTag(tagId, naked, limit, offset, search, )
+tag$listTagPermissions$listTag(search=list("foo"="bar"))
+}
+
+\code{$listTagResources()} Tagged items
+
+\strong{Usage}\preformatted{tag$listTagResources$listTag(tagId, naked, limit, offset, search, )
+tag$listTagResources$listTag(search=list("foo"="bar"))
+}
+
+\code{$listTags()} Available tags
+
+\strong{Usage}\preformatted{tag$listTags$listTag(name, resourceType, resourceId, lastModified, created, naked, limit, offset, search, )
+tag$listTags$listTag(search=list("foo"="bar"))
+}
+
+\code{$removeTagResource()} Remove resource from tag
+
+\strong{Usage}\preformatted{tag$removeTagResource$listTag(tagId, uuid, naked, )
+}
+
+\code{$updateTag()} Update tag
+
+\strong{Usage}\preformatted{tag$updateTag$listTag(tagId, body, naked, )
+}
+
+\code{$updateTagPermission()} Grant permission
+
+\strong{Usage}\preformatted{tag$updateTagPermission$listTag(tagId, body, naked, )
+}
+
+\code{$updateTagPermissionForUser()} Update user permission on tag
+
+\strong{Usage}\preformatted{tag$updateTagPermissionForUser$listTag(tagId, username, body, naked, )
+}
+
+\code{$updateTagResource()} Add resource to tag
+
+\strong{Usage}\preformatted{tag$updateTagResource$listTag(tagId, uuid, body, naked, )
 }
 
 }
