@@ -17,7 +17,14 @@ Make sure you have a proper CRAN repository from which you can download packages
 Install the `devtools` package with the following command.
 ```R
 > if(!require(devtools)) { install.packages("devtools") }
+> if(!require(devtools)) { install.packages("plyr") }
 ```
+If you would like to rebuild the documentation, you will need to install 
+roxygen2.  
+
+```R
+> if(!require(roxygen2)) { install.packages("roxygen2") }
+```  
 
 ### Installation from Github
 To install the package directly from the master branch in Github  
@@ -81,7 +88,7 @@ For example, create a new client with:
 
 ```R
 > clientData <- Client$new(clientName="my_client")
-> api$clients$add_client(body=clientData)$content
+> api$clients$create(body=clientData)
 ```  
 
 You may also pass in a list, if preferred, over the object model  
@@ -93,8 +100,8 @@ You may also pass in a list, if preferred, over the object model
 Access any endpoint with:
 
 ```R
-> api$systems$list_systems()
-> api$jobs$submit_job(body=Job$new(appId="head-1.0u1"))
+> api$systems$listSystems()
+> api$jobs$submitJob(body=Job$new(appId="head-1.0u1"))
 ```  
 
 Once a client is created, it is used by default to access the API.
