@@ -26,12 +26,12 @@ which are both used to bootstrap the Agave tooling.
 \code{$getTenantDetails(codeOrUuid)} gets detailed description for an individual
 tenant by either code or uuid.
 
-\strong{Usage}\preformatted{agave$tenants$getTenantDetails(codeOrUuid="agave.prod")
+\strong{Usage}\preformatted{tenants$getTenantDetails(codeOrUuid="agave.prod")
 }
 
 \code{$listTenants()} List all active tenants with optional pagination;
 
-\strong{Usage}\preformatted{agave$tenants$listTenants()
+\strong{Usage}\preformatted{tenants$listTenants()
 }
 
 }

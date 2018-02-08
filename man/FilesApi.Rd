@@ -17,31 +17,50 @@ rAgave.Files
 
 clear_file_item_permissions
 
-delete
+`$delete
 
-download
+\code{$download(path, systemId, filename)} Downloads the file on th remote system
+to the local disk. The original remote filename is preserved if none is provied.`
 
-transfer
+\code{$readStream(path, systemId, callback)} Fetches the remote file as a byte
+stream an returns it to the callback function as an argument.
 
-upload
+\code{transfer(path, systemId, source, body)} Initiate a transfer of a file from
+one location to another. For convenience, the \code{source} url can be provided.
+For detailed transfer requests including policy, notifications, permissions,
+etc, provide a valid body to pass on to the API.
 
-invoke_file_action_on_default_system
+\emph{\strong{If the transfer is within a single system, it is
+usually faster to use the copy action of a manage operation.}}
 
-invoke_file_item_action
+The source URL may be given in the following forms:
+\itemize{
+\item \emph{File path}: relative or absolute path on your default storage system
+\item \emph{Agave URL}: An internal Agave URL of the form `agave://<systemId>/<path>
+\item \emph{Public URL}: Any publicy accessible URL with a supported data protocol.
+}
 
-list_file_item_history
+\code{$upload(path, systemId, localPath, body)}  Upload a local file to the given
+system within the given directory path. The remote path must be a directory.
+If no body is provided, the local filename is preserved and will overwrite
+a remote file with the same name, if present.
 
-list_file_item_history_on_default_system
+For detailed transfer requests including policy, notifications, permissions,
+etc, provide a valid body to pass on to the API.
 
-list_file_item_permissions
+\code{$manage(path, systemId, body)} Performs management actions on the file item
+on the given system at the given path
 
-list_file_item_permissions_on_default_system
+\code{$history(path, systemId)} Lists history of the file item on the given system
+at the given path.
 
-list_file_items
+\code{$listPermissions()} List the permissions assigned to file item on the given
+system at the given path.
 
-update_file_item_permission
+\code{$list()} List the file item at the given path on the given system.
 
-update_file_item_permissions_on_default_system
+\code{$updatePermissions(path, systemId, username, permission, recursive)} Add
+or update a user permission for the given file item on the given system.
 
 }
 }

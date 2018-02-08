@@ -11,6 +11,18 @@ ClientsApi
 \description{
 rAgave.Clients
 }
+\details{
+The Clients API is the client registration service for the Agave Platform.
+This service is in charge of issuing and managing API keys for your client
+applications as well as its subscriptions to boutique APIs availabled from
+within your tenant.\preformatted{api <- Agave$new(username="username", password="password")
+
+myClient <- api$clients$create(body=list(clientName = "my_client"))
+
+api <- Agave$new(username="username", password="password")#'
+
+}
+}
 \section{Fields}{
 
 \describe{
@@ -25,19 +37,57 @@ rAgave.Clients
 
 \describe{
 
-add_client
+\code{$create(body, updateCache)} Creates a new client. Client names must be
+unique within a tenant. Attempting to create a client with an existing
+name will fail notifying you of the name conflict. If you already own
+a client with the given name, but have lost the key, you may delete the
+existing client and create a new one with the same name. Setting
+updateCache to FALSE will prevent the client key and secret from being
+written to your local auth cache. The default is TRUE.
 
-add_client_api_subscription
+\strong{Usage}\preformatted{myClient <- Client$new(clientName="my_client")
+clients$create(body=myClient)
 
-clear_client_api_subscriptions
+myImplicitClient <- Client$new(clientName="my_client", description="My cool app", callbackUrl="https://example.com/oauth2", tier="UNLIMITED")
+clients$create(body=myImplicitClient)
+}
 
-delete_client
+\code{$addSubscription(clientName, body)} Subscribe to an API. You must have been granted
+access to the API by the author before you can subscribe. Every new client
+is subsribed to all the core science API by default.
 
-get_client
+\strong{Usage}\preformatted{subscriptionRequest <- ClientSubscriptionRequest(apiName="Tags", apiProvider="admin", apiVersion="v2", tier="UNLIMITED")
+clients$addSubscription(clientName="my_client", body=subscriptionRequest)
+}
 
-list_client_api_subscriptions
+\code{$clearSubscriptions(clientName)} Unsubscribe the client from all API to
+which it is currently subscribed.
 
-list_clients
+\strong{Usage}\preformatted{clients$clearSubscriptions(clientName="my_client")
+}
+
+\code{$delete(clientName)} Delete the given client. This will invalidate the
+client's keys and any outstanding, active tokens it has.
+
+\strong{Usage}\preformatted{clients$delete(clientName="my_client")
+}
+
+\code{$getDetails(clientName)} Fetch the client details. Note that the client
+secret will not be returned once the client is created.
+
+\strong{Usage}\preformatted{clients$getDetails(clientName="my_client")
+}
+
+\code{$listSubscriptions(clientName)} List all API to which the client is
+subscribed.
+
+\strong{Usage}\preformatted{clients$listSubscriptions(clientName="my_client")
+}
+
+\code{$list()} list all clients for the autehnticated user
+
+\strong{Usage}\preformatted{clients$list()
+}
 
 }
 }

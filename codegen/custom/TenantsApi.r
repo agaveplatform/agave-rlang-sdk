@@ -26,7 +26,7 @@
 #' **Usage**
 #'
 #' ```
-#' agave$tenants$getTenantDetails(codeOrUuid="agave.prod")
+#' tenants$getTenantDetails(codeOrUuid="agave.prod")
 #' ```
 #'
 #' `$listTenants()` List all active tenants with optional pagination;
@@ -34,7 +34,7 @@
 #' **Usage**
 #'
 #' ```
-#' agave$tenants$listTenants()
+#' tenants$listTenants()
 #' ```
 #'
 #' }

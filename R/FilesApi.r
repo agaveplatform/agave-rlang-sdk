@@ -16,43 +16,57 @@
 #'
 #' clear_file_item_permissions
 #'
-#' delete
+#' `$delete
 #'
 #'
-#' download
+#' `$download(path, systemId, filename)` Downloads the file on th remote system
+#'   to the local disk. The original remote filename is preserved if none is provied.`
 #'
 #'
-#' transfer
+#' `$readStream(path, systemId, callback)` Fetches the remote file as a byte
+#'   stream an returns it to the callback function as an argument.
 #'
 #'
-#' upload
+#' `transfer(path, systemId, source, body)` Initiate a transfer of a file from
+#'   one location to another. For convenience, the `source` url can be provided.
+#'   For detailed transfer requests including policy, notifications, permissions,
+#'   etc, provide a valid body to pass on to the API.
+#'
+#'   ***If the transfer is within a single system, it is
+#'   usually faster to use the copy action of a manage operation.***
+#'
+#'   The source URL may be given in the following forms:
+#'   * _File path_: relative or absolute path on your default storage system
+#'   * _Agave URL_: An internal Agave URL of the form `agave://<systemId>/<path>
+#'   * _Public URL_: Any publicy accessible URL with a supported data protocol.
+#'
+#' `$upload(path, systemId, localPath, body)`  Upload a local file to the given
+#'   system within the given directory path. The remote path must be a directory.
+#'   If no body is provided, the local filename is preserved and will overwrite
+#'   a remote file with the same name, if present.
+#'
+#'   For detailed transfer requests including policy, notifications, permissions,
+#'   etc, provide a valid body to pass on to the API.
 #'
 #'
-#' invoke_file_action_on_default_system
+#'
+#' `$manage(path, systemId, body)` Performs management actions on the file item
+#'   on the given system at the given path
+#'
+#' `$history(path, systemId)` Lists history of the file item on the given system
+#'   at the given path.
+#'
+#'  
+#'
+#' `$listPermissions()` List the permissions assigned to file item on the given
+#'   system at the given path.
 #'
 #'
-#' invoke_file_item_action
+#' `$list()` List the file item at the given path on the given system.
 #'
 #'
-#' list_file_item_history
-#'
-#'
-#' list_file_item_history_on_default_system
-#'
-#'
-#' list_file_item_permissions
-#'
-#'
-#' list_file_item_permissions_on_default_system
-#'
-#'
-#' list_file_items
-#'
-#'
-#' update_file_item_permission
-#'
-#'
-#' update_file_item_permissions_on_default_system
+#' `$updatePermissions(path, systemId, username, permission, recursive)` Add
+#'   or update a user permission for the given file item on the given system.
 #'
 #' }
 #'
@@ -96,7 +110,8 @@ FilesApi <- R6::R6Class(
             colNames <- names(jsonResp)
             if (is.null(colNames)) {
               # convert to a list of dataframes
-              do.call("rbind", lapply(jsonResp, as.data.frame, col.names=factor(names(jsonResp[[1]]))))
+
+              do.call("rbind.fill", lapply(jsonResp, as.data.frame, col.names=factor(names(jsonResp[[1]]))))
             }
             else {
               # convert object to single data frame
@@ -142,20 +157,20 @@ FilesApi <- R6::R6Class(
         private$responseType = responseType
       }
     },
-    clearPermissions = function(path, systemId, naked, ...){
+    delete = function(systemId, path, systemId...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
 
-      if (!missing(`naked`)) {
-        queryParams['naked'] <- naked
+      if ("filter" %in% names(args)) {
+        queryParams['filter'] <- args$filter
       }
 
-      if (missing(`systemId`)) {
-        urlPath <- "/files/v2/pems/{filePath}"
+      if (missing(systemId)) {
+        urlPath <- "/files/v2/media/{filePath}"
       }
       else {
-        urlPath <- "/files/v2/pems/system/{systemId}/{filePath}"
+        urlPath <- "/files/v2/media/system/{systemId}/{filePath}"
         urlPath <- gsub(paste0("\\{", "systemId", "\\}"), `systemId`, urlPath)
       }
 
@@ -164,45 +179,15 @@ FilesApi <- R6::R6Class(
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
-                                 method = "DELETE",
-                                 queryParams = queryParams,
-                                 headerParams = headerParams,
-                                 body = body,
-                                 ...)
+                                        method = "DELETE",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        ...)
 
       private$formatResponse(resp, args)
     },
-    delete = function(systemId, path, naked, ...){
-      args <- list(...)
-      queryParams <- list()
-      headerParams <- character()
-
-      if (!missing(`naked`)) {
-        queryParams['naked'] <- naked
-      }
-
-      if (missing(destSystemId) || is.null(destSystemId)) {
-        urlPath <- "/files/v2/media/{filePath}"
-      }
-      else {
-        urlPath <- "/files/v2/media/system/{systemId}/{filePath}"
-        urlPath <- gsub(paste0("\\{", "systemId", "\\}"), `destSystemId`, urlPath)
-      }
-
-      if (!missing(`path`)) {
-        urlPath <- gsub(paste0("\\{", "filePath", "\\}"), `path`, urlPath)
-      }
-
-      resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
-                                 method = "DELETE",
-                                 queryParams = queryParams,
-                                 headerParams = headerParams,
-                                 body = body,
-                                 ...)
-
-      private$formatResponse(resp, args)
-    },
-    download = function(destSystemId, path, filename, overwrite=FALSE, ...){
+    download = function(path, systemId, filename, overwrite=FALSE, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -211,12 +196,12 @@ FilesApi <- R6::R6Class(
         filename <- basename(path)
       }
 
-      if (missing(destSystemId)) {
+      if (missing(systemId)) {
         urlPath <- "/files/v2/media/{filePath}"
       }
       else {
         urlPath <- "/files/v2/media/system/{systemId}/{filePath}"
-        urlPath <- gsub(paste0("\\{", "systemId", "\\}"), `destSystemId`, urlPath)
+        urlPath <- gsub(paste0("\\{", "systemId", "\\}"), `systemId`, urlPath)
       }
 
       if (!missing(`path`)) {
@@ -224,13 +209,13 @@ FilesApi <- R6::R6Class(
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
-                                 method = "GET",
-                                 queryParams = queryParams,
-                                 headerParams = headerParams,
-                                 body = body,
-                                 httr::progress(),
-                                 httr::write_disk(filename, overwrite=overwrite),
-                                 ...)
+                                        method = "GET",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        httr::progress(),
+                                        httr::write_disk(filename, overwrite=overwrite),
+                                        ...)
 
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
         normalizePath(filename)
@@ -239,48 +224,107 @@ FilesApi <- R6::R6Class(
         private$formatResponse(resp, args)
       }
     },
-    transfer = function(destSystemId, destDirPath, body, ...){
+    readStream = function(path, systemId, callback, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
 
-      if (!missing(`body`)) {
-        if (!is.list(body)) {
-          body <- `body`$toJSONString()
-        }
-      } else {
-        body <- NULL
+      if (missing(callback)) {
+        stop("No callback function provided. Please provide a callback function to receive the byte stream from the downloaded file")
+      }
+      # else if (!is.function(callback)) {
+      #   stop("Callback is not a function. Please provide a callback function to receive the byte stream from the downloaded file")
+      # }
+
+      if (missing(filename)) {
+        filename <- basename(path)
       }
 
-      if (missing(destSystemId)) {
+      if (missing(systemId)) {
         urlPath <- "/files/v2/media/{filePath}"
       }
       else {
         urlPath <- "/files/v2/media/system/{systemId}/{filePath}"
-        urlPath <- gsub(paste0("\\{", "systemId", "\\}"), `destSystemId`, urlPath)
+        urlPath <- gsub(paste0("\\{", "systemId", "\\}"), `systemId`, urlPath)
       }
 
-      if (!missing(`destDirPath`)) {
-        urlPath <- gsub(paste0("\\{", "filePath", "\\}"), `destDirPath`, urlPath)
+      if (!missing(`path`)) {
+        urlPath <- gsub(paste0("\\{", "filePath", "\\}"), `path`, urlPath)
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
-                                 method = "POST",
-                                 queryParams = queryParams,
-                                 headerParams = headerParams,
-                                 body = body,
-                                 ...)
+                                        method = "GET",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        httr::write_stream(callback),
+                                        ...)
 
-      private$formatResponse(resp, args)
+      if ( httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299 ) {
+        resp
+      }
+      else {
+        private$formatResponse(resp, args)
+      }
     },
-
-    upload = function(destSystemId, destDirPath, filename, body, ...){
+    transfer = function(path, systemId, source, body, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
 
+      if ("filter" %in% names(args)) {
+        queryParams['filter'] <- args$filter
+      }
+
+      body <- list()
+
+      if (missing(source)) {
+        stop("No source URL provided. Please provide a valid source as a path on your default storage system, Agave URL, or publicly accessible URL")
+      }
+      else {
+        body['fileToImport'] <- source
+      }
+
+      if (missing(systemId)) {
+        urlPath <- "/files/v2/media/{filePath}"
+      }
+      else {
+        urlPath <- "/files/v2/media/system/{systemId}/{filePath}"
+        urlPath <- gsub(paste0("\\{", "systemId", "\\}"), `systemId`, urlPath)
+      }
+
+      if (!missing(`path`)) {
+        urlPath <- gsub(paste0("\\{", "filePath", "\\}"), `path`, urlPath)
+      }
+
+      resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
+                                        method = "POST",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        ...)
+
+      private$formatResponse(resp, args)
+    },
+    upload = function(path, systemId, filename, body, ...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+
+      if ("filter" %in% names(args)) {
+        queryParams['filter'] <- args$filter
+      }
+
       # validate the filename entry
-      stopifnot(!missing(filename),!is.null(filename), nchar(filename) > 0, file.exists(filename))
+      if (missing(filename)) {
+        stop("No filename provided. Path to local file to upload is required")
+      }
+      else if (is.null(filename) || nchar(filename) == 0) {
+        stop("Invalid filename provided. Path to local file to upload is required")
+      }
+      else if (!file.exists(filename)) {
+        stop(paste0(c("No local file found at ", filename)))
+      }
 
       if (!missing(`body`)) {
         if (!is.list(body)) {
@@ -294,35 +338,43 @@ FilesApi <- R6::R6Class(
         body <- list(fileToUpload = httr::upload_file(filename))
       }
 
-      if (missing(destSystemId) || is.null(destSystemId)) {
+      if (missing(systemId) || is.null(systemId)) {
         urlPath <- "/files/v2/media/{filePath}"
       }
       else {
         urlPath <- "/files/v2/media/system/{systemId}/{filePath}"
-        urlPath <- gsub(paste0("\\{", "systemId", "\\}"), `destSystemId`, urlPath)
+        urlPath <- gsub(paste0("\\{", "systemId", "\\}"), `systemId`, urlPath)
       }
 
-      if (!missing(`destDirPath`)) {
-        urlPath <- gsub(paste0("\\{", "filePath", "\\}"), `destDirPath`, urlPath)
+      if (!missing(`path`)) {
+        urlPath <- gsub(paste0("\\{", "filePath", "\\}"), `path`, urlPath)
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
-                                     method = "POST",
-                                     queryParams = queryParams,
-                                     headerParams = headerParams,
-                                     body = body,
-                                     httr::progress(),
-                                     ...)
+                                        method = "POST",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        httr::progress(),
+                                        ...)
 
       private$formatResponse(resp, args)
     },
-    invokeAction = function(systemId, path, body, naked, ...){
+    manage = function(path, systemId, body, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
 
-      if (!missing(`naked`)) {
-        queryParams['naked'] <- naked
+      if ("limit" %in% names(args)) {
+        queryParams['limit'] <- args$limit
+      }
+
+      if ("offset" %in% names(args)) {
+        queryParams['offset'] <- args$offset
+      }
+
+      if ("filter" %in% names(args)) {
+        queryParams['filter'] <- args$filter
       }
 
       if (!missing(`body`)) {
@@ -346,41 +398,29 @@ FilesApi <- R6::R6Class(
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
-                                 method = "PUT",
-                                 queryParams = queryParams,
-                                 headerParams = headerParams,
-                                 body = body,
-                                 ...)
+                                        method = "PUT",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        ...)
 
       private$formatResponse(resp, args)
     },
-    listHistory = function(path, systemId, status, created, filter, naked, limit, offset, ...){
+    listHistory = function(path, systemId, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
 
-      if (!missing(`status`)) {
-        queryParams['status'] <- status
+      if ("limit" %in% names(args)) {
+        queryParams['limit'] <- args$limit
       }
 
-      if (!missing(`created`)) {
-        queryParams['created'] <- created
+      if ("offset" %in% names(args)) {
+        queryParams['offset'] <- args$offset
       }
 
-      if (!missing(`filter`)) {
-        queryParams['filter'] <- filter
-      }
-
-      if (!missing(`naked`)) {
-        queryParams['naked'] <- naked
-      }
-
-      if (!missing(`limit`)) {
-        queryParams['limit'] <- limit
-      }
-
-      if (!missing(`offset`)) {
-        queryParams['offset'] <- offset
+      if ("filter" %in% names(args)) {
+        queryParams['filter'] <- args$filter
       }
 
       if (missing(`systemId`)) {
@@ -396,18 +436,30 @@ FilesApi <- R6::R6Class(
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
-                                 method = "GET",
-                                 queryParams = queryParams,
-                                 headerParams = headerParams,
-                                 body = body,
-                                 ...)
+                                        method = "GET",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        ...)
 
       private$formatResponse(resp, args)
     },
-    listPermissions = function(path, naked, systemId, limit, offset, ...){
+    listPermissions = function(path, systemId){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
+
+      if ("limit" %in% names(args)) {
+        queryParams['limit'] <- args$limit
+      }
+
+      if ("offset" %in% names(args)) {
+        queryParams['offset'] <- args$offset
+      }
+
+      if ("filter" %in% names(args)) {
+        queryParams['filter'] <- args$filter
+      }
 
       if (!missing(`limit`)) {
         queryParams['limit'] <- limit
@@ -430,29 +482,29 @@ FilesApi <- R6::R6Class(
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
-                                 method = "GET",
-                                 queryParams = queryParams,
-                                 headerParams = headerParams,
-                                 body = body,
-                                 ...)
+                                        method = "GET",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        ...)
 
       private$formatResponse(resp, args)
     },
-    list = function(systemId, path, naked, limit, offset, ...){
+    list = function(path, systemId, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
 
-      if (!missing(`naked`)) {
-        queryParams['naked'] <- naked
+      if ("limit" %in% names(args)) {
+        queryParams['limit'] <- args$limit
       }
 
-      if (!missing(`limit`)) {
-        queryParams['limit'] <- limit
+      if ("offset" %in% names(args)) {
+        queryParams['offset'] <- args$offset
       }
 
-      if (!missing(`offset`)) {
-        queryParams['offset'] <- offset
+      if ("filter" %in% names(args)) {
+        queryParams['filter'] <- args$filter
       }
 
       if (missing(`systemId`)) {
@@ -468,27 +520,21 @@ FilesApi <- R6::R6Class(
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
-                                 method = "GET",
-                                 queryParams = queryParams,
-                                 headerParams = headerParams,
-                                 body = body,
-                                 ...)
+                                        method = "GET",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        ...)
 
       private$formatResponse(resp, args)
     },
-    updatePermissions = function(path, systemId, body, naked, ...){
+    clearPermissions = function(path, systemId...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
 
-      if (!missing(`naked`)) {
-        queryParams['naked'] <- naked
-      }
-
-      if (!missing(`body`)) {
-        body <- `body`$toJSONString()
-      } else {
-        body <- NULL
+      if ("filter" %in% names(args)) {
+        queryParams['filter'] <- args$filter
       }
 
       if (missing(`systemId`)) {
@@ -504,11 +550,68 @@ FilesApi <- R6::R6Class(
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
-                                 method = "POST",
-                                 queryParams = queryParams,
-                                 headerParams = headerParams,
-                                 body = body,
-                                 ...)
+                                        method = "DELETE",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        ...)
+
+      private$formatResponse(resp, args)
+    },
+    updatePermissions = function(path, systemId, username, permission = "NONE", recursive=FALSE, ...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+      body <- list()
+
+      if ("limit" %in% names(args)) {
+        queryParams['limit'] <- args$limit
+      }
+
+      if ("offset" %in% names(args)) {
+        queryParams['offset'] <- args$offset
+      }
+
+      if ("filter" %in% names(args)) {
+        queryParams['filter'] <- args$filter
+      }
+
+      if (missing(`username`)) {
+        stop("Username is required")
+      } else {
+        body['username'] <- username
+      }
+
+      if (missing(`permission`)) {
+        body['pemission'] <- "NONE"
+      } else {
+        body['pemission'] <- permission
+      }
+
+      if (!missing(`recursive`)) {
+        body['recursive'] <- "false"
+      } else {
+        body['recursive'] <- ifelse(isTRUE(recursive), "true", "false")
+      }
+
+      if (missing(`systemId`)) {
+        urlPath <- "/files/v2/pems/{filePath}"
+      }
+      else {
+        urlPath <- "/files/v2/pems/system/{systemId}/{filePath}"
+        urlPath <- gsub(paste0("\\{", "systemId", "\\}"), `systemId`, urlPath)
+      }
+
+      if (!missing(`path`)) {
+        urlPath <- gsub(paste0("\\{", "filePath", "\\}"), `path`, urlPath)
+      }
+
+      resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
+                                        method = "POST",
+                                        queryParams = queryParams,
+                                        headerParams = headerParams,
+                                        body = body,
+                                        ...)
 
       private$formatResponse(resp, args)
     }

@@ -234,7 +234,7 @@ AgaveCache  <- R6::R6Class(
     },
     
     getProperty = function(propertyName) {
-     getElement(private$config, propertyName)
+      getElement(private$config, propertyName)
     }
   )
 )
