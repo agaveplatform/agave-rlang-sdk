@@ -128,7 +128,7 @@ TenantsApi <- R6::R6Class(
         private$responseType = responseType
       }
     },
-    getTenantDetails = function(codeOrUuid, naked, filter, ...){
+    getDetails = function(codeOrUuid, filter, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -143,7 +143,7 @@ TenantsApi <- R6::R6Class(
 
       urlPath <- "/tenants/{codeOrUuid}"
       if (!missing(`code_or_uuid`)) {
-        urlPath <- gsub(paste0("\\{", "codeOrUuid", "\\}"), `code_or_uuid`, urlPath)
+        urlPath <- gsub(paste0("\\{", "codeOrUuid", "\\}"), `codeOrUuid`, urlPath)
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
@@ -155,17 +155,13 @@ TenantsApi <- R6::R6Class(
 
       private$formatResponse(resp, args)
     },
-    list_tenants = function(naked, filter, limit, offset, ...){
+    list = function(filter, limit, offset, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
 
       if (!missing(`filter`)) {
         queryParams['filter'] <- filter
-      }
-
-      if (!missing(`naked`)) {
-        queryParams['naked'] <- naked
       }
 
       if (!missing(`limit`)) {
