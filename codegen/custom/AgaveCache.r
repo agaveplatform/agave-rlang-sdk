@@ -159,21 +159,46 @@ AgaveCache  <- R6::R6Class(
       if (! is.null(private$config)) {
         client$key = private$config$`apikey`
         client$secret = private$config$`apisecret`
+        client$clientName = private$config$`client_name`
       }
 
       client
     },
 
     setClient = function(client) {
+
       # if the client is not provided, this is essentially just a write() operation
       if (! (missing(client) || is.null(client))) {
+        logger.debug("Saving client to cache...")
+
+        # logger.trace("Value of cache before saving client")
+        # logger.trace(str(private$config))
+
         # set the client config we perisist to disk
-        private$config$apikey <- ifelse(is.null(client$consumerSecret), client$key, client$consumerKey)
-        private$config$apisecret <- ifelse(is.null(client$consumerSecret), client$key, client$consumerSecret)
-        private$config$name <- ifelse(is.null(client$clientName), client$name, client$clientName)
+        clientObject <- NULL
+        if (R6::is.R6(client)) {
+          clientObject <- client
+        }
+        else if (is.list(client)) {
+          clientObject$fromJSON(client)
+        }
+        else {
+          stop("Unable to update the auth cache. Invalid client type.")
+        }
+
+        private$config$apikey <- clientObject$key #ifelse(is.null(client$consumerKey), client$key, client$consumerKey)
+        private$config$apisecret <- clientObject$secret #ifelse(is.null(client$consumerSecret), client$secret, client$consumerSecret)
+        private$config$client_name <- clientObject$clientName #ifelse(is.null(client$clientName), client$name, client$clientName)
+      }
+      else {
+        logger.debug("Skipping client update. Supplied client is empty...")
       }
 
+      # logger.debug("Value of cache after setting client")
+      # logger.trace(str(private$config))
       self$write()
+      # logger.debug("Value of cache after saving client")
+      # logger.debug(str(private$config))
     },
 
     getToken = function() {
@@ -194,7 +219,11 @@ AgaveCache  <- R6::R6Class(
 
     setToken = function(token) {
       # if the token is not provided, this is essentially just a write() operation
-      if (! (missing(token) || is.null(token))) {
+      if (!missing(token) && !is.null(token)) {
+        logger.debug("Saving token to cache...")
+
+        # logger.trace("Value of cache before saving token")
+        # logger.trace(str(private$config))
 
         # set the token config we perisist to disk
         private$config$access_token = token$`access_token`
@@ -204,8 +233,15 @@ AgaveCache  <- R6::R6Class(
         private$config$expires_at = token$`expires_at`
         private$config$username = token$username
       }
+      else {
+        logger.debug("Skipping token update. Cache is empty...")
+      }
 
+      # logger.debug("Value of cache after setting token")
+      # logger.trace(str(private$config))
       self$write()
+      # logger.debug("Value of cache after saving token")
+      # logger.debug(str(private$config))
     },
 
     getTenant = function() {
@@ -221,16 +257,26 @@ AgaveCache  <- R6::R6Class(
     },
 
     setTenant = function(tenant) {
-
       # if the tenant is not provided, this is essentially just a write() operation
       if (! (missing(tenant) || is.null(tenant))) {
+        logger.debug("Saving tenant to cache...")
+
+        # logger.trace("Value of cache before saving tenant...")
+        # logger.trace(str(private$config))
 
         # set the token config we perisist to disk
         private$config$tenantid = tenant$code
         private$config$baseurl = tenant$baseUrl
       }
+      else {
+        logger.debug("Skipping tenant update. Cache is empty...")
+      }
 
+      # logger.debug("Value of cache after setting tenant...")
+      # logger.trace(str(private$config))
       self$write()
+      # logger.debug("Value of cache after saving tenant...")
+      # logger.debug(str(private$config))
     },
 
     getProperty = function(propertyName) {

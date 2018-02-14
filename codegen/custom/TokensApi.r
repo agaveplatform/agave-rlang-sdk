@@ -202,7 +202,8 @@ TokensApi  <- R6::R6Class(
       token
     },
 
-    impersonate = function(updateCache, client, tokenUsername, username, password) {
+    impersonate = function(updateCache, client, tokenUsername, username, password, ...) {
+      args <- list(...)
 
       if (missing(updateCache)) {
         updateCache <- FALSE
@@ -263,7 +264,9 @@ TokensApi  <- R6::R6Class(
       private$formatResponse(resp, args)
     },
 
-    create = function(updateCache, client, username, password) {
+    create = function(updateCache, client, username, password, ...) {
+      args <- list(...)
+
       if (missing(updateCache)) {
         updateCache <- FALSE
       }
@@ -316,7 +319,9 @@ TokensApi  <- R6::R6Class(
       private$formatResponse(resp, args)
     },
 
-    refresh = function(updateCache, client, refreshToken) {
+    refresh = function(updateCache, client, refreshToken, ...) {
+      args <- list(...)
+
       if (missing(updateCache)) {
         updateCache <- FALSE
       }
@@ -359,7 +364,9 @@ TokensApi  <- R6::R6Class(
 
     },
 
-    revoke = function(updateCache, client, accessToken) {
+    revoke = function(updateCache, client, accessToken, ...) {
+      args <- list(...)
+
       if (missing(updateCache)) {
         updateCache <- FALSE
       }

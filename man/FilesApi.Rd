@@ -22,7 +22,15 @@ clear_file_item_permissions
 \code{$download(path, systemId, filename)} Downloads the file on th remote system
 to the local disk. The original remote filename is preserved if none is provied.`
 
-\code{$readStream(path, systemId, callback)} Fetches the remote file as a byte
+\code{$load(path, systemId, maxLength, mimeType)} Fetches the remote file as a byte
+stream and loads it into memory, parsing into an appropriate data object
+based on the mimetype provided, or the content-type of the response header
+if no mimeType value is provided. By default, any file larger than 512MB
+will be rejected. To accept a larger file, set the maxLength value to an
+integer value larger than 2^29. The user is responsible for ensuring they
+have enough memory to load the target file.
+
+\code{$stream(path, systemId, callback)} Fetches the remote file as a byte
 stream an returns it to the callback function as an argument.
 
 \code{transfer(path, systemId, source, body)} Initiate a transfer of a file from

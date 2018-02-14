@@ -106,6 +106,9 @@ Client <- R6::R6Class(
         if (!is.null(ClientObject$`name`)) {
           self$`clientName` <- ClientObject$`name`
         }
+        if (!is.null(ClientObject$`client_name`)) {
+          self$`clientName` <- ClientObject$`client_name`
+        }
         if (!is.null(ClientObject$`clientName`)) {
           self$`clientName` <- ClientObject$`clientName`
         }
@@ -137,12 +140,7 @@ Client <- R6::R6Class(
       if ("result" %in% names(ClientObject)) {
         ClientObject <- ClientObject$result
       }
-      self$`key` <- ClientObject$`consumerKey`
-      self$`secret` <- ClientObject$`consumerSecret`
-      self$`callbackUrl` <- ClientObject$`callbackUrl`
-      self$`description` <- ClientObject$`description`
-      self$`clientName` <- ClientObject$`name`
-      self$`tier` <- ClientObject$`tier`
+      self$fromJSON(ClientObject)
     }
   ),
   private = list(

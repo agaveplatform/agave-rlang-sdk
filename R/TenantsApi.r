@@ -53,14 +53,14 @@ TenantsApi <- R6::R6Class(
 
       # read the args from the unnamed request args
       if ("responseType" %in% names(args)) {
-        responseType = args$responseType
+        responseType <- args$responseType
       }
       else {
-        responseType = NULL
+        responseType <- NULL
       }
 
       if (is.null(responseType) || nchar(responseType) == 0) {
-        responseType = private$responseType
+        responseType <- private$responseType
       }
 
       if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
@@ -128,7 +128,7 @@ TenantsApi <- R6::R6Class(
         private$responseType = responseType
       }
     },
-    getTenantDetails = function(codeOrUuid, naked, filter, ...){
+    getDetails = function(codeOrUuid, filter, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
@@ -137,13 +137,9 @@ TenantsApi <- R6::R6Class(
         queryParams['filter'] <- filter
       }
 
-      if (!missing(`naked`)) {
-        queryParams['naked'] <- naked
-      }
-
       urlPath <- "/tenants/{codeOrUuid}"
-      if (!missing(`code_or_uuid`)) {
-        urlPath <- gsub(paste0("\\{", "codeOrUuid", "\\}"), `code_or_uuid`, urlPath)
+      if (!missing(`codeOrUuid`)) {
+        urlPath <- gsub(paste0("\\{", "codeOrUuid", "\\}"), `codeOrUuid`, urlPath)
       }
 
       resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, urlPath),
@@ -153,19 +149,69 @@ TenantsApi <- R6::R6Class(
                                  body = body,
                                  ...)
 
-      private$formatResponse(resp, args)
+      if (httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299) {
+        logger.debug(jsonlite::toJSON(httr::content(resp,stringsAsFactors = FALSE), auto_unbox=TRUE, null="null", na="null"))
+
+        # read the args from the unnamed request args
+        if ("responseType" %in% names(args)) {
+          responseType = args$responseType
+        }
+        else {
+          responseType = NULL
+        }
+
+        if (is.null(responseType) || nchar(responseType) == 0) {
+          responseType = private$responseType
+        }
+
+        if (responseType == "raw") {
+          # check for the undeclared pretty attibute to pretty-print the json response
+          prettyPrint <- ("pretty" %in% names(args) && isTRUE(args$pretty))
+          jsonlite::toJSON(httr::content(resp, stringsAsFactors = FALSE), auto_unbox=TRUE, null="null", na="null", pretty=prettyPrint)
+        }
+        else {
+          # check for a non-naked response
+          jsonResp <- httr::content(resp)
+          if ("result" %in% names(jsonResp)) {
+            jsonResp <- jsonResp$result
+          }
+
+          # workaround for the tenants api returning back
+          # an array on a resource request.
+          if (length(jsonResp) > 0) {
+            colNames <- names(jsonResp)
+
+            # future proof fix for response bug.
+            # lookup properties of object. if null, it's a list. if not null, it's an object
+            if (is.null(colNames)) {
+              jsonResp <- jsonResp[[1]]
+            }
+          }
+
+          if (responseType == "df") {
+            # convert object to single data frame
+            as.data.frame(jsonResp)
+          }
+          else {
+            jsonResp
+          }
+        }
+
+      } else if (httr::status_code(resp) >= 400 && httr::status_code(resp) <= 499) {
+        logger.warn(jsonlite::toJSON(httr::content(resp, "text", encoding="UTF-8"), auto_unbox=TRUE, null="null", na="null"))
+        httr::content(resp)
+      } else if (httr::status_code(resp) >= 500 && httr::status_code(resp) <= 599) {
+        logger.warn(jsonlite::toJSON(httr::content(resp, "text", encoding="UTF-8"), auto_unbox=TRUE, null="null", na="null"))
+        httr::content(resp)
+      }
     },
-    list_tenants = function(naked, filter, limit, offset, ...){
+    list = function(filter, limit, offset, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
 
       if (!missing(`filter`)) {
         queryParams['filter'] <- filter
-      }
-
-      if (!missing(`naked`)) {
-        queryParams['naked'] <- naked
       }
 
       if (!missing(`limit`)) {

@@ -146,8 +146,10 @@ Tenant <- R6::R6Class(
       self$`code` <- TenantObject$`code`
       self$`created` <- TenantObject$`created`
       self$`lastUpdated` <- TenantObject$`lastUpdated`
-      TenantContactObject <- TenantContact$new()
-      self$`contact` <- TenantContactObject$fromJSON(jsonlite::toJSON(TenantObject$contact, auto_unbox = TRUE))
+      if (!is.null(TenantObject$contact) && len(TenantObject$contact) > 0) {
+        TenantContactObject <- TenantContact$new()
+        self$`contact` <- TenantContactObject$fromJSON(jsonlite::toJSON(TenantObject$contact, auto_unbox = TRUE))
+      }
     }
   )
 )

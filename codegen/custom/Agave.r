@@ -337,10 +337,10 @@ Agave <- R6::R6Class(
       tenantCode <- private$resolveConfigurationProperty(explicitValue = tenantCode, configPropertyName = "tenantid", envPropertyName = "AGAVE_TENANT")
       # if found, lookup the base url for the tenant code given
       if (!is.null(tenantCode) && nchar(tenantCode) > 0) {
-        t <- tenantsApi$getDetails(tenantCode)
-        if (!is.null(t$baseUrl)) {
+        tenantDetails <- tenantsApi$getDetails(codeOrUuid=tenantCode)
+        if (!is.null(tenantDetails$baseUrl)) {
           resolvedTenant <- Tenant$new()
-          resolvedTenant$fromJSON(t)
+          resolvedTenant$fromJSON(tenantDetails)
         }
         else {
           logger.warn(paste0(c("Unable to resolve tenant code ",tenantCode)))
@@ -368,7 +368,7 @@ Agave <- R6::R6Class(
       # if found, lookup the base url for the tenant code given
       else {
         # look up the tenants
-        resp <- tenantsApi$list()
+        resp <- tenantsApi$list(responseType="list")
 
         # iterate looking for a matching URL
         for (t in resp) {
@@ -385,7 +385,8 @@ Agave <- R6::R6Class(
         if (is.null(resolvedTenant)) {
           logger.warn(paste0(c("Unable to resolve base url ",
                                tenantBaseUrl,
-                               " to a valid tenant. No tenant code will be configured.")))
+                               " to a valid tenant. No tenant code will be configured.")
+                             ,collapse = ''))
           resolvedTenant <- Tenant$new(baseUrl=tenantBaseUrl)
         }
       }
@@ -487,33 +488,56 @@ Agave <- R6::R6Class(
         resolvedTenant <- private$resolveTenantFromDefaultConfiguration()
       }
 
+      if (!is.null(resolvedTenant)) {
+        logger.debug(paste0(c("Tenant initialized to ",
+                              resolvedTenant$code,
+                             ". Base url will be ",
+                             resolvedTenant$baseUrl)
+                           ,collapse = ''))
+
+      }
+
       private$tenant <- resolvedTenant
+
+
     },
 
     resolveTenantFromDefaultConfiguration = function() {
+      resolvedTenant <- NULL
       # look for a tenant code to keep order of resolution in place
       t <- private$resolveTenantCode(tenantCode=NULL)
+
       # if that is null, we will try to resolve the base url from the environment
       if (is.null(t)) {
+        logger.trace("No tenant code resolved, looking for baseUrl")
         t <- private$resolveTenantBaseUrl(baseUrl=NULL)
+
         # if this is null, we'll just use the default tenant
         if (is.null(t)) {
+          logger.debug(paste0(c("No baseUrl found. Using default tenant, ",
+                                private$defaultTenant$baseUrl), collapse = ''))
           resolvedTenant <- private$defaultTenant
         }
         else {
+          logger.debug(paste0(c("Resolved baseUrl from system configuration to ",t$baseUrl), collapse = ''))
           resolvedTenant <- t
         }
       }
       # found a match, so use that
       else {
+        logger.debug(paste0(c("Resolved tenant code, ",
+                              t$code,
+                              ". Base url will be ",
+                              t$baseUrl), collapse = ''))
         resolvedTenant <- t
       }
+
+      resolvedTenant
     },
 
     initClientAndAuth = function(accessToken, refreshToken, username, password, clientKey, clientSecret) {
       private$token <- private$authCache$getToken()
       private$client <- private$authCache$getClient()
-      private$tenant <- private$authCache$getTenant()
 
       # use the provided client key or pull it from the environment or auth cache
       private$client$key <- private$resolveConfigurationProperty(explicitValue = clientKey, configPropertyName = "apikey", envPropertyName = "AGAVE_CLIENT_KEY")
@@ -543,7 +567,7 @@ Agave <- R6::R6Class(
     initResources = function() {
 
       # tenants api has no auth
-      self$tenants <- TenantsApi$new(responseType = private$responseType)
+      self$tenants <- TenantsApi$new(responseType = private$defaultResponseType)
 
       # init the ClientsApi api client with basic auth using the user's u/p
       if (!is.null(private$token) && !is.null(private$token$username) && !is.null(private$token$password)) {
@@ -555,7 +579,7 @@ Agave <- R6::R6Class(
         self$clients <- ClientsApi$new(
           apiClient = apiClient,
           cache = private$authCache,
-          responseType = private$responseType
+          responseType = private$defaultResponseType
         )
       }
       # Null it out if no user credentials are set
@@ -576,7 +600,7 @@ Agave <- R6::R6Class(
           username = private$token$username,
           password = private$token$password,
           cache = private$authCache,
-          responseType = private$responseType
+          responseType = private$defaultResponseType
         )
 
         # refresh the token so they're ready to geaux
@@ -585,7 +609,7 @@ Agave <- R6::R6Class(
 
         resp <- NULL
         if (!is.null(private$token$refresh_token)) {
-          resp <- self$tokens$refresh(refreshToken = private$token$refresh_token)
+          resp <- self$tokens$refresh(refreshToken = private$token$refresh_token, responseType="list")
           if ("access_token" %in% names(resp)) {
             # logger.trace("After call to refresh token")
             # logger.trace(str(resp))
@@ -595,14 +619,14 @@ Agave <- R6::R6Class(
             # logger.trace(token$toJSONString())
             token$username <- private$token$username
             token$password <- private$token$password
-            token$created_at <- format(Sys.time(), "%a %b %d %H:%M:%S %Y")
+            token$created_at <- as.integer(format(Sys.time(), "%s"))
             token$expires_at <- format(Sys.time() + token$expires_in, "%a %b %d %H:%M:%S %Y")
             private$token <- token
             logger.trace("After refresh token initialization")
             # logger.trace(str(private$token$toJSON()))
 
-            private$authCache$setToken(private$token)
             logger.info("Successfully refreshed the existing token")
+            self$store()
           }
           else {
             resp <- NULL
@@ -611,7 +635,7 @@ Agave <- R6::R6Class(
 
         # or pull a fresh token
         if (is.null(resp) && !is.null(private$token$username) && !is.null(private$token$password)) {
-          resp <- self$tokens$create()
+          resp <- self$tokens$create(responseType="list")
           if ("access_token" %in% names(resp)) {
             # logger.trace("After call to create token")
             # logger.trace(str(resp))
@@ -621,13 +645,13 @@ Agave <- R6::R6Class(
             # logger.trace(token$toJSONString())
             token$username <- private$token$username
             token$password <- private$token$password
-            token$created_at <- format(Sys.time(), "%a %b %d %H:%M:%S %Y")
+            token$created_at <- as.integer(format(Sys.time(), "%s"))
             token$expires_at <- format(Sys.time() + token$expires_in, "%a %b %d %H:%M:%S %Y")
             private$token <- token
             # logger.trace("After new token initialization")
             # logger.trace(private$token$toJSONString())
-            private$authCache$setToken(private$token)
             logger.info("Successfully obtained a fresh token")
+            self$store()
           }
           else {
             # leave it be
@@ -653,17 +677,17 @@ Agave <- R6::R6Class(
         )
 
         # init the remaining apis using bearer token auth
-        self$apps <- AppsApi$new(oauthApiClient, responseType = private$responseType)
-        self$meta <- MetaApi$new(oauthApiClient, responseType = private$responseType)
-        self$profiles <- ProfilesApi$new(oauthApiClient, responseType = private$responseType)
-        self$transforms <- TransformsApi$new(oauthApiClient, responseType = private$responseType)
-        self$jobs <- JobsApi$new(oauthApiClient, responseType = private$responseType)
-        self$files <- FilesApi$new(oauthApiClient, responseType = private$responseType)
-        self$monitors <- MonitorsApi$new(oauthApiClient, responseType = private$responseType)
-        self$systems <- SystemsApi$new(oauthApiClient, responseType = private$responseType)
-        self$uuids <- UuidsApi$new(oauthApiClient, responseType = private$responseType)
-        self$tags <- TagApi$new(oauthApiClient, responseType = private$responseType)
-        self$notifications <- NotificationsApi$new(oauthApiClient, responseType = private$responseType)
+        self$apps <- AppsApi$new(oauthApiClient, responseType = private$defaultResponseType)
+        self$meta <- MetaApi$new(oauthApiClient, responseType = private$defaultResponseType)
+        self$profiles <- ProfilesApi$new(oauthApiClient, responseType = private$defaultResponseType)
+        self$transforms <- TransformsApi$new(oauthApiClient, responseType = private$defaultResponseType)
+        self$jobs <- JobsApi$new(oauthApiClient, responseType = private$defaultResponseType)
+        self$files <- FilesApi$new(oauthApiClient, responseType = private$defaultResponseType)
+        self$monitors <- MonitorsApi$new(oauthApiClient, responseType = private$defaultResponseType)
+        self$systems <- SystemsApi$new(oauthApiClient, responseType = private$defaultResponseType)
+        self$uuids <- UuidsApi$new(oauthApiClient, responseType = private$defaultResponseType)
+        self$tags <- TagApi$new(oauthApiClient, responseType = private$defaultResponseType)
+        self$notifications <- NotificationsApi$new(oauthApiClient, responseType = private$defaultResponseType)
       }
       # NULL out all oauth apis if no acces token is available
       else {
@@ -748,7 +772,12 @@ Agave <- R6::R6Class(
 
       # if a token is provided, load that into the global cache
       if (!missing(token)) {
-        private$token <- token
+        if (is.list(token)) {
+          private$token$fromJSON(token)
+        }
+        else {
+          private$token$fromJSONString(token)
+        }
       }
       else if (is.null(private$token)) {
         private$token <- private$authCache$getToken()
@@ -774,7 +803,17 @@ Agave <- R6::R6Class(
       if (!missing(tenant)) {
         # TODO: validate tenant info and check for change of tenant
         # to auto invaliate the current token and client if not set above.
-        private$tenant <- tenant
+        private$tenant <- Tenant$new()
+        if (is.list(tenant)) {
+          logger.trace("Tenant provided is a list")
+          private$tenant$fromJSON(tenant)
+        }
+        else {
+          private$tenant$fromJSONString(tenant)
+        }
+      }
+      else {
+        private$tenant <- private$authCache$getTenant()
       }
 
       # Reinitialize all resource API clients with the new configs. This will
@@ -792,7 +831,7 @@ Agave <- R6::R6Class(
       private$authCache$setTenant(private$tenant)
 
       # force the auth cache to disk
-      private$authCache$write()
+      # private$authCache$write()
     }
   ),
   active = list(
@@ -801,19 +840,36 @@ Agave <- R6::R6Class(
       # It may have changed out of band.
       private$authCache$current
     },
-    tenantInfo = function(value) {
+    tenantInfo = function(tenant) {
       # The current tenant the SDK is configured to call
-      private$tenant$toJSON()
+      if (!missing(tenant) && !is.null(tenant)) {
+        tenantObject <- Tenant$new()
+        tenantObject$fromJSON(tenant)
+        private$tenant <- tenant
+      }
+      private$tenant
     },
-    tokenInfo = function(value) {
+    tokenInfo = function(token) {
       # The current token the SDK is configured to use in all
       # OAuth2 authenticated calls
+      if (!missing(token) && !is.null(token)) {
+        tokenObject <- Token$new()
+        tokenObject$fromJSON(token)
+        private$token <- token
+      }
+
       private$token
     },
-    clientInfo = function(value) {
+    clientInfo = function(client) {
       # The client used to perform token management against the
       # Agave OAuth2 server
-      private$client$toJSON()
+      if (!missing(client) && !is.null(client)) {
+        clientObject <- Client$new()
+        clientObject$fromJSON(client)
+        private$client <- clientObject
+      }
+
+      private$client
     },
     authCheck = function(value) {
 

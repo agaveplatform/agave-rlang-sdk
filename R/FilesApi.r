@@ -22,8 +22,15 @@
 #' `$download(path, systemId, filename)` Downloads the file on th remote system
 #'   to the local disk. The original remote filename is preserved if none is provied.`
 #'
+#' `$load(path, systemId, maxLength, mimeType)` Fetches the remote file as a byte
+#'   stream and loads it into memory, parsing into an appropriate data object
+#'   based on the mimetype provided, or the content-type of the response header
+#'   if no mimeType value is provided. By default, any file larger than 512MB
+#'   will be rejected. To accept a larger file, set the maxLength value to an
+#'   integer value larger than 2^29. The user is responsible for ensuring they
+#'   have enough memory to load the target file.
 #'
-#' `$readStream(path, systemId, callback)` Fetches the remote file as a byte
+#' `$stream(path, systemId, callback)` Fetches the remote file as a byte
 #'   stream an returns it to the callback function as an argument.
 #'
 #'
@@ -56,7 +63,7 @@
 #' `$history(path, systemId)` Lists history of the file item on the given system
 #'   at the given path.
 #'
-#'  
+#'
 #'
 #' `$listPermissions()` List the permissions assigned to file item on the given
 #'   system at the given path.
@@ -224,7 +231,84 @@ FilesApi <- R6::R6Class(
         private$formatResponse(resp, args)
       }
     },
-    readStream = function(path, systemId, callback, ...){
+    load = function(path, systemId, maxLength=524288000, mimeType=NULL, ...){
+      args <- list(...)
+      queryParams <- list()
+      headerParams <- character()
+
+      if (missing(systemId)) {
+        getUrlPath <- "/files/v2/media/{filePath}"
+        headUrlPath <- "/files/v2/listings/{filePath}"
+      }
+      else {
+        getUrlPath <- "/files/v2/media/system/{systemId}/{filePath}"
+        getUrlPath <- gsub(paste0("\\{", "systemId", "\\}"), `systemId`, getUrlPath)
+
+        headUrlPath <- "/files/v2/listings/system/{systemId}/{filePath}"
+        headUrlPath <- gsub(paste0("\\{", "systemId", "\\}"), `systemId`, headUrlPath)
+      }
+
+      if (!missing(`path`)) {
+        getUrlPath <- gsub(paste0("\\{", "filePath", "\\}"), `path`, getUrlPath)
+        headUrlPath <- gsub(paste0("\\{", "filePath", "\\}"), `path`, headUrlPath)
+      }
+
+      logger.debug(paste0("Fetching listing info about file item: ", private$apiClient$basePath, headUrlPath))
+      headResp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, headUrlPath),
+                                            method = "GET",
+                                            queryParams = queryParams,
+                                            headerParams = headerParams)
+
+      # logger.debug(str(headResp))
+      if (httr::status_code(headResp) >= 200 && httr::status_code(headResp) <= 299) {
+        logger.debug("Response from listing was successful")
+        json <- httr::content(headResp)
+
+        if (json[[1]]$length > maxLength) {
+          stop(paste0("File exceeds current maxLimit value of ",
+                      maxLimit,
+                      ". Specify a larger maxLimit value to load this file"))
+        }
+        else {
+          logger.debug(paste0("Fetching data to load into memory from file item: ", private$apiClient$basePath, getUrlPath))
+          resp <- private$apiClient$callApi(url = paste0(private$apiClient$basePath, getUrlPath),
+                                              method = "GET",
+                                              queryParams = queryParams,
+                                              headerParams = headerParams,
+                                              httr::progress(),
+                                              httr::write_memory(),
+                                              ...)
+          # logger.debug(str(resp))
+
+          if ( httr::status_code(resp) >= 200 && httr::status_code(resp) <= 299 ) {
+            logger.debug("Response from get was successful")
+
+            # read mimetype from the content-type header if not
+            # provided by the user.
+            if (missing(mimeType) || is.null(mimeType) || nchar(mimeType) == 0) {
+              logger.debug("No mimetype provided, the value returned in the response header will be used.")
+              headers <- httr::headers(resp)
+              contentType <- headers['content-type']
+              contentTypeVector <- stringr::str_split(string = contentType, pattern = ';')
+              mimeType = contentTypeVector[[1]][1]
+            }
+
+            logger.debug(paste0("Mimetype ", mimeType, " will be used"))
+
+            httr::content(resp, as = "parsed", encoding = "UTF-8", type = mimeType)
+          }
+          else {
+            logger.debug("Failed to fetch fileitem data")
+            private$formatResponse(resp, args)
+          }
+        }
+      }
+      else {
+        logger.debug("Failed to fetch listing request of fileitem")
+        private$formatResponse(headResp, args)
+      }
+    },
+    stream = function(path, systemId, callback, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
