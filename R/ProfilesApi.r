@@ -266,6 +266,14 @@ ProfilesApi <- R6::R6Class(
       queryParams <- list()
       headerParams <- character()
 
+      if ("limit" %in% names(args)) {
+        queryParams['limit'] <- args$limit
+      }
+
+      if ("offset" %in% names(args)) {
+        queryParams['offset'] <- args$offset
+      }
+
       if (!missing(`username`)) {
         queryParams['username'] <- username
       }

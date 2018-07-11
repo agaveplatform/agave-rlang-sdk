@@ -261,10 +261,18 @@ ProfilesApi <- R6::R6Class(
 
       private$formatResponse(resp, args)
     },
-    listProfiles = function(naked, username, name, email, ...){
+    listProfiles = function(naked, username, name, email ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
+
+      if ("limit" %in% names(args)) {
+        queryParams['limit'] <- args$limit
+      }
+
+      if ("offset" %in% names(args)) {
+        queryParams['offset'] <- args$offset
+      }
 
       if (!missing(`username`)) {
         queryParams['username'] <- username
