@@ -261,7 +261,7 @@ ProfilesApi <- R6::R6Class(
 
       private$formatResponse(resp, args)
     },
-    listProfiles = function(naked, username, name, email ...){
+    listProfiles = function(naked, username, name, email, ...){
       args <- list(...)
       queryParams <- list()
       headerParams <- character()
