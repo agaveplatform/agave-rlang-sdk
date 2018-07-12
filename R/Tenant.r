@@ -111,7 +111,12 @@ Tenant <- R6::R6Class(
       }
       if (!is.null(TenantObject$`contact`)) {
         contactObject <- TenantContact$new()
-        contactObject$fromJSON(jsonlite::toJSON(TenantObject$`contact`, auto_unbox = TRUE))
+        if (is.list(TenantObject$`contact`)) {
+          contactObject$fromJSON(TenantObject$`contact`[0])
+        }
+        else {
+          contactObject$fromJSON(jsonlite::fromJSON(TenantObject$`contact`, auto_unbox = TRUE))
+        }
         self$`contact` <- contactObject
       }
     },
@@ -147,8 +152,15 @@ Tenant <- R6::R6Class(
       self$`created` <- TenantObject$`created`
       self$`lastUpdated` <- TenantObject$`lastUpdated`
       if (!is.null(TenantObject$contact) && len(TenantObject$contact) > 0) {
-        TenantContactObject <- TenantContact$new()
-        self$`contact` <- TenantContactObject$fromJSON(jsonlite::toJSON(TenantObject$contact, auto_unbox = TRUE))
+        contactObject <- TenantContact$new()
+
+        if (is.list(TenantObject$`contact`)) {
+          contactObject$fromJSON(TenantObject$`contact`[0])
+        }
+        else {
+          contactObject$fromJSON(jsonlite::toJSON(TenantObject$`contact`, auto_unbox = TRUE))
+        }
+        self$`contact` <- contactObject
       }
     }
   )

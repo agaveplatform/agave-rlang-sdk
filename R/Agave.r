@@ -329,7 +329,7 @@ Agave <- R6::R6Class(
     },
 
     resolveTenantCode = function(tenantCode=NULL) {
-      tenantsApi <- TenantsApi$new(ApiClient$new(private$defaultTenant$baseUrl), responseType="list")
+      tenantsApi <- TenantsApi$new(responseType="list")
       resolvedTenant <- NULL
 
       # resolve the tenant code, falling back on the cache file and the
@@ -354,25 +354,32 @@ Agave <- R6::R6Class(
     },
 
     resolveTenantBaseUrl = function(baseUrl=NULL) {
-      tenantsApi <- TenantsApi$new(ApiClient$new(private$defaultTenant$baseUrl), responseType="list")
+      tenantsApi <- TenantsApi$new(responseType="list")
       resolvedTenant <- NULL
 
       # resolve the tenant base url, falling back on the cache file and the
-      # AGAVE_TENANT_BASE_URL and AGAVE_BASE_URL evironment variables if no code is provided
-      tenantBaseUrl <- private$resolveConfigurationProperty(explicitValue = baseUrl, configPropertyName = "baseurl", envPropertyName = "AGAVE_TENANT_BASE_URL")
-      tenantBaseUrl <- private$resolveConfigurationProperty(explicitValue = tenantBaseUrl, configPropertyName = "baseurl", envPropertyName = "AGAVE_BASE_URL")
+      tenantBaseUrl <- private$resolveConfigurationProperty(explicitValue = baseUrl, configPropertyName = "baseurl", envPropertyName = "AGAVE_BASE_URL")
       # if not found, move on and return NULL
       if (is.null(tenantBaseUrl) || nchar(tenantBaseUrl) == 0) {
         logger.debug("No base url provided explicitly or found in the config file or environment.")
       }
       # if found, lookup the base url for the tenant code given
       else {
+        #
+        if (!endsWith(tenantBaseUrl, "/")) {
+          tenantBaseUrl<-paste0(tenantBaseUrl, "/")
+        }
+
         # look up the tenants
         resp <- tenantsApi$list(responseType="list")
 
         # iterate looking for a matching URL
         for (t in resp) {
-          if (resp$baseUrl == tenantBaseUrl) {
+          if (!endsWith(t$baseUrl, "/")) {
+            t$baseUrl<-paste0(t$baseUrl, "/")
+          }
+
+          if (t$baseUrl == tenantBaseUrl) {
             resolvedTenant <- Tenant$new()
             resolvedTenant$fromJSON(t)
             break

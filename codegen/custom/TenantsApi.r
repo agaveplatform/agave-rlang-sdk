@@ -109,7 +109,13 @@ TenantsApi <- R6::R6Class(
         private$apiClient <- apiClient
       }
       else {
-        private$apiClient <- ApiClient$new()
+        tenantDiscoveryUrl <- Sys.getenv("AGAVE_TENANT_BASE_URL")
+        if (is.null(tenantDiscoveryUrl) || nchar(tenantDiscoveryUrl) == 0) {
+          private$apiClient <- ApiClient$new()
+        }
+        else {
+          private$apiClient <- ApiClient$new(tenantDiscoveryUrl)
+        }
       }
 
       # user can override the global representation in which resources
