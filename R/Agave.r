@@ -366,8 +366,8 @@ Agave <- R6::R6Class(
       # if found, lookup the base url for the tenant code given
       else {
         #
-        if (!endsWith(tenantBaseUrl, "/")) {
-          tenantBaseUrl<-paste0(tenantBaseUrl, "/")
+        if (endsWith(tenantBaseUrl, "/")) {
+          tenantBaseUrl<- substr(tenantBaseUrl, 1, nchar(tenantBaseUrl)-1)
         }
 
         # look up the tenants
@@ -375,8 +375,8 @@ Agave <- R6::R6Class(
 
         # iterate looking for a matching URL
         for (t in resp) {
-          if (!endsWith(t$baseUrl, "/")) {
-            t$baseUrl<-paste0(t$baseUrl, "/")
+          if (endsWith(t$baseUrl, "/")) {
+            t$baseUrl <- substr(t$baseUrl, 1, nchar(t$baseUrl)-1)
           }
 
           if (t$baseUrl == tenantBaseUrl) {
@@ -744,7 +744,12 @@ Agave <- R6::R6Class(
     tokens = NULL,
     transforms = NULL,
     uuids = NULL,
-    initialize = function(baseUrl, cacheDir=NULL, username=NULL, password=NULL, clientKey=NULL, clientSecret=NULL, accessToken=NULL, refreshToken=NULL, responseType="list", logLevel=FATAL, logFilePath="agave.log") {
+    initialize = function(baseUrl, cacheDir=NULL, username=NULL, password=NULL, clientKey=NULL, clientSecret=NULL, accessToken=NULL, refreshToken=NULL, responseType="list", logLevel=FATAL, logFilePath="agave.log", verify=False) {
+
+      # disable ssl peer verification if requested
+      if (!verify) {
+        set_config( config( ssl_verifypeer = 0L ) )
+      }
 
       # Configure logging based on user inputs, falling
       # back to silent defaults
