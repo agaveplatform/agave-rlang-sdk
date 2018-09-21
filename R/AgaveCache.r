@@ -104,7 +104,7 @@ AgaveCache  <- R6::R6Class(
       logger.debug(paste0(c("Loading auth cache file from",private$cacheFilePath), collapse = " "))
 
       # check that the file is not a directory
-      if (file.exists(cacheFilePath) && is.character(list.files(cacheFilePath))) {
+      if (file.exists(cacheFilePath) && is.character(list.files(cacheFilePath)) && file.size(cacheFilePath) > 0) {
         private$config <- jsonlite::read_json(private$cacheFilePath, simplifyVector = FALSE)
         logger.debug(paste0(c("Succesfully loaded auth cache file from",private$cacheFilePath), collapse = " "))
         # logger.debug(str(private$config))
