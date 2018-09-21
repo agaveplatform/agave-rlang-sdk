@@ -744,7 +744,7 @@ Agave <- R6::R6Class(
     tokens = NULL,
     transforms = NULL,
     uuids = NULL,
-    initialize = function(baseUrl, cacheDir=NULL, username=NULL, password=NULL, clientKey=NULL, clientSecret=NULL, accessToken=NULL, refreshToken=NULL, responseType="list", logLevel=FATAL, logFilePath="agave.log", verify=False) {
+    initialize = function(baseUrl, cacheDir=NULL, username=NULL, password=NULL, clientKey=NULL, clientSecret=NULL, accessToken=NULL, refreshToken=NULL, responseType="list", logLevel=FATAL, logFilePath="agave.log", verify=FALSE) {
 
       # disable ssl peer verification if requested
       if (!verify) {
